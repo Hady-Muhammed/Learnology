@@ -1,0 +1,186 @@
+<app-navbar></app-navbar>
+<!-- Hero Section -->
+<main class="hero relative flex flex-col space-y-4 justify-center items-center text-white font-mont">
+  <swiper
+  [config]="config2"
+  >
+
+    <ng-template class="relative flex flex-col space-y-4 justify-center items-center text-white font-mont" swiperSlide>
+        <img class="w-[100px] object-cover" src="../../../assets/hero.webp" />
+        <!-- Overlay screen -->
+        <div class="absolute w-full h-full left-0 top-0 bg-black/60"></div>
+        <div class="absolute space-y-4 z-[10]">
+          <h1 data-aos="fade-in" data-aos-delay="500" data-aos-duration="2500" class="font-semibold text-4xl text-center z-10">Grow your knowledge to advance your career path </h1>
+          <p data-aos="fade-in" data-aos-delay="800" data-aos-duration="2500" class="text-center max-w-[700px] mx-auto z-10">The purpose of learning is growth, and our minds, unlike our bodies, can continue growing as we continue to live.</p>
+          <div data-aos="fade-in" data-aos-delay="1100" data-aos-duration="2500" class="flex justify-center space-x-2 z-10">
+              <a href="#faq" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-lg p-4">Learn More</a>
+              <button routerLink="/courses" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-lg p-4">See Courses</button>
+          </div>
+        </div>
+      </ng-template>
+
+    <ng-template class="relative flex flex-col space-y-4 justify-center items-center text-white font-mont" swiperSlide>
+        <img class="w-[100px] object-cover" src="../../../assets/x.webp" />
+        <!-- Overlay screen -->
+        <div class="absolute w-full h-full left-0 top-0 bg-black/60"></div>
+        <div class="absolute space-y-4 z-[10]">
+          <h1 data-aos="fade-in" data-aos-delay="500" data-aos-duration="2500" class="font-semibold text-4xl text-center z-10">Grow your knowledge to advance your career path </h1>
+          <p data-aos="fade-in" data-aos-delay="800" data-aos-duration="2500" class="text-center max-w-[700px] mx-auto z-10">The purpose of learning is growth, and our minds, unlike our bodies, can continue growing as we continue to live.</p>
+          <div data-aos="fade-in" data-aos-delay="1100" data-aos-duration="2500" class="flex justify-center space-x-2 z-10">
+              <a href="#faq" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-lg p-4">Learn More</a>
+              <button routerLink="/courses" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-lg p-4">See Courses</button>
+          </div>
+        </div>
+      </ng-template>
+
+    <ng-template class="relative flex flex-col space-y-4 justify-center items-center text-white font-mont" swiperSlide>
+        <img class="w-[100px] object-cover" src="../../../assets/hero1.jpeg" />
+        <!-- Overlay screen -->
+        <div class="absolute w-full h-full left-0 top-0 bg-black/60"></div>
+        <div class="absolute space-y-4 z-[10]">
+          <h1 data-aos="fade-in" data-aos-delay="500" data-aos-duration="2500" class="font-semibold text-4xl text-center z-10">Grow your knowledge to advance your career path </h1>
+          <p data-aos="fade-in" data-aos-delay="800" data-aos-duration="2500" class="text-center max-w-[700px] mx-auto z-10">The purpose of learning is growth, and our minds, unlike our bodies, can continue growing as we continue to live.</p>
+          <div data-aos="fade-in" data-aos-delay="1100" data-aos-duration="2500" class="flex justify-center space-x-2 z-10">
+              <a href="#faq" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-lg p-4">Learn More</a>
+              <button routerLink="/courses" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-lg p-4">See Courses</button>
+          </div>
+        </div>
+      </ng-template>
+
+
+  </swiper>
+</main>
+<!-- Hero Section -->
+<!-- Popular courses -->
+<section class=" bg-gradient-to-r from-white to-[#8d46ff] xs:p-8 sm:p-16 font-mont">
+  <h3 class="text-center text-4xl font-semibold">
+    Our Popular Courses
+  </h3>
+  <p class="text-center mb-10 text-gray-600">some of the best sellers this week</p>
+  <div class="grid xs:grid-cols-1 md:grid-cols-3 gap-10">
+    <ng-container *ngFor="let course of popularCourses; let i = index">
+      <app-course-card [course]="course" data-aos="fade-up" data-aos-duration="1000" [attr.data-aos-delay]="i * 150" class="crs"></app-course-card>
+    </ng-container>
+  </div>
+</section>
+<!-- Popular courses -->
+<!-- FAQ -->
+<section class="bg-gradient-to-r from-white to-[#8d46ff] xs:p-8 sm:p-20 font-mont" id="faq">
+  <h3 class="text-center text-4xl font-semibold pb-12">
+    Frequently Asked Questions?
+  </h3>
+  <div class="flex lg:flex-row xs:flex-col items-center">
+    <img class="w-[500px] bg-cover" src="../../../assets/faq.webp" alt="faq">
+    <mat-accordion class="flex w-full flex-col gap-10">
+      <mat-expansion-panel data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100" data-aos-offset="100" class="bg-[#8d46ff] border border-black">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="text-white font-medium">
+            How do i know the right courses for me?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p class="text-white">This is the primary content of the panel.</p>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel data-aos="zoom-in" data-aos-duration="500" data-aos-delay="200" data-aos-offset="100" class="bg-[#8d46ff] border border-black" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="text-white font-medium">
+            Do i get a certificate for every course i take?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p class="text-white">I'm visible because I am open</p>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel data-aos="zoom-in" data-aos-duration="500" data-aos-delay="300" data-aos-offset="100" class="bg-[#8d46ff] border border-black" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="text-white font-medium">
+            Will i have lifetime access to courses i purchase?
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p class="text-white">I'm visible because I am open</p>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel data-aos="zoom-in" data-aos-duration="500" data-aos-delay="400" data-aos-offset="100" class="bg-[#8d46ff] border border-black" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+          <mat-panel-title class="text-white font-medium">
+           What are your payment options
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p class="text-white">I'm visible because I am open</p>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </div>
+</section>
+<!-- FAQ -->
+<!-- Testimonials -->
+<section class="bg-gradient-to-r from-white to-[#8d46ff] xs:px-5 xs:py-20 sm:p-20 font-mont" id="faq">
+  <h3 class="text-center text-4xl font-semibold pb-12">
+    Students' Testimonials
+  </h3>
+  <swiper
+  [config]="config"
+>
+  <ng-template swiperSlide>
+    <div>
+      <div class="mx-auto w-[100px] h-[100px] bg-[#6a43ff]/30 rounded-full p-3">
+        <img loading="lazy" class="object-cover rounded-full" src="https://avatars.mds.yandex.net/i?id=2b9841827119db31b6f5aa2dadb6c7859c5b058e-7544273-images-thumbs&n=13" alt="photo">
+      </div>
+      <h3 class="mx-auto w-fit">Diana Aut</h3>
+      <span class="mx-auto w-fit block">Student</span>
+      <div class="mt-10 bg-[#8d46ff] border border-black max-w-[500px] p-5 text-white relative before:absolute before:border-t-[30px] before:border-t-transparent before:border-l-[#8d46ff] before:border-b-transparent before:border-b-[30px] before:border-l-[30px] before:w-0 before:h-0 before:left-1/2 before:translate-x-[-50%] before:-rotate-90 before:-top-[44px] mx-auto">The European languages are members of the same family. Their separate existence is a myth. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his.</div>
+    </div>
+  </ng-template>
+  <ng-template swiperSlide>
+    <div>
+      <div class="mx-auto w-[100px] h-[100px] bg-[#6a43ff]/30 rounded-full p-3">
+        <img loading="lazy" class="object-cover rounded-full" src="https://avatars.mds.yandex.net/i?id=8c826d901fc356f89b3bbba8799e3057-4572119-images-thumbs&n=13" alt="photo">
+      </div>
+      <h3 class="mx-auto w-fit">Diana Aut</h3>
+      <span class="mx-auto w-fit block">Student</span>
+      <div class="mt-10 bg-[#8d46ff] border border-black max-w-[500px] p-5 text-white relative before:absolute before:border-t-[30px] before:border-t-transparent before:border-l-[#8d46ff] before:border-b-transparent before:border-b-[30px] before:border-l-[30px] before:w-0 before:h-0 before:left-1/2 before:translate-x-[-50%] before:-rotate-90 before:-top-[44px] mx-auto">But I must explain to you how all this mistaken idea of denouncing pleasure and One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his.</div>
+    </div>
+  </ng-template>
+  <ng-template swiperSlide>
+    <div>
+      <div class="mx-auto w-[100px] h-[100px] bg-[#6a43ff]/30 rounded-full p-3">
+        <img loading="lazy" class="object-cover rounded-full" src="https://avatars.mds.yandex.net/i?id=d4ce1d466992000c0a342a996106215ea1f40ffc-5099762-images-thumbs&n=13" alt="photo">
+      </div>
+      <h3 class="mx-auto w-fit">Diana Aut</h3>
+      <span class="mx-auto w-fit block">Student</span>
+      <div class="mt-10 bg-[#8d46ff] border border-black max-w-[500px] p-5 text-white relative before:absolute before:border-t-[30px] before:border-t-transparent before:border-l-[#8d46ff] before:border-b-transparent before:border-b-[30px] before:border-l-[30px] before:w-0 before:h-0 before:left-1/2 before:translate-x-[-50%] before:-rotate-90 before:-top-[44px] mx-auto">The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his. One morning, when Gregor Samsa woke from troubled dreams found himself transformed in his found, he found himself transformed in his.</div>
+    </div>
+  </ng-template>
+  <ng-template swiperSlide>
+    <div>
+      <div class="mx-auto w-[100px] h-[100px] bg-[#6a43ff]/30 rounded-full p-3">
+        <img loading="lazy" class="object-cover rounded-full" src="https://avatars.mds.yandex.net/i?id=8063442142f7d313bb26a010cd94004b-3381135-images-thumbs&n=13" alt="photo">
+      </div>
+      <h3 class="mx-auto w-fit">Diana Aut</h3>
+      <span class="mx-auto w-fit block">Student</span>
+      <div class="mt-10 bg-[#8d46ff] border border-black max-w-[500px] p-5 text-white relative before:absolute before:border-t-[30px] before:border-t-transparent before:border-l-[#8d46ff] before:border-b-transparent before:border-b-[30px] before:border-l-[30px] before:w-0 before:h-0 before:left-1/2 before:translate-x-[-50%] before:-rotate-90 before:-top-[44px] mx-auto">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his.</div>
+    </div>
+  </ng-template>
+  <ng-template swiperSlide>
+    <div>
+      <div class="mx-auto w-[100px] h-[100px] bg-[#6a43ff]/30 rounded-full p-3">
+        <img loading="lazy" class="object-cover rounded-full" src="https://avatars.mds.yandex.net/i?id=70018846bc5614e5f83a46fb925972de-5869685-images-thumbs&n=13" alt="photo">
+      </div>
+      <h3 class="mx-auto w-fit">Diana Aut</h3>
+      <span class="mx-auto w-fit block">Student</span>
+      <div class="mt-10 bg-[#8d46ff] border border-black max-w-[500px] p-5 text-white relative before:absolute before:border-t-[30px] before:border-t-transparent before:border-l-[#8d46ff] before:border-b-transparent before:border-b-[30px] before:border-l-[30px] before:w-0 before:h-0 before:left-1/2 before:translate-x-[-50%] before:-rotate-90 before:-top-[44px] mx-auto">One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his.</div>
+    </div>
+  </ng-template>
+  <ng-template swiperSlide>
+    <div>
+      <div class="mx-auto w-[100px] h-[100px] bg-[#6a43ff]/30 rounded-full p-3">
+        <img class="object-cover rounded-full" src="https://avatars.mds.yandex.net/i?id=5918676e51cd83c748c7bc8bf56c9dbe73fc336b-8209870-images-thumbs&n=13" alt="photo">
+      </div>
+      <h3 class="mx-auto w-fit">Diana Aut</h3>
+      <span class="mx-auto w-fit block">Student</span>
+      <div class="mt-10 bg-[#8d46ff] border border-black max-w-[500px] p-5 text-white relative before:absolute before:border-t-[30px] before:border-t-transparent before:border-l-[#8d46ff] before:border-b-transparent before:border-b-[30px] before:border-l-[30px] before:w-0 before:h-0 before:left-1/2 before:translate-x-[-50%] before:-rotate-90 before:-top-[44px] mx-auto">A wonderful serenity has taken possession of my entire soul, like these sweet mornings of One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his. One morning, when Gregor Samsa woke from troubled dreams, he found himself transformed in his.</div>
+    </div>
+  </ng-template>
+</swiper>
+</section>
+<!-- Testimonials -->
+
+<app-footer></app-footer>

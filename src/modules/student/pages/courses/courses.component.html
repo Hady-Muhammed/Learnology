@@ -1,0 +1,23 @@
+<app-navbar></app-navbar>
+<app-panner [title]="'Courses'"></app-panner>
+<div class="xs:p-5 sm:p-20 bg-gradient-to-r to-[#6a43ff] from-white">
+  <div class="mb-8 flex justify-end">
+    <form class="search-box">
+      <input name="search" (keyup)="filterData()" [formControl]="searchTerm" type="text" placeholder=" "/>
+      <button type="reset"></button>
+    </form>
+  </div>
+  <div class="grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+    <ng-container *ngIf="courses">
+      <ng-container *ngFor="let course of filteredCourses; let i = index">
+        <app-course-card [course]="course" data-aos="fade-up" data-aos-duration="1000" [attr.data-aos-delay]="i * 150" class="crs"></app-course-card>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="!courses">
+      <div *ngFor="let item of [1,2,3]">
+        <app-course-skeleton></app-course-skeleton>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<app-footer></app-footer>

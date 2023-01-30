@@ -1,0 +1,14 @@
+<app-navbar></app-navbar>
+<app-panner [title]="'Account'"></app-panner>
+<main class="xs:p-5 md:p-20 flex xs:flex-col xl:flex-row font-mont">
+  <ul class="space-y-4 min-w-[300px] pr-2 border-r-2">
+    <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="settings" class="p-2 block font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">Information</a>
+    <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="enrolled" class="p-2 block font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">Enrolled Courses</a>
+    <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="exams" class="p-2 block font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">Taken Exams</a>
+    <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="messages" class="p-2 block font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">Messages</a>
+  </ul>
+  <div class="xs:px-5 xs:py-10 sm:p-10 w-full">
+    <router-outlet></router-outlet>
+  </div>
+</main>
+<app-footer></app-footer>

@@ -1,0 +1,59 @@
+<app-navbar></app-navbar>
+<app-panner [title]="'About'"></app-panner>
+<!-- Achievements -->
+<section class="xs:p-5 lg:p-20 bg-gradient-to-r from-white to-[#8d46ff] font-mont">
+  <div class="flex xs:flex-col xl:flex-row xs:space-x-0 lg:space-x-10">
+    <img loading="lazy" class="w-[400px] mx-auto" src="../../../assets/achieve.webp" alt="photo">
+    <div class="space-y-4">
+      <h2 class="font-bold text-4xl">Achievements</h2>
+      <p>The goal of education is the advancement of knowledge and the dissemination of truth.</p>
+      <div class="flex xs:flex-col xl:flex-row xs:space-y-4 xl:space-y-0 text-center text-white justify-between">
+        <div data-aos="fade-right" data-aos-delay="300" class="flex flex-col p-12 px-16 bg-[#6a43ff] rounded-lg">
+          <i class="fa-solid fa-video bg-white text-black mx-auto w-[50px] h-[50px] grid place-items-center rounded-full text-xl"></i>
+          <p class="text-xl mt-5">450+</p>
+          <h5 class="text-md">Courses</h5>
+        </div>
+        <div data-aos="fade-right" data-aos-delay="400" class="flex flex-col p-12 px-16 bg-[#6a43ff] rounded-lg">
+          <i class="fa-sharp fa-solid fa-graduation-cap bg-white text-black mx-auto w-[50px] h-[50px] grid place-items-center rounded-full text-xl"></i>
+          <p class="text-xl mt-5">79,000+</p>
+          <h5 class="text-md">Students</h5>
+        </div>
+        <div data-aos="fade-right" data-aos-delay="500" class="flex flex-col p-12 px-16 bg-[#6a43ff] rounded-lg">
+          <i class="fa-solid fa-award bg-white text-black mx-auto w-[50px] h-[50px] grid place-items-center rounded-full text-xl"></i>
+          <p class="text-xl mt-5">26+</p>
+          <h5 class="text-md">Awards</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- Achievements -->
+<!-- Team -->
+<section class="xs:p-5 xs:py-16 lg:p-20 bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] text-white font-mont">
+  <h3 class="text-center text-4xl font-semibold">
+    Meet Our Team
+  </h3>
+  <div class="grid xs:grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-10 mt-10">
+    <ng-container *ngFor="let teacher of teachers; let i = index">
+      <app-teacher-card [teacher]="teacher" [attr.data-aos-delay]="i*100" data-aos="zoom-in-up"></app-teacher-card>
+    </ng-container>
+
+  </div>
+</section>
+<!-- Team -->
+<!-- Trusted -->
+<section class="xs:p-16 lg:p-20 px-10 bg-gradient-to-r from-white to-[#8d46ff] font-mont">
+  <h3 class="text-center text-4xl font-semibold">
+    Trusted By
+  </h3>
+  <div class="flex xs:flex-col md:flex-row xs:space-y-5 md:space-y-0 justify-around items-center mt-12">
+    <img class="w-[150px]" src="../../../assets/b1.webp" alt="brand">
+    <img class="w-[250px]" src="../../../assets/b3.webp" alt="brand">
+    <img class="w-[100px]" src="../../../assets/b4.webp" alt="brand">
+    <img class="w-[250px]" src="../../../assets/b2.webp" alt="brand">
+  </div>
+</section>
+<!-- Trusted -->
+<app-footer></app-footer>
+
+

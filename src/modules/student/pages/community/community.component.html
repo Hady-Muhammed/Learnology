@@ -1,0 +1,78 @@
+<app-navbar></app-navbar>
+<app-panner [title]="'Community'"></app-panner>
+<main class="xs:p-5 md:p-20 font-mont">
+  <div class="flex flex-col space-y-8">
+    <div class="flex items-center justify-between" *ngFor="let std of students">
+      <ng-container *ngIf="account && std.email !== account.email">
+        <div class="flex xs:flex-col sm:flex-row items-center xs:space-x-0 sm:space-x-4">
+          <img class="xs:w-[50px] xs:h-[50px] sm:w-[70px] sm:h-[70px] rounded-full object-cover" [src]="std.picture === 'default' ? '../../../assets/user.webp': std.picture" alt="photo">
+          <div>
+            <h2 class="font-bold text-xl xs:text-center sm:text-left">{{std.name}}</h2>
+            <h3>courses: {{std.enrolled_courses.length}}</h3>
+          </div>
+        </div>
+        <button (click)="createChat(std.name,std.email,std.picture)" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium">SEND MESSAGE</button>
+      </ng-container>
+    </div>
+  </div>
+  <div class="mt-10">
+    <h2 class="text-3xl font-semibold relative before:absolute before:w-[60px] before:h-[2px] before:left-0  before:bg-[#6a43ff] before:rounded-lg before:-bottom-2 w-fit">Recent posts</h2>
+    <div class="flex items-center mt-4">
+      <div class="p-5 border-b w-[90%]">
+        <div (click)="opened = true" class="flex items-center rounded-md space-x-4 cursor-text">
+          <img class="object-cover w-[50px] h-[50px] rounded-full" [src]="account && account.picture === 'default' ? '../../../assets/user.webp': account && account.picture" alt="profile">
+          <p class="text-black/50">What's on your Mind? | Post something</p>
+        </div>
+      </div>
+      <button (click)="refreshPosts()" class="w-[10%] flex flex-col items-center group">
+        <span class="text-xs group-hover:scale-150 duration-300">Refresh posts</span>
+        <i class=" group-hover:animate-spin text-[#8d46ff] text-3xl fa-solid fa-rotate-right"></i>
+      </button>
+    </div>
+    <div class="flex flex-col space-y-12 items-center mt-10">
+      <!-- Posts -->
+      <ng-container *ngIf="posts && !refreshing">
+        <ng-container *ngFor="let post of posts && posts.reverse(); let i = index; trackBy: trackPosts">
+          <app-post [post]="post" [account]="account" (reactHappened)="refresh($event)"></app-post>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="!posts || refreshing">
+        <ng-container *ngFor="let item of [1,2,3]">
+          <app-post-skeleton data-aos="fade-in" data-aos-duration="600"></app-post-skeleton>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</main>
+<app-footer></app-footer>
+
+
+
+
+<!-- Overlay screen -->
+<div (click)="this.opened = false; this.reactListOpened = false;" [ngClass]="opened || reactListOpened ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="fixed w-full h-full left-0 top-0 bg-black/50 duration-500 flex justify-center items-center z-40"></div>
+
+<!-- Popup of create post -->
+<div [ngClass]="opened ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="bg-white xs:w-[95%] lg:w-1/2 rounded-md p-3 fixed left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] z-50 duration-500 font-mont">
+  <h4 class="p-4 text-center font-bold text-lg">Create Post</h4>
+  <hr>
+  <h5 class="p-4">Sharing to <span class="bg-gray-300 inline-block p-2 rounded-md"><i class="fa-solid fa-earth-americas"></i> Public</span> </h5>
+  <hr>
+  <div class="my-8">
+    <div class="space-x-2 flex items-center">
+      <img class="object-cover w-[50px] h-[50px] rounded-full" [src]="account && account.picture === 'default' ? '../../../assets/user.webp': account && account.picture" alt="profile">
+      <h6 class="font-bold text-lg">{{account && account.name}}</h6>
+    </div>
+    <textarea [(ngModel)]="content" placeholder="What's on your mind?" class="p-4 outline-none w-full h-full block mt-5 placeholder:text-xl" ></textarea>
+    <img class="rounded-sm w-full" *ngIf="imageURL" [src]="imageURL" alt="postImage">
+  </div>
+  <input placeholder="Image URL" class="outline-none bg-[#8d46ff]/30 text-white rounded-md duration-500" [ngClass]="openedUpload ? 'w-[50%] p-2':'w-[0%] p-0'" [(ngModel)]="imageURL" type="text">
+  <button (click)="openedUpload = !openedUpload" class="flex justify-end items-center space-x-1 mb-5">
+    <span class="inline-block text-black/50 text-sm">Choose photo</span>
+    <i class="fa-solid fa-images inline-block text-[#8d46ff] text-2xl"></i>
+  </button>
+  <button (click)="createPost()" class="w-full py-4 rounded-md bg-[#6a43ff] text-white text-center">Post</button>
+  <button (click)="opened = false" class="absolute right-4 top-4 rounded-full flex justify-center items-center text-white bg-red-400 p-1">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
