@@ -13,19 +13,18 @@ import { TeacherArticlesComponent } from './pages/teacher-articles/teacher-artic
 import { TeacherMessagesComponent } from './pages/teacher-messages/teacher-messages.component';
 import { TeacherCoursesComponent } from './pages/teacher-courses/teacher-courses.component';
 import { TeacherDashboardComponent } from './pages/teacher-dashboard/teacher-dashboard.component';
-import { AuthGuard } from '../../app/guards/auth.guard';
 import { TeacherComponent } from './pages/teacher/teacher.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
   {
-    path: 'teacherr',
+    path: '',
     pathMatch: 'full',
-    redirectTo: 'teacher/dashboard',
+    redirectTo: 't/dashboard',
   },
   {
-    path: 'teacher',
+    path: 't',
     component: TeacherComponent,
     canActivate: [TeacherGuard],
     children: [
@@ -104,6 +103,7 @@ const routes: Routes = [
     ],
   },
 ];
+
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

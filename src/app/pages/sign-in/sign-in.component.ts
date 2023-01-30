@@ -59,7 +59,7 @@ export class SignInComponent implements OnInit {
                     setTimeout(() => {
                       this.loading = false;
                       this.toast.success({ detail: 'Logged in successfully!' });
-                      this.router.navigateByUrl('/teacherr');
+                      this.router.navigateByUrl('/teacher');
                     }, 4000);
                   },
                   error: (error) => {

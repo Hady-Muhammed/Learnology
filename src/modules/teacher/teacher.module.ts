@@ -1,7 +1,6 @@
+import { SharedModule } from 'src/modules/shared/shared.module';
 import { PictureDialog } from './../../modules/teacher/pages/teacher-account/teacher-account.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from './../shared/shared.module';
-import { MaterialModule } from './../material/material.module';
 import { TeacherRoutingModule } from './teacher-routing.module';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -44,9 +43,8 @@ import { TeacherCreateQuizComponent } from './pages/teacher-quizzes/teacher-crea
   imports: [
     CommonModule,
     TeacherRoutingModule,
-    MaterialModule,
-    SharedModule,
     FormsModule,
+    SharedModule,
     ReactiveFormsModule,
   ],
   exports: [ChatComponent],
