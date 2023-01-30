@@ -1,0 +1,37 @@
+<h2 class="text-center font-semibold text-3xl mb-5 relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2">Your Chats</h2>
+<!-- Chats -->
+<div class="flex justify-between" *ngFor="let chat of chats; let i = index">
+  <a data-aos="fade-up" data-aos-duration="800" [attr.data-aos-delay]="i*100" class="h-fit w-full flex items-center space-x-3 cursor-pointer hover:bg-gray-100 p-3" (click)="goToConversation(chat._id)">
+    <!-- Sender -->
+    <img class="w-[70px] h-[70px] object-cover rounded-full" [src]="chat.person1.email === account ? chat.person2.picture === 'default' ? '../../../../../assets/user.webp': chat.person2.picture : chat.person1.picture === 'default' ? '../../../../../assets/user.webp': chat.person1.picture" alt="photo">
+    <span *ngIf="
+    chat.person1.email !== account && isOnline(chat.person1.email)
+    || chat.person2.email !== account && isOnline(chat.person2.email)
+    " class="absolute left-12 bottom-2 border-[3px] border-white w-[20px] h-[20px] rounded-full bg-green-600"></span>
+    <span *ngIf="" class="absolute right-0 bottom-0 border-[3px] border-white w-[20px] h-[20px] rounded-full bg-green-600"></span>
+    <div>
+      <p class="text-2xl">{{chat.person1.email === account ? chat.person2.name : chat.person1.name}}</p>
+      <span *ngIf="
+      chat.person1.email !== account && isOnline(chat.person1.email)
+      || chat.person2.email !== account && isOnline(chat.person2.email)
+      "
+      class="text-xs text-green-600 block">online</span>
+      <ng-container *ngIf="chat.newMessages">
+        <p class="font-bold text-red-400 flex items-center"><span class="text-white bg-red-600 rounded-full w-[20px] h-[20px] text-sm grid place-items-center mr-1">{{chat.newMessages}}</span> new message</p>
+      </ng-container>
+    </div>
+  </a>
+  <button data-aos="fade-up" data-aos-duration="800" [attr.data-aos-delay]="i*100" class="flex items-center" [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+    <mat-icon>more_vert</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button (click)="deleteChat(chat._id)" mat-menu-item>
+      <mat-icon class="">delete</mat-icon>
+      <span class="whitespace-nowrap">Delete conversation</span>
+    </button>
+  </mat-menu>
+</div>
+<p class="text-2xl font-bold text-center" data-aos="zoom-in" data-aos-duration="800" *ngIf="chats && chats.length == 0">
+  No Chats Found!
+</p>
+

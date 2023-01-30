@@ -1,0 +1,155 @@
+<a class="text-white ml-5 shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40" (click)="return()">Return</a>
+<main class="relative z-40 p-5">
+  <mat-tab-group class="bg-white rounded-md">
+    <mat-tab label="Course's Information">
+      <ng-template matTabContent>
+        <div class="flex flex-col p-20 space-x-2">
+            <img data-aos-offset="20" data-aos="fade-up" data-aos-once="true" class="w-[55%] my-10 mx-auto rounded-md object-cover" [src]="imageURL?.value ? imageURL?.value : '?.?./?.?./?.?./?.?./?.?./assets/placeholder?.webp'" alt="p">
+            <form class="flex flex-col w-full space-y-4" [formGroup]="form" action="">
+              <mat-form-field>
+                <mat-label>Course's title</mat-label>
+                <input type="text" matInput formControlName="courseTitle" placeholder="Title">
+                <mat-error *ngIf="courseTitle?.hasError('required')">
+                  Please enter the course's title
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                  <mat-label>Image URL</mat-label>
+                  <input type="text" matInput formControlName="imageURL" placeholder="Image URL">
+                  <mat-error *ngIf="imageURL?.hasError('required')">
+                    Please enter the image url
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                  <mat-label>Course's Category</mat-label>
+                  <input type="text" matInput formControlName="courseCateg" placeholder="Image URL">
+                  <mat-error *ngIf="courseCateg?.hasError('required')">
+                    Please enter the course's category
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                  <mat-label>Posted at</mat-label>
+                  <input type="text" matInput formControlName="coursePostedAt" placeholder="Image URL">
+                  <mat-error *ngIf="coursePostedAt?.hasError('required')">
+                    Please enter the course's category
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                  <mat-label>Course's Short desc</mat-label>
+                  <input type="text" matInput formControlName="courseShortDesc" placeholder="Image URL">
+                  <mat-error *ngIf="courseShortDesc?.hasError('required')">
+                    Please enter the course's short desc
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                  <mat-label>Course's Overview</mat-label>
+                  <textarea matInput formControlName="courseOverview" placeholder="Image URL" rows="5"></textarea>
+                  <mat-error *ngIf="courseOverview?.hasError('required')">
+                    Please enter the course's overview
+                  </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                  <mat-label>Course's price</mat-label>
+                  <input type="number" matInput formControlName="coursePrice" placeholder="Image URL">
+                  <mat-error *ngIf="coursePrice?.hasError('required')">
+                    Please enter the course's price
+                  </mat-error>
+              </mat-form-field>
+
+              <h2 class="font-bold text-lg">What you'will learn:</h2>
+              <div formArrayName="WhatYouWillLearn">
+                <div *ngFor="let skill of WhatYouWillLearn?.controls; let i=index">
+                  <form action="" [formGroupName]="i">
+                    {{i + 1}} -
+                    <mat-form-field class="example-full-width ml-2">
+                      <mat-label>Point name</mat-label>
+                      <input #p formControlName="point" type="text" matInput placeholder="Image URL">
+                      <mat-error *ngIf="courseCateg?.hasError('required')">
+                        Please enter the point name
+                      </mat-error>
+                    </mat-form-field>
+                    <button (click)="deletePoint(i)" class="bg-red-500 px-2 text-white ml-5 rounded-md text-xs p-1">Delete</button>
+                  </form>
+                </div>
+              </div>
+              <button class="text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40" (click)="addNewPoint()">add</button>
+              <div class="flex mt-20 justify-end space-x-5">
+                <button (click)="saveChanges()" [disabled]="
+                !courseCateg?.dirty && !courseOverview?.dirty
+                && !coursePrice?.dirty && !coursePostedAt?.dirty
+                && !courseShortDesc?.dirty && !courseTitle?.dirty
+                && !WhatYouWillLearn.dirty && !imageURL?.dirty
+                " class="disabled:opacity-[.5] disabled:pointer-events-none text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40">SAVE CHANGES</button>
+                <button (click)="cancelChanges()" [disabled]="
+                !courseCateg?.dirty && !courseOverview?.dirty
+                && !coursePrice?.dirty && !coursePostedAt?.dirty
+                && !courseShortDesc?.dirty && !courseTitle?.dirty
+                && !WhatYouWillLearn.dirty && !imageURL?.dirty
+                " class="disabled:opacity-[.5] disabled:pointer-events-none text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40">CANCEL</button>
+              </div>
+            </form>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Enrolled Students">
+      <div class="mx-auto block w-fit mt-10">
+        <mat-form-field>
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex?. Mia" #input>
+        </mat-form-field>
+      </div>
+
+      <div class="p-8">
+        <table class="w-full" mat-table [dataSource]="dataSource" matSort>
+          {{dataSource}}
+          <!-- ID Column -->
+          <ng-container matColumnDef="id" class="p-0">
+            <th class="p-0" mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <td mat-cell *matCellDef="let row;let i = index"> {{i + 1}} </td>
+          </ng-container>
+
+          <!-- Photo Column -->
+          <ng-container matColumnDef="photo">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Photo </th>
+            <td mat-cell *matCellDef="let row">
+                <img class="mx-auto w-[40px] h-[40px] rounded-full object-cover" [src]="row?.picture === 'default' ? '?.?./?.?./?.?./?.?./?.?./assets/user?.webp':row?.picture" alt="phooto">
+            </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+            <td mat-cell *matCellDef="let row">
+                <span>{{row?.name}}</span>
+            </td>
+          </ng-container>
+
+          <!-- Email Column -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+            <td mat-cell *matCellDef="let row"> {{row?.email}} </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
+            <td mat-cell *matCellDef="let row">
+              <button (click)="createChat(row?.email,row?.name,row?.picture)" class="text-white bg-black p-3 font-bold">Send Message</button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+          <!-- Row shown when there is no matching data?. -->
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell" colspan="4">No data matching the filter "{{input?.value}}"</td>
+          </tr>
+        </table>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Select page of users"></mat-paginator>
+
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</main>

@@ -1,0 +1,31 @@
+<app-navbar></app-navbar>
+<app-panner [title]="'Blog'"></app-panner>
+<main class="xs:p-5 md:p-20 bg-gradient-to-r from-white to-[#8d46ff] font-mont">
+<div class="flex xs:flex-col-reverse lg:flex-row xs:space-x-0 lg:space-x-12">
+  <div [ngClass]="filteredArticles && filteredArticles.length == 0 ? 'grid place-items-center':''" class="min-w-[70%] space-y-12 divide-y-2 divide-black">
+    <ng-container *ngIf="articles && filteredArticles">
+      <div *ngFor="let article of filteredArticles" data-aos="fade-up" data-aos-duration="800" class="space-y-6 pt-10">
+        <app-article-card [article]="article"></app-article-card>
+      </div>
+    </ng-container>
+    <p class="xs:py-24 lg:py-0 text-2xl font-bold" data-aos="zoom-in" data-aos-duration="800" *ngIf="filteredArticles && filteredArticles.length == 0">
+      No Articles Found!
+    </p>
+    <ng-container *ngIf="!articles">
+      <app-article-skeleton></app-article-skeleton>
+    </ng-container>
+  </div>
+  <div class="min-w-[30%] pt-10 text-white">
+    <h3 class="pl-5 italic text-3xl">Categories</h3>
+    <ul>
+      <li (click)="changeCategory($event)" class="cursor-pointer border-b hover:scale-110 duration-300 p-6">Web Development</li>
+      <li (click)="changeCategory($event)" class="cursor-pointer border-b hover:scale-110 duration-300 p-6">Data Science</li>
+      <li (click)="changeCategory($event)" class="cursor-pointer border-b hover:scale-110 duration-300 p-6">App Development</li>
+      <li (click)="changeCategory($event)" class="cursor-pointer border-b hover:scale-110 duration-300 p-6">Frontend</li>
+      <li (click)="changeCategory($event)" class="cursor-pointer border-b hover:scale-110 duration-300 p-6">Python Programming</li>
+      <li (click)="changeCategory($event)" class="cursor-pointer border-b hover:scale-110 duration-300 p-6">JavaScript Hacks</li>
+    </ul>
+  </div>
+</div>
+</main>
+<app-footer></app-footer>

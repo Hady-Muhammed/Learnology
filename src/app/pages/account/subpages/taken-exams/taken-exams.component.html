@@ -1,0 +1,28 @@
+<h2 class="text-center font-semibold text-3xl mb-10 relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2">Your Quizzes</h2>
+<div class="grid xs:grid-cols-1 md:grid-cols-2 gap-10">
+  <ng-container *ngIf="quizzes">
+      <div *ngFor="let quiz of quizzes; let i = index">
+        <div data-aos="fade-up" data-aos-duration="1000" [attr.data-aos-delay]="i * 150"  class="cursor-pointer rounded-md relative overflow-hidden bg-slate-100 block">
+          <div>
+            <img class="h-[250px] w-full object-cover" [src]="quiz.image" alt="x">
+          </div>
+          <div class="p-5 h-[150px] space-y-2">
+            <p class="text-gray-400">{{quiz.category}}</p>
+            <h3 class="font-bold text-lg">{{quiz.name}}</h3>
+            <div class="flex items-center justify-between">
+              <span class="inline-block text-sm text-black/50">{{quiz.publishedAt | date}}</span>
+              <span [ngClass]="quiz.difficulty === 'Hard' ? 'bg-red-500': quiz.difficulty === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'" class="inline-block text-white px-2 rounded-full">{{quiz.difficulty}}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+  </ng-container>
+  <ng-container *ngIf="!quizzes">
+    <div *ngFor="let item of [1,2,3]">
+      <app-course-skeleton></app-course-skeleton>
+    </div>
+  </ng-container>
+</div>
+<p class="text-2xl font-bold text-center" data-aos="zoom-in" data-aos-duration="800" *ngIf="quizzes && quizzes.length == 0">
+  No Quizzes Taken!
+</p>

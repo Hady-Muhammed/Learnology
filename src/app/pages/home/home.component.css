@@ -1,0 +1,32 @@
+/* @import 'swiper/swiper.min'; */
+@import '~swiper/swiper.min.css';
+@import '~swiper/modules/navigation/navigation.min.css';
+@import '~swiper/modules/pagination/pagination.min.css';
+@import '~swiper/modules/effect-fade/effect-fade.min.css';
+.hero {
+  background-image: url(../../../assets/hero.webp);
+  background-size: cover;
+  height: 100vh;
+}
+
+.crs:hover {
+  transition-delay: 0s !important;
+  transition-duration: .3s !important;
+  transform: scale(1.1) !important;
+}
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+}
+
+/* target the active bullet */
+span.swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: #6a43ff;
+  opacity: 1;
+}
+

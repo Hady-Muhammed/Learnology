@@ -1,0 +1,119 @@
+<main class="p-5 relative z-40">
+  <a class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40" (click)="return()">Return</a>
+  <form [formGroup]="form" action="">
+
+  <div class="flex flex-col w-full space-y-4 mt-10" action="">
+    <div class="flex">
+      <img [src]="imageURL?.value" alt="image">
+      <div class="flex flex-col space-y-5 w-full p-5">
+        <mat-form-field data-aos="fade-up" data-aos-delay="200">
+          <mat-label>Name</mat-label>
+          <input type="text" matInput formControlName="name" placeholder="Name">
+          <mat-error *ngIf="name?.hasError('required')">
+            Please enter the name
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field data-aos="fade-up" data-aos-delay="400">
+            <mat-label>Image URL</mat-label>
+            <input type="text" matInput formControlName="imageURL" placeholder="Image URL">
+            <mat-error *ngIf="imageURL?.hasError('required')">
+              Please enter the image url
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field data-aos="fade-up" data-aos-delay="400">
+            <mat-label>Quiz category</mat-label>
+            <input type="text" matInput formControlName="category" placeholder="Quiz category">
+            <mat-error *ngIf="category?.hasError('required')">
+              Please enter the Quiz category
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field data-aos="fade-up" data-aos-delay="600" appearance="fill">
+          <mat-label>Difficulty</mat-label>
+          <mat-select (selectionChange)="changed = true" formControlName="selectedValue" name="categ">
+            <mat-option *ngFor="let categ of categories" [value]="categ.value">
+              {{categ.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <h3 class="font-bold text-lg my-10">Questions</h3>
+  <ul class="space-y-5">
+    <div data-aos="slide-left" [attr.data-aos-delay]="i*100" data-aos-duration="700" *ngFor="let question of quiz?.questions; let i = index" class="bg-white w-full rounded-full p-5 flex justify-between items-center px-10">
+      <!-- Left -->
+      <div class="w-[10%] font-bold text-3xl">
+        {{i + 1}}
+      </div>
+      <!-- Center -->
+      <div class="w-[70%]">
+        <h4 [ngClass]="open === i ? 'hidden':'block'" class="font-semibold text-md">{{question.head}} ?</h4>
+        <div formArrayName="questions" [ngClass]="open === i ?'h-[250px]':'h-0'" class="overflow-hidden duration-500 flex items-center">
+          <form class="flex" [formGroupName]="i" action="">
+            <div class="flex flex-col justify-center">
+              <mat-form-field>
+                <mat-label>Question head</mat-label>
+                <input type="text" matInput formControlName="head" placeholder="Head">
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Solving time</mat-label>
+                <input type="text" matInput formControlName="solving_time" placeholder="Solving time">
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Correct answer</mat-label>
+                <input type="text" matInput formControlName="correctAnswer" placeholder="Correct answer">
+              </mat-form-field>
+            </div>
+            <div>
+              <h3 class="text-center">Answers</h3>
+              <div formGroupName="answers" class="grid grid-cols-2 gap-5 p-10 py-6">
+                <mat-form-field>
+                  <mat-label>Answer 1</mat-label>
+                  <input type="text" matInput formControlName="ans1" placeholder="Answer1">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Answer 2</mat-label>
+                  <input type="text" matInput formControlName="ans2" placeholder="Answer2">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Answer 3</mat-label>
+                  <input type="text" matInput formControlName="ans3" placeholder="Answer3">
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Answer 4</mat-label>
+                  <input type="text" matInput formControlName="ans4" placeholder="Answer4">
+                </mat-form-field>
+              </div>
+            </div>
+          </form>
+        </div>
+        <span [ngClass]="open === i ? 'hidden':'block'">{{question.solving_time}}</span>
+      </div>
+      <!-- Right -->
+      <div class="w-[20%] flex flex-col space-y-4">
+        <button (click)="editQuestion(i)">
+          <i class="fa-solid fa-pen-to-square text-xl"></i>
+        </button>
+        <button (click)="deleteQuestion(i)">
+          <mat-icon class="text-red-500 text-2xl">delete</mat-icon>
+        </button>
+      </div>
+    </div>
+  </ul>
+  <div class="flex justify-end">
+    <button (click)="addNewQuestion()" class="bg-black text-white p-4 mt-5">Add new question</button>
+  </div>
+  <div class="flex space-x-2 mt-10 justify-center">
+      <button (click)="saveChanges()" [disabled]="
+      !name?.dirty && !imageURL?.dirty
+      && !category?.dirty && !selectedValue?.dirty
+      && !questions.dirty && !clicked
+      " class="disabled:opacity-[.5] disabled:pointer-events-none text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40">SAVE CHANGES</button>
+      <button (click)="cancelChanges()" [disabled]="
+      !name?.dirty && !imageURL?.dirty
+      && !category?.dirty && !selectedValue?.dirty
+      && !questions.dirty && !clicked
+      " class="disabled:opacity-[.5] disabled:pointer-events-none text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40">CANCEL</button>
+  </div>
+  </form>
+</main>

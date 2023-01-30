@@ -1,0 +1,24 @@
+<main class='p-5 relative z-40'>
+  <div class="flex items-center justify-between">
+    <h1 class="font-bold xs:text-md sm:text-2xl">Your Published Quizzes</h1>
+    <button routerLink="/teacher/quizzes/new-quiz" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-md p-2 relative z-40">Upload a new quiz</button>
+  </div>
+  <div class="flex flex-col mt-10" *ngFor="let quiz of quizzes; let i = index">
+    <div data-aos="fade-up" [attr.data-aos-delay]="i*100" class="flex xs:flex-col xl:flex-row items-center bg-white mb-10 rounded-md overflow-hidden xs:w-fit xl:w-full mx-auto justify-between">
+      <img class="w-[300px] object-contain xs:mt-5 xl:mt-0" [src]="quiz && quiz.image" alt="phooto">
+      <div class="xs:text-center md:text-left xs:px-5 md:px-10 p-10 space-y-4 xs:w-[300px] sm:w-[350px] md:w-[500px]">
+        <h3 class="xs:text-md md:text-xl">{{quiz && quiz.name}}</h3>
+        <h4 [ngClass]="quiz.difficulty === 'Hard' ? 'bg-red-500': quiz.difficulty === 'Medium' ? 'bg-yellow-600' : 'bg-green-600'" class="inline-block text-white px-2 rounded-full">{{quiz.difficulty}}</h4>
+        <h4 class="xs:text-sm md:text-md text-black/60">{{quiz && quiz.category}}</h4>
+      </div>
+      <div class="flex xs:flex-row xl:flex-col xs:space-x-4 xl:space-x-0 xs:space-y-0 xl:space-y-4 xs:mb-5 xl:mb-0 mr-10">
+        <button [routerLink]="[quiz._id]" class="w-full text-white bg-[#8d46ff] duration-500 relative before:absolute before:left-0 before:top-0 before:duration-500 before:w-[0%] before:h-full before:bg-black hover:before:w-full overflow-hidden rounded-md py-2 px-6"><span class="relative z-10">Modify</span></button>
+        <button (click)="deleteQuiz(quiz._id)" class="w-full text-white bg-[#8d46ff] duration-500 relative before:absolute before:left-0 before:top-0 before:duration-500 before:w-[0%] before:h-full before:bg-black hover:before:w-full overflow-hidden rounded-md py-2 px-6"><span class="relative z-10">Delete</span></button>
+      </div>
+    </div>
+  </div>
+  <p data-aos="zoom-in" class="text-3xl font-bold h-[50vh] grid place-items-center" *ngIf="quizzes && quizzes.length === 0">
+    No Quizzes Found!
+  </p>
+</main>
+

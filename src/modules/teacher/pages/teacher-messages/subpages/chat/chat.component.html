@@ -1,0 +1,44 @@
+<div class="w-full bg-white rounded-md shadow-xl shadow-black/20 relative z-40">
+  <div class="flex justify-between relative p-5 rounded-sm shadow-lg">
+    <img class="w-[60px] h-[60px] rounded-full object-cover" [src]="person2 && person2.picture === 'default' ? '../../../../../../assets/user.webp': person2 && person2.picture" alt="phooto">
+    <div class="w-[70%]">
+      <h3 class="font-bold text-xl">{{person2 && person2.name}}</h3>
+      <p *ngIf="person2 && onlineUsers && onlineUsers.includes(person2.email)" class="text-black/50 text-sm text-green-600"><span class="min-w-[10px] min-h-[10px] rounded-full bg-green-600 inline-block w-fit"></span> Online</p>
+    </div>
+    <button class="absolute top-1 right-2 rotate-90" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button (click)="deleteChat(chat._id)" mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+  <div>
+    <div class="p-5 h-[72vh] overflow-auto">
+      <div class="flex flex-col">
+        <div class="border-b py-5" *ngFor="let msg of messages; let i = index">
+            <div [ngClass]="msg.belongsTo === account.email ? 'justify-end': ''" class="flex items-center space-x-2">
+              <img class="border border-black w-[70px] h-[70px] object-cover rounded-full" [src]="msg.belongsTo === account.email ? account && account.picture === 'default' ? '../../../../../../assets/user.webp': account && account.picture : person2 && person2.picture === 'default' ? '../../../../../../assets/user.webp': person2 && person2.picture" alt="photo">
+              <p class="overflow-auto">
+              </p>
+              <h2 class="font-bold text-xl">{{msg.belongsTo === account.email ? account && account.name : person2 && person2.name}}</h2>
+            </div>
+            <p [ngClass]="msg.belongsTo === account.email ? 'text-right': ''" class="py-8">{{msg.content}}</p>
+            <p class="text-center text-black/50">{{msg.sentAt | date}}</p>
+        </div>
+        <p class="font-bold text-center p-16" *ngIf="messages && messages.length === 0">No messages sent yet..</p>
+        <p *ngIf="typing" data-aos="fade-in" data-aos-duration="1000" class="mt-5 p-4 text-2xl text-black/60">typing...</p>
+        <div>
+          <mat-form-field class="w-full" appearance="fill">
+            <mat-label>Write a message</mat-label>
+            <textarea (keyup)="isTyping()" [(ngModel)]="message" matInput></textarea>
+          </mat-form-field>
+          <button (click)="sendMessage()" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2">Send Message</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

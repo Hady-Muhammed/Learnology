@@ -1,0 +1,105 @@
+<ng-container *ngIf="!course">
+  <div class="left-0 top-0 absolute flex items-center justify-center w-full h-full bg-black z-50">
+    <app-loader></app-loader>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="course">
+
+<app-navbar></app-navbar>
+<app-panner [title]="'Enroll Our Popular Courses and Skill UP'"></app-panner>
+<main class="xs:p-5 md:p-20 bg-gradient-to-r from-white to-[#8d46ff] font-mont">
+  <div class="flex xs:flex-col xs:space-y-10 lg:space-y-0 xs:space-x-0 lg:space-x-5 lg:flex-row">
+    <!-- Left -->
+    <div class="space-y-8">
+      <img class="w-full rounded-lg" [src]="course && course.image" alt="photo">
+      <div class="flex justify-between items-center">
+        <div>
+          <h2 class="text-2xl font-semibold">{{course && course.course_title}}</h2>
+          <div class="my-3">
+            <i *ngFor="let i of course && course.rating" class="text-yellow-500 mr-1 fa-solid fa-star"></i>
+          </div>
+          <p>{{course && course.short_desc}}</p>
+        </div>
+        <span class="block p-4 font-bold text-xl rounded-lg bg-white text-[#6a43ff] h-fit">
+          {{course && course.price}}$
+        </span>
+      </div>
+      <h3 class="text-lg font-bold">Instructor</h3>
+      <div class="flex space-x-4 items-center border-b border-b-black pb-5 ">
+        <a [routerLink]="['../../instructor',instructor && instructor._id]" href="">
+          <img class="object-cover rounded-full w-[70px] h-[70px]" [src]="instructor && instructor.picture === 'default' ? '../../../assets/users.webp' : instructor && instructor.picture" alt="photo">
+        </a>
+        <div>
+        <a [routerLink]="['../../instructor',instructor && instructor._id]" href="">
+          <h4 class="font-bold text-xl">{{course && course.instructor_name}}</h4>
+        </a>
+        <p class="text-black/50 text-sm">{{instructor && instructor.title}}</p>
+        </div>
+      </div>
+      <!-- Overview -->
+      <div>
+        <h4 class="mb-5 font-semibold text-xl">Course Overview</h4>
+        <article class="pb-5 border-b border-b-black">
+          {{course && course.overview}}
+          {{course && course.overview}}
+          {{course && course.overview}}
+          {{course && course.overview}}
+        </article>
+      </div>
+      <!-- Perks -->
+      <div>
+        <h4 class="mb-5 font-semibold text-xl">What'll learn</h4>
+        <ul class="space-y-6">
+          <li *ngFor="let perk of course && course.WhatYouWillLearn">
+            <i class="fa-solid fa-circle-check text-[#8d46ff]"></i>
+            {{perk}}
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- Right -->
+    <div class="xs:w-full lg:w-[400px]">
+      <div class="bg-white p-5 rounded-lg">
+        <h3 class="text-xl font-semibold">
+          This course includes:
+        </h3>
+        <ul>
+          <li class="flex xs:justify-center lg:justify-start items-center space-x-3 p-5 pl-2">
+            <i class="text-[#6a43ff] fa-sharp fa-solid fa-video"></i>
+            <p>52 hours video</p>
+          </li>
+          <li class="flex xs:justify-center lg:justify-start items-center space-x-3 p-5 pl-2">
+            <i class="text-[#6a43ff] fa-regular fa-newspaper"></i>
+            <p>75 articles</p>
+          </li>
+          <li class="flex xs:justify-center lg:justify-start items-center space-x-3 p-5 pl-2">
+            <i class="text-[#6a43ff] fa-sharp fa-solid fa-cloud-arrow-down"></i>
+            <p class="whitespace-nowrap">Downloadable resourses</p>
+          </li>
+          <li class="flex xs:justify-center lg:justify-start items-center space-x-3 p-5 pl-2">
+            <i class="text-[#6a43ff] fa-solid fa-lock-open"></i>
+            <p>Full lifetime access</p>
+          </li>
+          <li class="flex xs:justify-center lg:justify-start items-center space-x-3 p-5 pl-2">
+            <i class="text-[#6a43ff] fa-solid fa-tv"></i>
+            <p class="whitespace-nowrap">Access on mobile and TV</p>
+          </li>
+          <li class="flex xs:justify-center lg:justify-start items-center space-x-3 p-5 pl-2">
+            <i class="text-[#6a43ff] fa-sharp fa-solid fa-file-circle-exclamation"></i>
+            <p>Assignments</p>
+          </li>
+          <li class="flex xs:justify-center lg:justify-start items-center space-x-3 p-5 pl-2">
+            <i class="text-[#6a43ff] fa-solid fa-certificate"></i>
+            <p>Certificate of completion</p>
+          </li>
+        </ul>
+        <button [disabled]="isEnrolled" (click)="enrollCourse()" class="mx-auto block p-2 rounded-md px-10 bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] text-white disabled:opacity-[50%]">{{text}}</button>
+      </div>
+    </div>
+  </div>
+</main>
+
+<app-footer></app-footer>
+
+</ng-container>

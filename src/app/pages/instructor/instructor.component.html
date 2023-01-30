@@ -1,0 +1,63 @@
+<app-navbar></app-navbar>
+<app-panner [title]="'Instructor Details'"></app-panner>
+<main class="flex xs:flex-col lg:flex-row xs:space-x-0 lg:space-x-8 p-16 font-mont">
+  <div>
+    <img class="mx-auto object-cover w-[400px] h-[400px]" [src]="teacher && teacher.picture === 'default' ? '../../../assets/users.webp': teacher && teacher.picture" alt="photo">
+  </div>
+  <div>
+    <div class="mt-10">
+      <h2 class="text-4xl font-semibold">{{teacher && teacher.name}}</h2>
+      <p class="text-black/60">{{teacher && teacher.title}}</p>
+      <div class="space-x-6 mt-10 flex items-center">
+        <span class="text-black/50 inline-block">Joined at : {{teacher && teacher.createdAt | date}}</span>
+        <span class="inline-block text-4xl">|</span>
+        <span class="text-black/50 inline-block">Num of courses : {{teacher && teacher.courses_teaching.length}}</span>
+      </div>
+    </div>
+    <div>
+    </div>
+    <div class="flex h-[50px] mt-10 space-x-2">
+      <button (click)="createChat()" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2 px-8 font-medium">SEND MESSAGE</button>
+      <!-- [disabled]="liked" class="disabled:bg-red-400 disabled:pointer-events-none like" -->
+      <!-- Start Like -->
+      <button [ngClass]="liked ? 'before:left-[0!important] before:right-[0!important] before:opacity-[1!important] text-[white!important] border-[#e91e63!important]':''" (click)="addLike()" [disabled]="liked" class="flex disabled:opacity-[.5] space-x-2 bt items-center rounded-md px-10">
+        <span>{{teacher && teacher.likes}} |</span>
+        <i class="fa-regular fa-thumbs-up"></i>
+        <span>{{statusText}}</span>
+      </button>
+       <!-- End Like  -->
+    </div>
+    <div class="mt-20">
+      <h3 class="font-bold text-2xl mt-52 mb-10 relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2 w-fit">Related courses</h3>
+      <div class="xs:grid md:grid-cols-2  gap-10">
+        <ng-container *ngIf="courses">
+          <ng-container *ngFor="let course of courses; let i = index">
+            <a data-aos="fade-up" data-aos-duration="1000" [attr.data-aos-delay]="i * 150" [routerLink]="['/course-details',course._id]" routerLinkActive="router-link-active"  data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600" class="bg-slate-100 cursor-pointer rounded-md crs relative overflow-hidden">
+              <div>
+                <img class="h-[200px] w-full object-cover" [src]="course.image" alt="x">
+              </div>
+              <div class="p-5 h-[150px]">
+                <p class="text-gray-400">Updated 21/8/21</p>
+                <h3 class="font-bold text-lg">{{course.course_title}}</h3>
+                <ng-container *ngFor="let i of course.rating">
+                  <i class="text-yellow-500 fa-solid fa-star"></i>
+                </ng-container>
+                <span class="inline-block ml-2 text-gray-400">({{course.num_of_likes}})</span>
+                <span class="bg-slate-600 text-white rounded-full absolute right-5 top-1/2 translate-y-[-19%] flex items-center justify-center w-[70px] h-[70px] p-2">{{course.price}}$</span>
+              </div>
+            </a>
+          </ng-container>
+        </ng-container>
+        <ng-container *ngIf="!courses">
+          <div *ngFor="let item of [1,2,3]">
+            <app-course-skeleton></app-course-skeleton>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="courses && courses.length === 0">
+          <h4 data-aos="zoom-in" class="font-bold text-md">No Courses yet!</h4>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</main>
+<app-footer></app-footer>

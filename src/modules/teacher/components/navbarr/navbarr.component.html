@@ -1,0 +1,115 @@
+<!-- Large / Medium Screens MENU -->
+<aside [ngClass]="toggle ? 'w-[150px]':'md:w-[250px]'" class=" border-r border-r-black h-full duration-500 xs:hidden md:block">
+  <div class="p-5">
+    <!-- Logo -->
+    <div *ngIf="!toggle" class="mx-auto w-fit pb-10">
+      <app-logo [size]="20"></app-logo>
+    </div>
+    <!-- Logo -->
+    <div *ngIf="toggle" class="mx-auto w-fit pb-10">
+      <h3 class="text-[20px] font-bold">
+        <i class="bg-[#8d46ff] rounded-full p-2 fa-solid fa-brain"></i>
+      </h3>
+    </div>
+    <div routerLink="account" [ngClass]="toggle ? 'hidden':'block'" class="border-4 mx-auto border-[#6a43ff]/30 rounded-full p-2 w-fit cursor-pointer">
+      <img class="w-[100px] h-[100px] rounded-full object-cover" [src]="account && account.picture === 'default' ? '../../../../assets/user.webp': account && account.picture" alt="profile">
+    </div>
+    <div class="space-y-4">
+      <div>
+        <p [ngClass]="toggle ? 'text-lg':'text-3xl'" class="text-center whitespace-nowrap mt-4 font-medium">{{account && account.name}}</p>
+        <span class="block text-black/50 mx-auto text-xs w-fit">{{account && account.title}}</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <mat-icon class="text-red-500">favorite</mat-icon>
+        <span>{{account && account.likes}}</span>
+      </div>
+      <button routerLink="account" class="bg-black text-white p-2 mx-auto rounded-md block">Edit account</button>
+    </div>
+  </div>
+
+  <nav>
+    <ul>
+      <a routerLink="dashboard" [matTooltipDisabled]="!toggle" matTooltip="Dashboard" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-sharp fa-solid fa-chart-line"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Dashboard</span>
+      </a>
+      <a routerLink="courses" [matTooltipDisabled]="!toggle" matTooltip="Courses" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-solid fa-chalkboard-user"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Courses</span>
+      </a>
+      <a routerLink="messages" [matTooltipDisabled]="!toggle" matTooltip="Messages" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-regular fa-paper-plane"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Messages</span>
+      </a>
+      <a routerLink="articles" [matTooltipDisabled]="!toggle" matTooltip="Articles" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-regular fa-newspaper"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Articles</span>
+      </a>
+      <a routerLink="quizzes" [matTooltipDisabled]="!toggle" matTooltip="Quizzes" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-solid fa-paste"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Quizzes</span>
+      </a>
+      <a routerLink="statistics" [matTooltipDisabled]="!toggle" matTooltip="Statistics" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-solid fa-signal"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Statistics</span>
+      </a>
+      <a [matTooltipDisabled]="!toggle" matTooltip="Logout" (click)="logOut()" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium">
+        <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Logout</span>
+      </a>
+    </ul>
+  </nav>
+</aside>
+
+
+<!-- Small Screens MENU -->
+<aside [ngClass]="toggle ? 'left-0' : 'left-[-50%]'" class=" border-r border-r-black h-full xs:block md:hidden absolute duration-500 z-[60] bg-white">
+  <div class="p-5">
+    <!-- Logo -->
+    <div *ngIf="toggle" class="mx-auto w-fit pb-10">
+      <h3 class="text-[20px] font-bold">
+        <i class="bg-[#8d46ff] rounded-full p-2 fa-solid fa-brain"></i>
+      </h3>
+    </div>
+    <div class="space-y-4">
+      <div>
+        <p [ngClass]="toggle ? 'text-lg':'text-3xl'" class="text-center whitespace-nowrap mt-4 font-medium">{{account && account.name}}</p>
+        <span class="block text-black/50 mx-auto text-xs w-fit">{{account && account.title}}</span>
+      </div>
+      <div class="flex flex-col items-center">
+        <mat-icon class="text-red-500">favorite</mat-icon>
+        <span>{{account && account.likes}}</span>
+      </div>
+      <button routerLink="account" class="bg-black text-white p-2 mx-auto rounded-md block">Edit account</button>
+    </div>
+  </div>
+
+  <nav>
+    <ul>
+      <a (click)="toggle = !toggle" routerLink="dashboard" [matTooltipDisabled]="!toggle" matTooltip="Dashboard" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="group-hover:text-white relative z-10 duration-500 fa-sharp fa-solid fa-chart-line"></i>
+      </a>
+      <a (click)="toggle = !toggle" routerLink="courses" [matTooltipDisabled]="!toggle" matTooltip="Courses" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="group-hover:text-white relative z-10 duration-500 fa-solid fa-chalkboard-user"></i>
+      </a>
+      <a (click)="toggle = !toggle" routerLink="messages" [matTooltipDisabled]="!toggle" matTooltip="Messages" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="group-hover:text-white relative z-10 duration-500 fa-regular fa-paper-plane"></i>
+      </a>
+      <a (click)="toggle = !toggle" routerLink="articles" [matTooltipDisabled]="!toggle" matTooltip="Articles" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="group-hover:text-white relative z-10 duration-500 fa-regular fa-newspaper"></i>
+      </a>
+      <a (click)="toggle = !toggle" routerLink="quizzes" [matTooltipDisabled]="!toggle" matTooltip="Quizzes" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-solid fa-paste"></i>
+      </a>
+      <a (click)="toggle = !toggle" routerLink="statistics" [matTooltipDisabled]="!toggle" matTooltip="Statistics" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="group-hover:text-white relative z-10 duration-500 fa-solid fa-signal"></i>
+      </a>
+      <a (click)="toggle = !toggle" [matTooltipDisabled]="!toggle" matTooltip="Logout" (click)="logOut()" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium">
+        <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
+      </a>
+    </ul>
+  </nav>
+</aside>
+<!-- Overlay screen -->
+<div (click)="toggle = !toggle" [ngClass]="!toggle? 'opacity-0 pointer-events-none':'opacity-[1] pointer-events-auto'" class="fixed left-0 top-0 z-50 w-full h-full duration-500 bg-black/50 xs:block md:hidden"></div>
+

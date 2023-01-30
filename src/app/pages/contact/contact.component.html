@@ -1,0 +1,39 @@
+<app-navbar></app-navbar>
+<app-panner [title]="'Contact'"></app-panner>
+<main class="xs:p-5 sm:p-10 md:p-24 py-36 font-mont bg-gradient-to-r from-white to-[#8d46ff]">
+  <div data-aos="fade-up" class="max-w-[1200px] shadow-black/40 shadow-lg xs:p-5 md:p-20 mx-auto flex xs:flex-col-reverse xl:flex-row xs:justify-center xl:justify-end bg-white rounded-md border relative">
+    <form class=" flex flex-col space-y-4" action="">
+      <div class="flex xs:flex-col xl:flex-row xs:space-x-0 xl:space-x-4 xs:space-y-4 xl:space-y-0">
+        <input [formControl]="fname"  class="p-2 border rounded-sm  outline-none" placeholder="First Name" type="text" />
+        <input [formControl]="lname"  class="p-2 border rounded-sm  outline-none" placeholder="Last Name" type="text" />
+      </div>
+      <input [formControl]="email" placeholder="Your Email Address" type="text">
+      <textarea [formControl]="message"  name="" id="" cols="30" rows="10" placeholder="Write your message"></textarea>
+      <button (click)="sendEmail()" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2">Send Message</button>
+    </form>
+    <div data-aos="flip-right" class="xs:relative xl:absolute xl:left-10 xl:-top-12 flex xs:mb-10 xl:mb-0 shadow-black/40 shadow-lg  px-10 p-5 space-y-8 rounded-md text-white flex-col bg-[#8d46ff]">
+      <img class="w-[250px] mx-auto" src="../../../assets/contact.webp" alt="contact">
+      <h3 class="font-bold text-3xl">Contact Us</h3>
+      <p class="max-w-[300px]">The goal of education is the advancement of knowledge and the dissemination of truth.</p>
+      <div class="flex xs:flex-col sm:flex-row items-center space-x-2">
+        <i class="fa-solid fa-phone"></i>
+        <p>+01283861152</p>
+      </div>
+      <div class="flex xs:text-[10px] sm:text-[16px] xs:flex-col sm:flex-row items-center space-x-2">
+        <i class="fa-regular fa-envelope"></i>
+        <p>hadyymohammed@gmail.com</p>
+      </div>
+      <div class="flex xs:flex-col sm:flex-row items-center space-x-2">
+        <i class="fa-solid fa-location-dot"></i>
+        <p>Cairo , Egypt</p>
+      </div>
+      <ul class="flex justify-center space-x-4 mt-6">
+        <i class="fa-brands fa-facebook-f"></i>
+        <i class="fa-brands fa-instagram"></i>
+        <i class="fa-brands fa-twitter"></i>
+        <i class="fa-brands fa-youtube"></i>
+      </ul>
+    </div>
+  </div>
+</main>
+<app-footer></app-footer>

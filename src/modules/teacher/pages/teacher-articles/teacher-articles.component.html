@@ -1,0 +1,23 @@
+<div class="p-5">
+  <div class="flex items-center justify-between">
+    <h1 class="font-bold xs:text-md sm:text-2xl">Your Published Articles</h1>
+    <button routerLink="/teacher/articles/new-article" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-md p-2 relative z-40">Post a new article</button>
+  </div>
+  <div class="xs:grid md:grid-cols-2 pt-10 xs:gap-5 md:gap-10 relative z-40">
+    <div [attr.data-aos]="i % 2 == 0 ? 'fade-right' : 'fade-left'" class="bg-white rounded-md shadow-md overflow-hidden" *ngFor="let article of articles; let i = index">
+      <img [src]="article && article.image ? article.image : '../../../../assets/placeholder.webp'" alt="image" class="w-full h-[300px] object-cover">
+      <div class="space-y-2 p-5">
+        <div class="text-sm text-black/50 flex justify-between"><span>ARTICLE</span><span>{{article && article.postedAt | date}}</span></div>
+        <h3 class="font-bold text-lg">{{article && article.title}}</h3>
+        <p class="text-sm text-black/50">{{article && article.category}}</p>
+        <div class="flex justify-between">
+          <button [routerLink]="[article && article._id]" class="text-white bg-[#8d46ff] w-[45%] duration-500 relative before:absolute before:left-0 before:top-0 before:duration-500 before:w-[0%] before:h-full before:bg-black hover:before:w-full overflow-hidden rounded-md py-2 px-6"><span class="relative z-10">Modify</span></button>
+          <button (click)="deleteArticle(article && article._id)" class="text-white bg-[#8d46ff] w-[45%] duration-500 relative before:absolute before:left-0 before:top-0 before:duration-500 before:w-[0%] before:h-full before:bg-black hover:before:w-full overflow-hidden rounded-md py-2 px-6"><span class="relative z-10">Delete</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p data-aos="zoom-in" class="text-3xl font-bold h-[50vh] grid place-items-center" *ngIf="articles && articles.length === 0">
+    No Articles Found!
+  </p>
+</div>

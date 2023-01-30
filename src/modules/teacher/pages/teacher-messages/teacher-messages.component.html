@@ -1,0 +1,43 @@
+<div class="flex xs:flex-col-reverse lg:flex-row p-5 xs:space-x-0 lg:space-x-4">
+  <!-- All Your chats -->
+  <div class="xs:w-full lg:w-[40%] xs:mt-12 lg:mt-0">
+    <div class="flex justify-between items-center relative z-40">
+      <h2 class="font-medium text-xl">All Your Chats</h2>
+      <div class="rounded-xl flex items-center bg-white overflow-hidden p-2 space-x-2">
+        <mat-icon class="text-black/50">search</mat-icon>
+        <input (keyup)="filterData()" [formControl]="searchTerm" class="outline-none" type="text" placeholder="Search Chats" name="" id="">
+      </div>
+    </div>
+    <!-- Chats -->
+    <div class="flex flex-col relative z-40">
+      <div class="cursor-pointer" data-aos="fade-up" [attr.data-aos-delay]="i * 100" *ngFor="let chat of filteredChats; let i = index">
+        <a (click)="goToConversation(chat._id)" class="flex justify-between space-x-3 relative mt-5 bg-white p-5 rounded-xl hover:bg-[#6a43ff] duration-500">
+            <div class="relative">
+              <img class="w-[60px] h-[60px] rounded-full object-cover" [src]="chat.person1.email === account ? chat.person2.picture === 'default' ? '../../../../../assets/user.webp': chat.person2.picture : chat.person1.picture === 'default' ? '../../../../../assets/user.webp': chat.person1.picture" alt="phooto">
+              <span *ngIf="chat.person1.email === account ? onlineUsers && onlineUsers.includes(chat.person2.email) : onlineUsers && onlineUsers.includes(chat.person1.email)" class="w-[15px] right-0 top-0 border border-white h-[15px] absolute block  rounded-full bg-green-600"></span>
+            </div>
+            <div class="w-[70%]">
+              <ng-container *ngIf="chat.newMessages">
+                <span class="absolute left-2 rounded-full text-white bg-red-500 w-[23px] h-[23px] grid place-items-center">{{chat.newMessages}}</span>
+              </ng-container>
+              <h3 class="font-bold text-lg">{{chat.person1.email === account ? chat.person2.name : chat.person1.name}}</h3>
+              <p class="text-black/50 text-sm">All your chats</p>
+            </div>
+            <button class="absolute top-1 right-2 rotate-90" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button (click)="deleteChat(chat._id)" mat-menu-item>
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </a>
+      </div>
+    </div>
+  </div>
+  <!-- Messages -->
+  <div class="xs:w-full lg:w-[60%]">
+    <router-outlet></router-outlet>
+  </div>
+</div>

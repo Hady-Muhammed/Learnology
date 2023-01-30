@@ -1,0 +1,58 @@
+<nav class="flex justify-between items-center font-mont fixed w-full bg-transparent top-0 z-30 bg-gradient-to-r from-white to-[#8d46ff] shadow-md shadow-black/30 p-5 px-12">
+  <!-- Logo -->
+  <a routerLink="/" data-aos="slide-right" data-aos-duration="1000">
+    <app-logo [size]="20"></app-logo>
+  </a>
+  <button (click)="isOpened = !isOpened" class="text-4xl xs:block lg:hidden text-white"><i class="fa-solid fa-bars"></i></button>
+  <ul data-aos="slide-left" data-aos-duration="1000" class="space-x-4 xs:hidden lg:flex items-center">
+    <a routerLink="" class="text-white text-xl font-bold" href="">Home</a>
+    <a routerLink="/about" class="text-white text-xl font-bold" href="">About us</a>
+    <a routerLink="/courses" class="text-white text-xl font-bold" href="">Courses</a>
+    <a routerLink="/blog" class="text-white text-xl font-bold" href="">Blog</a>
+    <a routerLink="/contact" class="text-white text-xl font-bold" href="">Contact</a>
+    <a (click)="logOut()" class="text-white text-xl font-bold" href="">Logout</a>
+    <a matTooltip="Account" routerLink="/account" class="rounded-full overflow-hidden">
+      <img class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
+    </a>
+    <button class="text-white flex items-center" [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a routerLink="/community" mat-menu-item>
+        <mat-icon>forum</mat-icon>
+        <span>Community</span>
+      </a>
+      <a routerLink="/quizzes" mat-menu-item>
+        <mat-icon>assignment</mat-icon>
+        <span>Quizzes</span>
+      </a>
+    </mat-menu>
+  </ul>
+  <!-- Mobile Menu -->
+  <ul [ngClass]="isOpened ? 'scale-[1]':'scale-0'" class="fixed w-full h-full justify-center items-center left-0 top-0 duration-500 space-y-4 bg-black flex flex-col">
+    <button (click)="isOpened = !isOpened" class="absolute top-10 right-10 text-4xl text-white"><i class="fa-solid fa-xmark"></i></button>
+    <a (click)="isOpened = !isOpened" routerLink="" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">Home</a>
+    <a (click)="isOpened = !isOpened" routerLink="/about" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">About us</a>
+    <a (click)="isOpened = !isOpened" routerLink="/courses" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">Courses</a>
+    <a (click)="isOpened = !isOpened" routerLink="/blog" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">Blog</a>
+    <a (click)="isOpened = !isOpened" routerLink="/contact" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">Contact</a>
+    <a (click)="logOut()" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">Logout</a>
+    <a matTooltip="Account" (click)="isOpened = !isOpened" routerLink="/account" class="overflow-hidden rounded-full">
+      <img class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
+    </a>
+    <button class="text-white flex items-center" [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <a routerLink="/community" mat-menu-item>
+        <mat-icon>forum</mat-icon>
+        <span>Community</span>
+      </a>
+      <a routerLink="/quizzes" mat-menu-item>
+        <mat-icon>assignment</mat-icon>
+        <span>Quizzes</span>
+      </a>
+    </mat-menu>
+  </ul>
+</nav>
+

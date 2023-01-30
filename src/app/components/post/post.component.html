@@ -1,0 +1,84 @@
+<article class="sm:max-w-[600px] msm:w-[400px] sm:w-[500px] md:w-[600px] border-2 rounded-xl pb-5">
+  <!-- Post header -->
+  <div class="flex p-4 justify-between">
+    <div class="flex items-center space-x-3">
+      <div class="relative">
+        <img class="object-cover w-[50px] h-[50px] rounded-full" [src]="post && post.author[0].picture == 'default' ? '../../../assets/user.webp': post && post.author[0].picture" alt="profile">
+        <span *ngIf="post.author[0].online && post.author[0].email !== account?.email" class="absolute right-0 bottom-0 border-2 border-white w-[15px] h-[15px] rounded-full bg-green-600"></span>
+      </div>
+      <div>
+        <h3 class="font-semibold text-lg">{{post.author[0].name}}</h3>
+        <span [matTooltip]="(post.publishedAt | date: 'short') || 'easy'" class="text-sm text-black/40">{{post.publishedAt | date}}</span>
+      </div>
+    </div>
+    <button class="flex items-center" [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button *ngIf="account" [disabled]="post.authorID !== account._id" class="disabled:opacity-[.6]" (click)="deletePost(post._id)" mat-menu-item>
+        <mat-icon>delete</mat-icon>
+        <span>{{post.authorID !== account._id ? 'Cannot delete':'Delete'}}</span>
+      </button>
+    </mat-menu>
+  </div>
+  <!-- Content -->
+  <div *ngIf="!seeMore " class="my-4 p-4">
+    {{post.content.slice(0, 400)}}<span *ngIf="post.content.length > 200">... <button class="text-[#8d46ff] font-bold cursor-pointer" (click)="seeMore = !seeMore">See More</button></span>
+  </div>
+  <div *ngIf="seeMore" class="my-4 p-4">
+    {{post.content}}<button *ngIf="post.content.length > 200" class="text-[#8d46ff] font-bold cursor-pointer" (click)="seeMore = !seeMore">See Less</button>
+  </div>
+  <!-- Post image -->
+  <img *ngIf="post.image" class="w-full object-cover" [src]="post.image" alt="post image">
+  <div class="flex justify-between items-center px-5 py-5">
+    <!-- Reacts -->
+    <div class="flex items-center">
+      <div class="flex items-center">
+        <i *ngIf="post.postHasLoves" class="inline-block text-red-500 text-xl fa-solid fa-heart"></i>
+        <i *ngIf="post.postHasLikes" class="inline-block text-blue-500 text-xl fa-regular fa-thumbs-up"></i>
+        <i *ngIf="post.postHasWows" class="inline-flex justify-center items-center overflow-hidden w-[20px] h-[20px] text-yellow-400 text-xl bg-black rounded-full fa-solid fa-face-surprise"></i>
+      </div>
+      <span (click)="getAllReactsOfPost(post._id)" *ngIf="post.reacts !== 0" class="inline-block ml-3 hover:underline hover:decoration-[#6a43ff] hover:decoration-2 hover:underline-offset-2 cursor-pointer xs:text-xs msm:text-sm md:text-base">{{post.reacts}} reacts</span>
+      <span *ngIf="post.reacts === 0" class="inline-block ml-3 xs:text-xs msm:text-sm md:text-base">No reacts yet</span>
+    </div>
+    <span (click)="getComments(post._id,inp,true)" *ngIf="post.comments !== 0" class="hover:underline hover:decoration-[#6a43ff] hover:decoration-2 hover:underline-offset-2 cursor-pointer xs:text-xs msm:text-sm md:text-base">{{post.comments}} comments</span>
+    <span *ngIf="post.comments === 0" class="xs:text-xs msm:text-sm md:text-base">No comments yet</span>
+  </div>
+  <hr class="h-[1px] w-full bg-black mb-4">
+  <div class="flex relative justify-between">
+    <!-- Like & Comment buttons -->
+    <button (mouseout)="handleReactMenuOfPostMouseOut()" (mouseover)="handleReactMenuOfPostMouseOver()" class="p-3 bg-[#6a43ff]/80 w-full uppercase text-white border-r xs:text-xs msm:text-sm md:text-base">
+      {{checkReactType(post) === 'love' ? 'You loved this post' : checkReactType(post) === 'like' ? 'You liked this post' : checkReactType(post) === 'wow' ? 'You wowed this post' : 'like'}}
+    </button>
+    <button (click)="getComments(post._id,inp,true)" class="p-3 bg-[#6a43ff]/80 w-full uppercase text-white xs:text-xs msm:text-sm md:text-base">comment</button>
+    <app-reacts-popup [isOpened]="openReactMenuOfPost" (openReactMenu)="openReactMenuOfPost=$event" [post]="post" [account]="account" (reactHappened)="reactHappened.emit(true)" [type]="'post'"></app-reacts-popup>
+  </div>
+  <div class="flex p-5 items-center mt-2 space-x-2">
+    <img class="object-cover block w-[35px] h-[35px] rounded-full" [src]="account && account.picture === 'default' ? '../../../assets/user.webp': account && account.picture" alt="profile">
+    <input #inp (keyup.enter)="addComment(post._id,inp)" [formControl]="commentContent" class="w-full outline-none block bg-gray-200 rounded-md p-2" placeholder="Write a comment.." type="text">
+    <button (click)="addComment(post._id,inp)" class="text-white grid place-items-center bg-[#8d46ff] rounded-full p-2">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+  <div *ngIf="comments && !loading">
+    <!-- Comments -->
+    <ng-container *ngFor="let comment of comments; let j = index; trackBy: trackComments">
+        <app-comment data-aos="fade-up" data-aos-duration="500" [attr.data-aos-delay]="100*j" [post]="post" [comment]="comment" [account]="account" (reactHappened)="getComments(post._id,inp,false)" (commentDeleted)="getComments(post._id,inp,false)"></app-comment>
+    </ng-container>
+  </div>
+  <!-- Loader -->
+  <ng-container *ngIf="loading">
+    <div class="h-[200px] flex justify-center items-center">
+      <div class="loader"></div>
+    </div>
+  </ng-container>
+</article>
+
+<!-- Overlay screen -->
+<div (click)="this.opened = false; this.reactListOpened = false;" [ngClass]="opened && reactListOpened ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="fixed w-full h-full left-0 top-0 bg-black/50 duration-500 flex justify-center items-center z-40"></div>
+
+<!-- Popup of Post reacts list -->
+
+<ng-container *ngIf="reactsOnPost">
+  <app-reacts-list [reacts]="reactsOnPost" (closePopup)="reactListOpened = $event" [isOpened]="reactListOpened"></app-reacts-list>
+</ng-container>

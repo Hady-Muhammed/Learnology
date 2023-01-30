@@ -1,0 +1,49 @@
+<main class="p-5 relative z-40">
+  <a class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40" (click)="return()">Return</a>
+  <div class="flex flex-col space-x-2 relative z-40">
+      <img data-aos="fade-up" class="w-[55%] mx-auto rounded-md object-cover" [src]="imageURL?.value ? imageURL?.value : '../../../../../assets/placeholder.webp'" alt="p">
+      <form [formGroup]="form" class="flex flex-col w-full space-y-4" action="">
+        <mat-form-field data-aos="fade-up" data-aos-delay="200" class="example-full-width">
+          <mat-label>Title</mat-label>
+          <input type="text" matInput formControlName="title" placeholder="Title">
+          <mat-error *ngIf="title?.hasError('required')">
+            Please enter the title
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field data-aos="fade-up" data-aos-delay="400" class="example-full-width">
+            <mat-label>Image URL</mat-label>
+            <input type="text" matInput formControlName="imageURL" placeholder="Image URL">
+            <mat-error *ngIf="imageURL?.hasError('required')">
+              Please enter the image url
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field data-aos="fade-up" data-aos-delay="600" appearance="fill">
+          <mat-label>Article Category</mat-label>
+          <mat-select (selectionChange)="changed = true" formControlName="selectedValue" name="categ">
+            <mat-option *ngFor="let categ of categories" [value]="categ.value">
+              {{categ.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field data-aos="fade-up" data-aos-delay="800" class="example-full-width">
+          <mat-label>Article's content</mat-label>
+          <textarea matInput formControlName="articleContent" placeholder="Article's content.." cols="30" rows="10"></textarea>
+          <mat-error *ngIf="articleContent?.errors">
+            Please enter the article's content
+          </mat-error>
+        </mat-form-field>
+      </form>
+  </div>
+  <div class="flex space-x-4 justify-center mt-10">
+    <button
+    [disabled]="
+    !title?.dirty && !articleContent?.dirty &&
+    !imageURL?.dirty && !changed"
+    (click)="modifyArticle()" class="disabled:opacity-[.5] block bg-black text-white px-10 py-4">Modify The Article</button>
+    <button
+    [disabled]="
+    !title?.dirty && !articleContent?.dirty &&
+    !imageURL?.dirty && !changed"
+    (click)="cancelChanges()" class="disabled:opacity-[.5] block bg-black text-white px-10 py-4">Cancel Changes</button>
+  </div>
+</main>

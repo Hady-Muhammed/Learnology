@@ -1,0 +1,49 @@
+<main class="p-5 relative z-40">
+  <h2 data-aos="fade-down" data-aos-duration="500" class="font-bold xs:text-md sm:text-2xl">Overview</h2>
+  <div class="flex xs:flex-col md:flex-row xs:space-x-0 md:space-x-3 xs:space-y-3 md:space-y-0 mt-10">
+    <div data-aos="zoom-in" data-aos-duration="500" data-aos-delay="100" class="space-y-2 rounded-lg bg-white px-2 py-12 font-semibold text-lg  w-full text-center">
+      <i class="text-3xl text-[#6a43ff] fa-solid fa-chalkboard-user"></i>
+      <h3>
+        +{{account && account.courses_teaching.length}}
+      </h3>
+      <span class="block text-[#6a43ff]/50">Courses</span>
+    </div>
+    <div data-aos="zoom-in" data-aos-duration="500" data-aos-delay="300" class="space-y-2 rounded-lg bg-white px-2 py-12 font-semibold text-lg  w-full text-center">
+      <i class="text-3xl text-[#6a43ff] fa-regular fa-newspaper"></i>
+      <h3>
+        +{{account && account.articles_published.length}}
+      </h3>
+      <span class="block text-[#6a43ff]/50">Articles</span>
+    </div>
+    <div data-aos="zoom-in" data-aos-duration="500" data-aos-delay="500" class="space-y-2 rounded-lg bg-white px-2 py-12 font-semibold text-lg  w-full text-center">
+      <i class="text-3xl text-[#6a43ff] fa-solid fa-paste"></i>
+      <h3>
+        +{{account && account.quizzes_published.length}}
+      </h3>
+      <span class="block text-[#6a43ff]/50">Quizzes</span>
+    </div>
+  </div>
+  <!-- Revenue -->
+  <div>
+    <h3 data-aos="fade-right" data-aos-duration="500" data-aos-delay="600" class="font-bold xs:text-md sm:text-2xl my-10">Revenue summary</h3>
+    <div class="flex xs:flex-col md:flex-row xs:space-x-0 md:space-x-3 xs:space-y-3 md:space-y-0 my-10">
+      <div data-aos="zoom-in" data-aos-duration="500" data-aos-delay="700" class="space-y-2 rounded-lg bg-white px-2 py-12 font-semibold text-lg  w-full text-center">
+        <i class="text-3xl text-green-700 fa-solid fa-money-check-dollar"></i>
+        <h3 class="text-4xl">
+          +17,005
+        </h3>
+        <span class="block text-[#6a43ff]/50">Total revenue</span>
+      </div>
+      <div data-aos="zoom-in" data-aos-duration="500" data-aos-delay="900" class="space-y-2 rounded-lg bg-white px-2 py-12 font-semibold text-lg  w-full text-center">
+        <i class="text-3xl text-red-700 fa-solid fa-heart"></i>
+        <h3>
+          +{{account && account.likes}}
+        </h3>
+        <span class="block text-[#6a43ff]/50">Number of likes</span>
+      </div>
+    </div>
+    <div data-aos="fade-up" data-aos-duration="500" data-aos-delay="1000" class="mx-auto w-full rounded-lg overflow-hidden">
+      <img class="object-cover w-full" src="../../../../assets/chart.webp" alt="chart">
+    </div>
+  </div>
+</main>

@@ -1,0 +1,91 @@
+<div class="flex justify-center relative items-center overflow-auto lg:h-screen bg-gradient-to-r from-[#6a43ff] to-[#8d46ff]">
+    <svg class="absolute w-full h-full" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" width="1440" height="560" preserveAspectRatio="none" viewBox="0 0 1440 560">
+      <g mask="url(&quot;#SvgjsMask1054&quot;)" fill="none">
+          <path d="M79.282,360.524C95.88,360.32,108.856,347.682,116.789,333.101C124.327,319.245,125.907,302.74,118.211,288.971C110.332,274.875,95.428,265.662,79.282,265.997C63.654,266.321,50.848,276.981,43.055,290.531C35.287,304.036,32.983,320.206,40.145,334.043C47.905,349.036,62.401,360.731,79.282,360.524" fill="rgba(52, 8, 147, 0.4)" class="triangle-float1"></path>
+          <path d="M1016.828,154.143C1047.226,153.864,1076.135,141.873,1093.266,116.761C1113.056,87.751,1126.616,49.788,1108.564,19.666C1090.812,-9.955,1051.353,-11.513,1016.828,-10.785C984.014,-10.093,948.686,-4.598,931.557,23.399C913.844,52.351,919.38,89.758,937.921,118.187C954.845,144.136,985.849,154.427,1016.828,154.143" fill="rgba(52, 8, 147, 0.4)" class="triangle-float3"></path>
+          <path d="M787.234,67.664C813.099,68.647,840.187,59.664,852.942,37.141C865.556,14.866,857.22,-11.649,844.834,-34.052C831.911,-57.426,813.943,-81.841,787.234,-81.707C760.666,-81.573,742.594,-57.198,730.628,-33.477C720.018,-12.445,718.139,11.897,729.644,32.454C741.422,53.498,763.135,66.748,787.234,67.664" fill="rgba(52, 8, 147, 0.4)" class="triangle-float1"></path>
+          <path d="M333.45 540.51 a103.41 103.41 0 1 0 206.82 0 a103.41 103.41 0 1 0 -206.82 0z" fill="rgba(52, 8, 147, 0.4)" class="triangle-float3"></path>
+      </g>
+      <defs>
+          <mask id="SvgjsMask1054">
+              <rect width="1440" height="560" fill="#ffffff"></rect>
+          </mask>
+      </defs>
+    </svg>
+    <!-- Loader -->
+    <ng-container *ngIf="loading">
+        <div class="left-0 top-0 absolute flex items-center justify-center w-full h-full bg-black/80 z-50">
+            <app-loader></app-loader>
+        </div>
+    </ng-container>
+    <main data-aos="fade-up" class="flex justify-between xs:flex-col lg:flex-row rounded-md relative overflow-hidden font-mont">
+
+        <div class="p-10 bg-white relative">
+          <!-- Logo -->
+          <app-logo></app-logo>
+          <img loading="lazy" class="w-[300px] min-h-[300px] relative z-30 mx-auto object-cover" src="../../../assets/signup.webp" alt="photo">
+          <div class="relative z-30">
+              <p class="my-6 flex items-center"><span class="text-3xl text-[#8d46ff] font-bold">"</span>We're born to raise a generation of well educated students!<span class="text-3xl text-[#8d46ff] font-bold">"</span></p>
+              <p class="mx-auto w-fit my-6 relative before:w-[15px] before:h-[2px] before:absolute before:bg-[#8d46ff] before:top-1/2 before:translate-y-[-50%] before:left-[-25px] after:w-[15px] after:h-[2px] after:absolute after:bg-[#8d46ff] after:top-1/2 after:translate-y-[-50%] after:right-[-25px]">GET IN TOUCH</p>
+              <ul class="flex justify-center space-x-4">
+                <li class="text-blue-600 text-xl"><i class="fa-brands fa-square-facebook"></i></li>
+                <li class="text-red-600 text-xl"><i class="fa-brands fa-youtube"></i></li>
+                <li class="text-blue-500 text-xl"><i class="fa-brands fa-square-twitter"></i></li>
+              </ul>
+          </div>
+        </div>
+        <form class="flex flex-col bg-white p-10">
+            <div class="flex flex-col space-y-5">
+              <h1 class="font-bold text-3xl relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2">Create a new Account</h1>
+              <mat-form-field class="example-full-width">
+                <mat-label>Full Name</mat-label>
+                <input type="text" matInput [formControl]="name" placeholder="Ex. Alex">
+                <mat-error *ngIf="name.hasError('maxlength') || name.hasError('minlength') ">
+                  a name between 5 to 20 characters
+                </mat-error>
+                <mat-error *ngIf="name.hasError('required')">
+                  Name is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Email</mat-label>
+                <input type="email" matInput [formControl]="email" placeholder="Ex. pat@example.com">
+                <mat-error *ngIf="email.hasError('email') && !email.hasError('required')">
+                  Please enter a valid email address
+                </mat-error>
+                <mat-error *ngIf="email.hasError('required')">
+                  Email is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Password</mat-label>
+                <input type="password" matInput [formControl]="password" placeholder="Ex. 25Kl*ndR">
+                <mat-error *ngIf="password.hasError('minlength')">
+                  Must be at least 5 charaters
+                </mat-error>
+                <mat-error *ngIf="password.hasError('required')">
+                  Password is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Confirm password</mat-label>
+                <input type="password" matInput [formControl]="confirmPassword" placeholder="Ex. 25Kl*ndR">
+                <mat-error *ngIf="confirmPassword.hasError('notIdentical')">
+                  Must be Identical
+                </mat-error>
+                <mat-error *ngIf="confirmPassword.hasError('required')">
+                  Confirm password is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
+              <div>
+                <mat-checkbox #checkbox name="checkbox" class="example-margin italic" [(ngModel)]="checked">All terms and conditions</mat-checkbox>
+                <p class="text-red-500" *ngIf="checkbox.change.hasError">Must be checked!</p>
+              </div>
+              <p>Already have an account? <a class="text-[#6a43ff] font-semibold" routerLink="/signin">Sign in</a> </p>
+              <button (click)="signUp()" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2">SIGN UP</button>
+            </div>
+        </form>
+    </main>
+</div>
+
+

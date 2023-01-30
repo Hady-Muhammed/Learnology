@@ -1,0 +1,42 @@
+<main class="p-5 relative z-40">
+  <a class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40" (click)="return()">Return</a>
+  <form [formGroup]="form" action="">
+    <div class="flex flex-col w-full space-y-4 mt-10" action="">
+      <div class="flex flex-col">
+        <img class="object-cover w-[400px] mx-auto" [src]="imageURL?.value ? imageURL?.value : '../../../../../assets/placeholder.webp'" alt="image">
+        <div class="flex flex-col space-y-5 w-full p-5">
+          <mat-form-field data-aos="fade-up" data-aos-delay="200">
+            <mat-label>Name</mat-label>
+            <input type="text" matInput formControlName="name" placeholder="Name">
+            <mat-error *ngIf="name?.hasError('required')">
+              Please enter the name
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field data-aos="fade-up" data-aos-delay="400">
+              <mat-label>Image URL</mat-label>
+              <input type="text" matInput formControlName="imageURL" placeholder="Image URL">
+              <mat-error *ngIf="imageURL?.hasError('required')">
+                Please enter the image url
+              </mat-error>
+          </mat-form-field>
+          <mat-form-field data-aos="fade-up" data-aos-delay="400">
+              <mat-label>Quiz category</mat-label>
+              <input type="text" matInput formControlName="category" placeholder="Quiz category">
+              <mat-error *ngIf="category?.hasError('required')">
+                Please enter the Quiz category
+              </mat-error>
+          </mat-form-field>
+          <mat-form-field data-aos="fade-up" data-aos-delay="600" appearance="fill">
+            <mat-label>Difficulty</mat-label>
+            <mat-select formControlName="selectedValue" name="categ">
+              <mat-option *ngFor="let categ of categories" [value]="categ.value">
+                {{categ.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+    <button (click)="postQuiz()" class="block mx-auto bg-black text-white px-10 py-4 mt-10 mb-5">Post Quiz</button>
+  </form>
+</main>
