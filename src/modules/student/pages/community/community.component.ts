@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { comment, Post } from 'src/app/models/post';
 import { Student } from 'src/app/models/student';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-community',
@@ -29,6 +29,7 @@ export class CommunityComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: NgToastService,
+    private socketService: SocketioService,
     private cd: ChangeDetectorRef
   ) {
     this.getAllStudents();
@@ -42,7 +43,11 @@ export class CommunityComponent implements OnInit {
     const student: any = jwt_decode(localStorage.getItem('token') || '');
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
-      .subscribe((student: Student) => (this.account = student));
+      .subscribe((student: Student) => {
+        this.account = student
+        this.socketService.online(student._id);
+        this.socketService.setupSocketConnection(student.email);
+      });
   }
 
   getAllStudents() {

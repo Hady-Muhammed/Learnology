@@ -2,7 +2,9 @@ import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Course } from 'src/app/models/course';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import jwtDecode from 'jwt-decode';
+import { Student } from 'src/app/models/student';
 
 @Component({
   selector: 'app-courses',
@@ -13,9 +15,10 @@ export class CoursesComponent implements OnInit {
   courses!: Course[];
   filteredCourses!: Course[];
   searchTerm = new FormControl('');
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient , private socketService: SocketioService) {
     this.getAllCourses();
     window.scrollTo(0, 0);
+    this.getAccount()
   }
 
   ngOnInit(): void {}
@@ -28,6 +31,17 @@ export class CoursesComponent implements OnInit {
     } else {
       this.filteredCourses = this.courses;
     }
+  }
+
+  getAccount() {
+    const token: any = localStorage.getItem('token');
+    const student: any = jwtDecode(token);
+    this.http
+      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
+      .subscribe((student: Student) => {
+        this.socketService.online(student._id);
+        this.socketService.setupSocketConnection(student.email);
+      });
   }
 
   getAllCourses() {

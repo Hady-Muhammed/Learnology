@@ -73,7 +73,7 @@ export class TeacherMessagesComponent implements OnInit {
         newMessages: 0,
       })
       .subscribe((res: any) => console.log(res));
-    this.router.navigateByUrl('teacher/messages/' + id);
+    this.router.navigateByUrl('teacher/t/messages/' + id);
   }
 
   getChats() {

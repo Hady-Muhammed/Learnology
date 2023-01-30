@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-instructor',
@@ -24,6 +24,7 @@ export class InstructorComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
+    private socketService: SocketioService,
     private toast: NgToastService
   ) {
     window.scrollTo(0, 0);
@@ -42,8 +43,11 @@ export class InstructorComponent implements OnInit {
       .subscribe((student: Student) => {
         this.account = student;
         this.isLiked();
+        this.socketService.online(student._id);
+        this.socketService.setupSocketConnection(student.email);
       });
   }
+
 
   getInstructor(id: string) {
     this.http

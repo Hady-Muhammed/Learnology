@@ -9,7 +9,8 @@ import {
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
 import { Teacher } from 'src/app/models/teacher';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'app-course-detail',
@@ -26,12 +27,14 @@ export class CourseDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private toast: NgToastService,
+    private socketService: SocketioService,
     private router: Router
   ) {
     this.id = route.snapshot.params['id'];
     this.getCourse(this.id);
     this.getInstructor(this.id);
     window.scrollTo(0, 0);
+    this.getAccount()
   }
 
   ngOnInit(): void {
@@ -97,6 +100,17 @@ export class CourseDetailComponent implements OnInit {
         error: (err) => {
           console.log(err);
         },
+      });
+  }
+
+  getAccount() {
+    const token: any = localStorage.getItem('token');
+    const student: any = jwtDecode(token);
+    this.http
+      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
+      .subscribe((student: Student) => {
+        this.socketService.online(student._id);
+        this.socketService.setupSocketConnection(student.email);
       });
   }
 }

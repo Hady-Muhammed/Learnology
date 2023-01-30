@@ -5,7 +5,8 @@ import jwt_decode from 'jwt-decode';
 import { Component, OnInit } from '@angular/core';
 import { Chat } from 'src/app/models/chat';
 import { Student } from 'src/app/models/student';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'app-messages',
@@ -19,14 +20,17 @@ export class MessagesComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toast: NgToastService
+    private toast: NgToastService,
+    private socketService: SocketioService
   ) {
     this.getChats();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getAccount();
+  }
 
-  async getChats() {
+  getChats() {
     const token: any = localStorage.getItem('token');
     const student: any = jwt_decode(token);
     this.account = student.email;
@@ -80,5 +84,29 @@ export class MessagesComponent implements OnInit {
 
   isOnline(email: string){
     return this.onlineUsers?.find(user => user.email === email && user.online === true)
+  }
+
+  getAccount() {
+    const token: any = localStorage.getItem('token');
+    const student: any = jwtDecode(token);
+    this.http
+      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
+      .subscribe((student: Student) => {
+        this.account = student.email
+        this.connectToSocket()
+        this.socketService.online(student._id);
+      });
+  }
+
+  connectToSocket(){
+    if(!this.isConnectedToSocket()) {
+      this.socketService.setupSocketConnection(this.account)
+    } else {
+      console.log("connected before!")
+    }
+  }
+
+  isConnectedToSocket(){
+    return this.socketService?.socket?.connected
   }
 }

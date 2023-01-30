@@ -1,7 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import jwtDecode from 'jwt-decode';
+import { Student } from 'src/app/models/student';
 
 @Component({
   selector: 'app-contact',
@@ -14,11 +16,16 @@ export class ContactComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.email]);
   message = new FormControl('', [Validators.required]);
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private socketService: SocketioService
+  ) {
     window.scrollTo(0, 0);
+    this.getAccount()
   }
 
   ngOnInit(): void {}
+
   sendEmail() {
     this.http
       .post(API_URL + '/api/students/sendEmail', {
@@ -36,5 +43,16 @@ export class ContactComponent implements OnInit {
     this.lname.setErrors(null);
     this.message.setValue('');
     this.message.setErrors(null);
+  }
+
+  getAccount() {
+    const token: any = localStorage.getItem('token');
+    const student: any = jwtDecode(token);
+    this.http
+      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
+      .subscribe((student: Student) => {
+        this.socketService.online(student._id);
+        this.socketService.setupSocketConnection(student.email);
+      });
   }
 }

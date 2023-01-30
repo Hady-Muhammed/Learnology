@@ -11,7 +11,7 @@ export class SocketioService {
 
   setupSocketConnection(email: string) {
     this.socket = io(environment.SOCKET_ENDPOINT, {
-      query: { studentEmail: email, transports: ['websocket'], upgrade: false },
+      query: { studentEmail: email, transports: ['websocket'], upgrade: false},
     });
   }
 

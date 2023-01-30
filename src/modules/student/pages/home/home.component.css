@@ -4,7 +4,7 @@
 @import '~swiper/modules/pagination/pagination.min.css';
 @import '~swiper/modules/effect-fade/effect-fade.min.css';
 .hero {
-  background-image: url(../../../assets/hero.webp);
+  background-image: url(../../../../assets/hero.webp);
   background-size: cover;
   height: 100vh;
 }

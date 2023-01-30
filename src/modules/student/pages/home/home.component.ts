@@ -61,14 +61,14 @@ export class HomeComponent implements OnInit {
     private http: HttpClient,
     private socketService: SocketioService
   ) {
-    this.getAllCourses();
+    this.getPopularCourses();
     window.scrollTo(0, 0);
     this.getAccount();
   }
   ngOnInit(): void {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
-    this.socketService.setupSocketConnection(student.email);
+    // this.socketService.setupSocketConnection(student.email);
   }
 
   getAccount() {
@@ -78,17 +78,28 @@ export class HomeComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         this.account = student;
+        this.connectToSocket();
         this.socketService.online(student._id);
       });
   }
 
-  getAllCourses() {
+  getPopularCourses() {
     this.http
-      .get<Course[]>(API_URL + '/api/courses/getAllCourses')
+      .get<Course[]>(API_URL + '/api/courses/getPopularCourses')
       .subscribe((courses: Course[]) => {
-        this.popularCourses = courses.filter(
-          (course: Course) => course.num_of_likes >= 200
-        );
+        this.popularCourses = courses
       });
+  }
+
+  connectToSocket(){
+    if(!this.isConnectedToSocket()) {
+      this.socketService.setupSocketConnection(this.account.email)
+    } else {
+      console.log("connected before!")
+    }
+  }
+
+  isConnectedToSocket(){
+    return this.socketService?.socket?.connected
   }
 }

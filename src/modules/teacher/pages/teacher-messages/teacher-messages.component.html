@@ -33,7 +33,10 @@
               </button>
             </mat-menu>
           </a>
-      </div>
+        </div>
+        <p class="text-center mt-10" *ngIf="filteredChats?.length === 0">
+          No chats yet...
+        </p>
     </div>
   </div>
   <!-- Messages -->

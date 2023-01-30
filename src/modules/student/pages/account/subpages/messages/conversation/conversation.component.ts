@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
@@ -20,23 +20,21 @@ export class ConversationComponent implements OnInit {
   message!: string;
   newMessages!: number;
   typing!: boolean;
+  @ViewChild('lastMessage') lastMessage!: any
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router,
     private socketService: SocketioService
   ) {
-    this.id = this.route.snapshot.params['id'];
-    this.socketService.joinChat(this.id);
     const student: any = jwt_decode(localStorage.getItem('token') || '');
+    this.id = this.route.snapshot.params['id'];
     this.getAccount(student.email);
   }
 
   ngOnInit(): void {
-    this.listenForNewMessagesRealtime();
-    this.listenForTyping();
   }
+
   getChat() {
     this.http
       .get<Chat>(API_URL + `/api/chats/getSingleChat/${this.id}`)
@@ -50,6 +48,8 @@ export class ConversationComponent implements OnInit {
           this.getPerson2(chat.person1.email);
         }
         console.log(this.messages);
+        this.listenForNewMessagesRealtime();
+        this.listenForTyping();
       });
   }
 
@@ -58,6 +58,8 @@ export class ConversationComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${email}`)
       .subscribe((student: Student) => {
         this.account = student;
+        this.connectToSocket()
+        this.socketService.joinChat(this.id)
         this.getChat();
       });
   }
@@ -72,11 +74,9 @@ export class ConversationComponent implements OnInit {
           this.http
             .get<Teacher>(API_URL + `/api/teachers/getTeacher/${email}`)
             .subscribe((teacher: Teacher) => {
-              console.log('person2:', teacher);
               this.person2 = teacher;
             });
         } else {
-          console.log('person2:', student);
           this.person2 = student;
         }
       });
@@ -90,6 +90,7 @@ export class ConversationComponent implements OnInit {
         sentAt: new Date().toUTCString(),
       };
       this.messages.push(message);
+      this.scrollToLastMessage()
       this.socketService.sendMessage(message, this.id);
       this.http
         .post(API_URL + `/api/chats/sendMessage`, {
@@ -104,7 +105,6 @@ export class ConversationComponent implements OnInit {
           console.log('sendMessage res:', res);
           this.message = '';
           this.socketService.typingMessage(this.id, '')
-          this.getChat();
         });
       this.http
         .post(API_URL + '/api/chats/setNewMessages', {
@@ -118,11 +118,16 @@ export class ConversationComponent implements OnInit {
   listenForNewMessagesRealtime() {
     this.socketService.socket?.on('receive-message', (message: message) => {
       this.messages.push(message);
+      this.scrollToLastMessage()
     });
   }
 
+  scrollToLastMessage() {
+    this.lastMessage.nativeElement.scrollIntoView({behavior: 'smooth'})
+  }
+
   listenForTyping() {
-    this.socketService.socket?.on('listen-typing-message', (typing: any) => {
+    this.socketService.socket?.on('listen-typing-message', (typing: boolean) => {
       console.log(typing);
       if (typing) this.typing = true;
       else this.typing = false;
@@ -132,4 +137,17 @@ export class ConversationComponent implements OnInit {
   isTyping() {
     this.socketService.typingMessage(this.id, this.message);
   }
+
+  connectToSocket(){
+    if(!this.isConnectedToSocket()) {
+      this.socketService.setupSocketConnection(this.account.email)
+    } else {
+      console.log("connected before!")
+    }
+  }
+
+  isConnectedToSocket(){
+    return this.socketService?.socket?.connected
+  }
+
 }

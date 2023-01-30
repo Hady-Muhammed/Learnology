@@ -1,26 +1,57 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import jwtDecode from 'jwt-decode';
+import { Student } from 'src/app/models/student';
 import { Teacher } from 'src/app/models/teacher';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-about',
   templateUrl: './about.component.html',
-  styleUrls: ['./about.component.css']
+  styleUrls: ['./about.component.css'],
 })
 export class AboutComponent implements OnInit {
   teachers!: Teacher[];
-  constructor(private http: HttpClient) {
-    window.scrollTo(0,0)
-    this.getAllTeachers()
+  account!: Student;
+  constructor(
+    private http: HttpClient,
+    private socketService: SocketioService
+  ) {
+    window.scrollTo(0, 0);
+    this.getAllTeachers();
+    this.getAccount();
   }
 
   ngOnInit(): void {
   }
-  getAllTeachers(){
-    this.http.get(API_URL+'/api/teachers/getAllTeachers')
-    .subscribe((data: any) => this.teachers = data.allTeachers)
 
+  getAccount() {
+    const token: any = localStorage.getItem('token');
+    const student: any = jwtDecode(token);
+    this.http
+      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
+      .subscribe((student: Student) => {
+        this.account = student
+        this.connectToSocket()
+        this.socketService.online(student._id);
+      });
   }
 
+  getAllTeachers() {
+    this.http
+      .get(API_URL + '/api/teachers/getAllTeachers')
+      .subscribe((data: any) => (this.teachers = data.allTeachers));
+  }
+
+  connectToSocket(){
+    if(!this.isConnectedToSocket()) {
+      this.socketService.setupSocketConnection(this.account.email)
+    } else {
+      console.log("connected before!")
+    }
+  }
+
+  isConnectedToSocket(){
+    return this.socketService?.socket?.connected
+  }
 }
