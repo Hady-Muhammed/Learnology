@@ -1,17 +1,19 @@
-<img class="w-[750px] rounded-xl" [src]="article.image" alt="photo" />
-<div class="flex justify-between">
-  <span class="block text-black/60">{{
-    article.author.charAt(0).toUpperCase() + article.author.slice(1)
-  }}</span>
-  <span class="block text-black/60">{{ article.postedAt | date }}</span>
-</div>
-<h2 class="text-2xl font-bold">{{ article.title }}</h2>
-<p class="text-black/80 max-w-[600px]">
-  {{ article.body.slice(0, 400) + "........." }}
-</p>
-<button
-  [routerLink]="['/article-details', article._id]"
-  class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2 px-8"
->
-  Read More
-</button>
+<article class="space-y-4">
+  <img class="w-[750px] rounded-xl" [src]="article.image" alt="photo" />
+  <div class="flex justify-between">
+    <span class="block text-black/60">{{
+      article.author.charAt(0).toUpperCase() + article.author.slice(1)
+    }}</span>
+    <span class="block text-black/60">{{ article.postedAt | date }}</span>
+  </div>
+  <h2 class="text-2xl font-bold">{{ article.title }}</h2>
+  <p class="text-black/80 max-w-[600px]">
+    {{ article.body.slice(0, 400) + "........." }}
+  </p>
+  <button
+    [routerLink]="['/article-details', article._id]"
+    class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2 px-8"
+  >
+    Read More
+  </button>
+</article>

@@ -20,11 +20,11 @@ export class InstructorComponent implements OnInit {
   courses!: Course[];
   liked!: boolean;
   statusText!: string;
+  
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private socketService: SocketioService,
     private toast: NgToastService
   ) {
     window.scrollTo(0, 0);
@@ -43,8 +43,6 @@ export class InstructorComponent implements OnInit {
       .subscribe((student: Student) => {
         this.account = student;
         this.isLiked();
-        this.socketService.online(student._id);
-        this.socketService.setupSocketConnection(student.email);
       });
   }
 
@@ -94,9 +92,11 @@ export class InstructorComponent implements OnInit {
       })
       .subscribe((courses: Course[]) => (this.courses = courses));
   }
+
   isLiked() {
     this.liked = this.account.liked_teachers.includes(this.id);
   }
+
   addLike() {
     this.http
       .post(API_URL + `/api/students/likeTeacher`, {

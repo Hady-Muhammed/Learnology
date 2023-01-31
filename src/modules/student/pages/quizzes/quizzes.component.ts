@@ -17,6 +17,7 @@ export class QuizzesComponent implements OnInit {
   loading!: boolean;
   grid!: boolean;
   searchTerm!: string;
+  
   constructor(private http: HttpClient) {
     window.scrollTo(0, 0);
   }
@@ -24,6 +25,7 @@ export class QuizzesComponent implements OnInit {
   ngOnInit(): void {
     this.getAllQuizzes();
   }
+
   createQuiz() {
     this.http
       .post(API_URL + '/api/quizzes/createQuiz', {
@@ -43,6 +45,7 @@ export class QuizzesComponent implements OnInit {
       })
       .subscribe((res) => console.log(res));
   }
+
   getAllQuizzes() {
     this.http
       .get<Quiz[]>(API_URL + '/api/quizzes/getAllQuizzes')
@@ -51,6 +54,7 @@ export class QuizzesComponent implements OnInit {
         this.filteredQuizzes = quizzes;
       });
   }
+
   changeDifficulty() {
     this.loading = true;
     setTimeout(() => {

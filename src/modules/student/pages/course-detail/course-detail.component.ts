@@ -27,14 +27,12 @@ export class CourseDetailComponent implements OnInit {
     private route: ActivatedRoute,
     private http: HttpClient,
     private toast: NgToastService,
-    private socketService: SocketioService,
     private router: Router
   ) {
-    this.id = route.snapshot.params['id'];
+    this.id = this.route.snapshot.params['id'];
     this.getCourse(this.id);
     this.getInstructor(this.id);
     window.scrollTo(0, 0);
-    this.getAccount()
   }
 
   ngOnInit(): void {
@@ -100,17 +98,6 @@ export class CourseDetailComponent implements OnInit {
         error: (err) => {
           console.log(err);
         },
-      });
-  }
-
-  getAccount() {
-    const token: any = localStorage.getItem('token');
-    const student: any = jwtDecode(token);
-    this.http
-      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
-      .subscribe((student: Student) => {
-        this.socketService.online(student._id);
-        this.socketService.setupSocketConnection(student.email);
       });
   }
 }

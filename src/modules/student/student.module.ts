@@ -41,6 +41,7 @@ import { ReplyComponent } from './components/reply/reply.component';
 import { ArticleSkeletonComponent } from './components/skeletons/article-skeleton/article-skeleton.component';
 import { CourseSkeletonComponent } from './components/skeletons/course-skeleton/course-skeleton.component';
 import { PostSkeletonComponent } from './components/skeletons/post-skeleton/post-skeleton.component';
+import { NotifiedPostComponent } from './pages/notified-post/notified-post.component';
 
 
 
@@ -82,6 +83,7 @@ import { PostSkeletonComponent } from './components/skeletons/post-skeleton/post
     ArticleSkeletonComponent,
     CourseSkeletonComponent,
     PostSkeletonComponent,
+    NotifiedPostComponent,
   ],
   imports: [
     CommonModule,

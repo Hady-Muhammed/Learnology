@@ -48,8 +48,8 @@
   <ng-container *ngIf="showReplyInput">
     <div class="flex p-5 items-center space-x-2 pl-10">
       <img class="object-cover block w-[35px] h-[35px] rounded-full" [src]="account && account.picture === 'default' ? '../../../assets/user.webp': account && account.picture" alt="profile">
-      <input #replyInp (keyup.enter)="addReply(post._id,comment._id,replyInp)" [formControl]="replyContent" class="w-full outline-none block bg-gray-200 rounded-md p-2" placeholder="Write a reply.." type="text">
-      <button (click)="addReply(post._id,comment._id,replyInp)" class="text-white grid place-items-center bg-[#8d46ff] rounded-full p-2">
+      <input #replyInp (keyup.enter)="addReply(post,comment,replyInp)" [formControl]="replyContent" class="w-full outline-none block bg-gray-200 rounded-md p-2" placeholder="Write a reply.." type="text">
+      <button (click)="addReply(post,comment,replyInp)" class="text-white grid place-items-center bg-[#8d46ff] rounded-full p-2">
         <mat-icon>send</mat-icon>
       </button>
     </div>

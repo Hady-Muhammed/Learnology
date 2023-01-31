@@ -12,7 +12,7 @@ import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 export class AccountComponent implements OnInit {
   account!: Student;
 
-  constructor(private http: HttpClient,private socketService: SocketioService) {
+  constructor(private http: HttpClient) {
   }
 
   ngOnInit(): void {
@@ -25,19 +25,6 @@ export class AccountComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         this.account = student
-        this.connectToSocket()
-        this.socketService.online(student._id);
       });
-  }
-  connectToSocket(){
-    if(!this.isConnectedToSocket()) {
-      this.socketService.setupSocketConnection(this.account.email)
-    } else {
-      console.log("connected before!")
-    }
-  }
-
-  isConnectedToSocket(){
-    return this.socketService?.socket?.connected
   }
 }

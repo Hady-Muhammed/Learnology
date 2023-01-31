@@ -1,4 +1,4 @@
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { NgToastService } from 'ng-angular-popup';
@@ -10,30 +10,47 @@ import { Student } from 'src/app/models/student';
   templateUrl: './reacts-popup.component.html',
   styleUrls: ['./reacts-popup.component.css'],
 })
-
 export class ReactsPopupComponent implements OnInit {
+
   @Input('type') type!: string;
   @Input('isOpened') isOpened!: boolean;
   @Input('post') post!: Post;
   @Input('comment') comment!: comment;
   @Input('reply') reply!: reply;
   @Input('account') account!: Student;
-  @Output() openReactMenu = new EventEmitter<boolean>()
-  @Output() reactHappened = new EventEmitter<boolean>()
-  constructor(private http: HttpClient, private toast: NgToastService) {}
+  @Output() openReactMenu = new EventEmitter<boolean>();
+  @Output() reactHappened = new EventEmitter<boolean>();
 
-  reactOnPost(id: string, react: any) {
-    this.openReactMenu.emit(false)
+  constructor(
+    private http: HttpClient,
+    private toast: NgToastService,
+    private socketService: SocketioService
+  ) {}
+
+  ngOnInit(): void {}
+
+  reactOnPost(id: string, react: any, postOwner: Student) {
+    this.openReactMenu.emit(false);
     this.http
       .post(API_URL + '/api/reacts/reactOnPost', {
         studentID: this.account._id,
         postID: id,
         react,
+        notificationn: {
+          belongsTo: postOwner._id,
+          about_what: 'Reacted to your post',
+          type: react.type,
+          happenedAt: new Date().toUTCString(),
+          postID: id,
+        },
       })
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          this.reactHappened.emit(true)
+          if(postOwner._id !== this.account._id) {
+            this.socketService.notifyForANewReact(postOwner.email);
+          }
+          this.reactHappened.emit(true);
         },
         error: (err) => {
           this.toast.error({ detail: err.message });
@@ -41,24 +58,30 @@ export class ReactsPopupComponent implements OnInit {
       });
   }
 
-  reactOnComment(
-    postID: string,
-    react: any,
-    commentID: string,
-  ) {
-    this.openReactMenu.emit(false)
+  reactOnComment(postID: string, react: any, comment: comment) {
+    this.openReactMenu.emit(false);
     this.http
       .post(API_URL + '/api/reacts/reactOnComment', {
         studentID: this.account._id,
         postID,
         react,
-        commentID,
+        commentID: comment._id,
+        notificationn: {
+          belongsTo: comment.belongsTo,
+          about_what: 'Reacted to your comment',
+          type: react.type,
+          happenedAt: new Date().toUTCString(),
+          postID,
+        },
       })
       .subscribe({
         next: (res: any) => {
           console.log('res: ', res);
           this.toast.success({ detail: res.message });
-          this.reactHappened.emit(true)
+          if(comment.commenter[0]._id !== this.account._id) {
+            this.socketService.notifyForANewReact(comment.commenter[0].email);
+          }
+          this.reactHappened.emit(true);
         },
         error: (err) => {
           console.log('err: ', err);
@@ -67,24 +90,30 @@ export class ReactsPopupComponent implements OnInit {
       });
   }
 
-  reactOnReply(
-    postID: string,
-    react: any,
-    replyID: string,
-  ) {
-    this.openReactMenu.emit(false)
+  reactOnReply(postID: string, react: any, reply: reply) {
+    this.openReactMenu.emit(false);
     this.http
       .post(API_URL + '/api/reacts/reactOnReply', {
         studentID: this.account._id,
         postID,
         react,
-        replyID,
+        replyID: reply._id,
+        notificationn: {
+          belongsTo: reply.replier[0]._id,
+          about_what: 'Reacted to your reply',
+          type: react.type,
+          happenedAt: new Date().toUTCString(),
+          postID,
+        },
       })
       .subscribe({
         next: (res: any) => {
           console.log('res: ', res);
           this.toast.success({ detail: res.message });
-          this.reactHappened.emit(true)
+          if(reply.replier[0]._id !== this.account._id) {
+            this.socketService.notifyForANewReact(reply.replier[0].email);
+          }
+          this.reactHappened.emit(true);
         },
         error: (err) => {
           console.log('err: ', err);
@@ -92,6 +121,4 @@ export class ReactsPopupComponent implements OnInit {
         },
       });
   }
-
-  ngOnInit(): void {}
 }

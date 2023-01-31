@@ -21,7 +21,6 @@ export class MessagesComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: NgToastService,
-    private socketService: SocketioService
   ) {
     this.getChats();
   }
@@ -93,20 +92,6 @@ export class MessagesComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         this.account = student.email
-        this.connectToSocket()
-        this.socketService.online(student._id);
       });
-  }
-
-  connectToSocket(){
-    if(!this.isConnectedToSocket()) {
-      this.socketService.setupSocketConnection(this.account)
-    } else {
-      console.log("connected before!")
-    }
-  }
-
-  isConnectedToSocket(){
-    return this.socketService?.socket?.connected
   }
 }

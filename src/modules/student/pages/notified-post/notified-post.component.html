@@ -1,0 +1,10 @@
+<app-navbar></app-navbar>
+<main class="my-28 pt-10 mx-auto w-fit font-mont min-h-[561px]">
+  <ng-container *ngIf="post && account">
+    <app-post [post]="post" [account]="account" (reactHappened)="refresh($event)"></app-post>
+  </ng-container>
+  <ng-container *ngIf="!post || !account">
+    <app-post-skeleton></app-post-skeleton>
+  </ng-container>
+</main>
+<app-footer></app-footer>

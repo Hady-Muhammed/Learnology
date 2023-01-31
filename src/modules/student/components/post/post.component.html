@@ -55,8 +55,8 @@
   </div>
   <div class="flex p-5 items-center mt-2 space-x-2">
     <img class="object-cover block w-[35px] h-[35px] rounded-full" [src]="account && account.picture === 'default' ? '../../../assets/user.webp': account && account.picture" alt="profile">
-    <input #inp (keyup.enter)="addComment(post._id,inp)" [formControl]="commentContent" class="w-full outline-none block bg-gray-200 rounded-md p-2" placeholder="Write a comment.." type="text">
-    <button (click)="addComment(post._id,inp)" class="text-white grid place-items-center bg-[#8d46ff] rounded-full p-2">
+    <input #inp (keyup.enter)="addComment(post,inp)" [formControl]="commentContent" class="w-full outline-none block bg-gray-200 rounded-md p-2" placeholder="Write a comment.." type="text">
+    <button (click)="addComment(post,inp)" class="text-white grid place-items-center bg-[#8d46ff] rounded-full p-2">
       <mat-icon>send</mat-icon>
     </button>
   </div>

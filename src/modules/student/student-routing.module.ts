@@ -22,6 +22,7 @@ import { QuestionComponent } from './pages/quizzes/question/question.component';
 import { QuizDetailComponent } from './pages/quizzes/quiz-detail/quiz-detail.component';
 import { QuizResultsComponent } from './pages/quizzes/quiz-results/quiz-results.component';
 import { QuizzesComponent } from './pages/quizzes/quizzes.component';
+import { NotifiedPostComponent } from './pages/notified-post/notified-post.component';
 
 const routes: Routes = [
   {
@@ -70,6 +71,12 @@ const routes: Routes = [
     path: 'community',
     pathMatch: 'full',
     component: CommunityComponent,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'notified-post/:id',
+    pathMatch: 'full',
+    component: NotifiedPostComponent,
     canActivate: [AuthGuard],
   },
   {

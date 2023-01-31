@@ -4,7 +4,7 @@ import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter, 
 import { NgToastService } from 'ng-angular-popup';
 import { comment, Post, react, reply } from 'src/app/models/post';
 import { Student } from 'src/app/models/student';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -30,8 +30,10 @@ export class CommentComponent implements OnInit {
   @Input('account') account!: Student
   @Output() reactHappened = new EventEmitter()
   @Output() commentDeleted = new EventEmitter()
+
   constructor(
     private http: HttpClient,
+    private socketService: SocketioService,
     private toast: NgToastService,
   ) {
   }
@@ -78,17 +80,17 @@ export class CommentComponent implements OnInit {
   }
 
   addReply(
-    postID: string,
-    commentID: string,
+    post: Post,
+    comment: comment,
     input: HTMLInputElement
   ) {
     if (this.replyContent.value) {
       this.http
         .post(API_URL + '/api/replies/addReply', {
           replyy: {
-            postID,
-            commentID,
-            belongsTo: this.account._id,
+            postID: post._id,
+            commentID: comment._id,
+            belongsTo: this.account._id, //
             content: this.replyContent.value,
             repliedAt: new Date().toUTCString(),
             reacts: 0,
@@ -96,13 +98,23 @@ export class CommentComponent implements OnInit {
             replyHasLoves: false,
             replyHasWows: false,
           },
+          notificationn: {
+            belongsTo: comment.belongsTo,
+            about_what: "Replied to your comment",
+            type: "reply",
+            happenedAt: new Date().toUTCString(),
+            postID: post._id
+          }
         })
         .subscribe({
           next: (res: any) => {
             console.log(res);
             this.toast.success({ detail: res.message });
             this.replyContent.setValue('');
-            this.getReplies(commentID)
+            if(comment.belongsTo !== this.account._id) {
+              this.socketService.notifyForANewReply(comment.commenter[0].email);
+            }
+            this.getReplies(comment._id)
           },
           error: (err) => {
             console.log(err);

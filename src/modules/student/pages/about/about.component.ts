@@ -15,7 +15,6 @@ export class AboutComponent implements OnInit {
   account!: Student;
   constructor(
     private http: HttpClient,
-    private socketService: SocketioService
   ) {
     window.scrollTo(0, 0);
     this.getAllTeachers();
@@ -32,8 +31,6 @@ export class AboutComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         this.account = student
-        this.connectToSocket()
-        this.socketService.online(student._id);
       });
   }
 
@@ -41,17 +38,5 @@ export class AboutComponent implements OnInit {
     this.http
       .get(API_URL + '/api/teachers/getAllTeachers')
       .subscribe((data: any) => (this.teachers = data.allTeachers));
-  }
-
-  connectToSocket(){
-    if(!this.isConnectedToSocket()) {
-      this.socketService.setupSocketConnection(this.account.email)
-    } else {
-      console.log("connected before!")
-    }
-  }
-
-  isConnectedToSocket(){
-    return this.socketService?.socket?.connected
   }
 }

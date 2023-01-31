@@ -12,7 +12,7 @@ import {
 import { NgToastService } from 'ng-angular-popup';
 import { Observable } from 'rxjs';
 import { Post, comment, react } from 'src/app/models/post';
-import { API_URL } from 'src/app/services/socketio.service';
+import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 import { Student } from 'src/app/models/student';
 
 @Component({
@@ -38,18 +38,20 @@ export class PostComponent implements OnInit {
   @Output() reactHappened = new EventEmitter<boolean>();
   @ViewChild('inp') inp!: ElementRef;
 
-  constructor(private http: HttpClient, private toast: NgToastService) {}
+  constructor(
+    private http: HttpClient,
+    private toast: NgToastService,
+    private socketService: SocketioService
+  ) {}
 
-  ngOnInit(): void {
-    console.log(this.post)
-  }
+  ngOnInit(): void {}
 
-  addComment(postID: string, input: HTMLInputElement) {
+  addComment(post: Post, input: HTMLInputElement) {
     if (this.commentContent.value) {
       this.http
         .post(API_URL + '/api/comments/addComment', {
           commentt: {
-            postID,
+            postID: post._id,
             belongsTo: this.account._id,
             content: this.commentContent.value,
             replies: 0,
@@ -59,13 +61,23 @@ export class PostComponent implements OnInit {
             commentHasLoves: false,
             commentHasWows: false,
           },
+          notificationn: {
+            belongsTo: post.author[0]._id,
+            about_what: "Commented on your post",
+            type: "comment",
+            happenedAt: new Date().toUTCString(),
+            postID: post._id
+          }
         })
         .subscribe({
           next: (res: any) => {
             console.log(res);
             this.toast.success({ detail: res.message });
             this.commentContent.setValue('');
-            this.getComments(postID, input, false);
+            if(post.author[0]._id !== this.account._id) {
+              this.socketService.notifyForANewComment(post.author[0].email);
+            }
+            this.getComments(post._id, input, false);
           },
           error: (err) => {
             console.log(err);

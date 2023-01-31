@@ -19,6 +19,18 @@ export class SocketioService {
     this.socket.emit('send-message', msg, chatID);
   }
 
+  notifyForANewComment(targetEmail: string){
+    this.socket.emit("add-comment",targetEmail)
+  }
+
+  notifyForANewReply(targetEmail: string){
+    this.socket.emit("add-reply",targetEmail)
+  }
+
+  notifyForANewReact(targetEmail: string){
+    this.socket.emit("add-react",targetEmail)
+  }
+
   online(id: string) {
     this.socket.emit('online', id);
   }

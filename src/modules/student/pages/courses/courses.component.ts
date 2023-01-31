@@ -15,10 +15,9 @@ export class CoursesComponent implements OnInit {
   courses!: Course[];
   filteredCourses!: Course[];
   searchTerm = new FormControl('');
-  constructor(private http: HttpClient , private socketService: SocketioService) {
+  constructor(private http: HttpClient) {
     this.getAllCourses();
     window.scrollTo(0, 0);
-    this.getAccount()
   }
 
   ngOnInit(): void {}
@@ -33,16 +32,6 @@ export class CoursesComponent implements OnInit {
     }
   }
 
-  getAccount() {
-    const token: any = localStorage.getItem('token');
-    const student: any = jwtDecode(token);
-    this.http
-      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
-      .subscribe((student: Student) => {
-        this.socketService.online(student._id);
-        this.socketService.setupSocketConnection(student.email);
-      });
-  }
 
   getAllCourses() {
     this.http

@@ -18,7 +18,6 @@ export class ContactComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private socketService: SocketioService
   ) {
     window.scrollTo(0, 0);
     this.getAccount()
@@ -51,8 +50,6 @@ export class ContactComponent implements OnInit {
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
-        this.socketService.online(student._id);
-        this.socketService.setupSocketConnection(student.email);
       });
   }
 }

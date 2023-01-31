@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
@@ -19,8 +19,8 @@ export class ConversationComponent implements OnInit {
   id!: string;
   message!: string;
   newMessages!: number;
-  typing!: boolean;
-  @ViewChild('lastMessage') lastMessage!: any
+  typing: boolean = false;
+  @ViewChild('lastMessage') lastMessage!: ElementRef
 
   constructor(
     private http: HttpClient,
@@ -47,9 +47,11 @@ export class ConversationComponent implements OnInit {
         } else {
           this.getPerson2(chat.person1.email);
         }
-        console.log(this.messages);
         this.listenForNewMessagesRealtime();
         this.listenForTyping();
+        setTimeout(() => {
+          this.scrollToLastMessage()
+        }, 100);
       });
   }
 
@@ -58,7 +60,6 @@ export class ConversationComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${email}`)
       .subscribe((student: Student) => {
         this.account = student;
-        this.connectToSocket()
         this.socketService.joinChat(this.id)
         this.getChat();
       });
@@ -123,7 +124,7 @@ export class ConversationComponent implements OnInit {
   }
 
   scrollToLastMessage() {
-    this.lastMessage.nativeElement.scrollIntoView({behavior: 'smooth'})
+    this.lastMessage?.nativeElement?.scrollIntoView({behavior: 'smooth', block: 'nearest' , inline: 'start'})
   }
 
   listenForTyping() {
@@ -136,18 +137,6 @@ export class ConversationComponent implements OnInit {
 
   isTyping() {
     this.socketService.typingMessage(this.id, this.message);
-  }
-
-  connectToSocket(){
-    if(!this.isConnectedToSocket()) {
-      this.socketService.setupSocketConnection(this.account.email)
-    } else {
-      console.log("connected before!")
-    }
-  }
-
-  isConnectedToSocket(){
-    return this.socketService?.socket?.connected
   }
 
 }

@@ -14,7 +14,7 @@ export class BlogComponent implements OnInit {
   articles!: any;
   filteredArticles!: any;
   category!: any;
-  constructor(private http: HttpClient, private socketService: SocketioService) {
+  constructor(private http: HttpClient) {
     this.getAllArticles();
     window.scrollTo(0, 0);
     this.getAccount()
@@ -44,8 +44,6 @@ export class BlogComponent implements OnInit {
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
-        this.socketService.online(student._id);
-        this.socketService.setupSocketConnection(student.email);
       });
   }
 }

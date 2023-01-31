@@ -19,6 +19,7 @@ export class QuizDetailComponent implements OnInit {
   math = Math;
   totalTime: number = 0;
   taken: boolean = false;
+  
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,

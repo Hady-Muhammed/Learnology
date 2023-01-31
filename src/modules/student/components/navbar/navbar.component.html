@@ -14,6 +14,10 @@
     <a matTooltip="Account" routerLink="/account" class="rounded-full overflow-hidden">
       <img class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
     </a>
+    <button (click)="toggleNotificationMenu()" class="relative">
+      <i class="fa-solid fa-bell text-white text-xl"></i>
+      <span [ngClass]="numOfNotifications ? 'opacity-[1]':'opacity-0'" class="absolute -right-2 -top-2 w-[20px] h-[20px] rounded-full grid place-items-center text-white bg-red-500 font-bold text-[12px] duration-500">{{numOfNotifications}}</span>
+    </button>
     <button class="text-white flex items-center" [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -40,6 +44,10 @@
     <a matTooltip="Account" (click)="isOpened = !isOpened" routerLink="/account" class="overflow-hidden rounded-full">
       <img class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
     </a>
+    <button (click)="toggleNotificationMenu()" class="relative">
+      <i class="fa-solid fa-bell text-white text-xl"></i>
+      <span [ngClass]="numOfNotifications ? 'opacity-[1]':'opacity-0'" class="absolute -right-2 -top-2 w-[20px] h-[20px] rounded-full grid place-items-center text-white bg-red-500 font-bold text-[12px] duration-500">{{numOfNotifications}}</span>
+    </button>
     <button class="text-white flex items-center" [matMenuTriggerFor]="menu" aria-label="icon-button with a menu">
       <mat-icon>more_vert</mat-icon>
     </button>
@@ -55,4 +63,44 @@
     </mat-menu>
   </ul>
 </nav>
+
+<!-- Notifications menu -->
+<ul [ngClass]="notificationsMenuOpened ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="bg-white fixed z-50 xxs:right-1 msm:right-16 top-16 rounded-xl xss:w-[250px] msm:w-[350px] sm:w-[500px] shadow-xl text-left duration-500 overflow-auto max-h-[680px]">
+  <h3 class="font-bold text-xl text-left p-5 flex items-center"><span class="inline-block mr-1">Notifications</span><mat-icon class="mat-18 text-violet-300 text-md">circle_notifications</mat-icon></h3>
+  <ng-container *ngFor="let notif of notifications?.reverse(); let i = index">
+    <a [routerLink]="['../../notified-post', notif.postID]" [ngClass]="i !== notifications.length - 1 ? 'border-b border-b-violet-600/30':''" class="flex items-center justify-between py-4 hover:bg-gray-200 px-5 overflow-hidden cursor-pointer">
+      <div class="flex items-center space-x-4">
+        <div class="relative">
+          <img class="xs:w-[50px] xs:h-[50px] sm:w-[70px] sm:h-[70px] rounded-full object-cover" [src]="notif.sender[0].picture === 'default' ? '../../../assets/user.webp': notif.sender[0].picture" alt="photo">
+          <span *ngIf="notif.type === 'love'" class="grid place-items-center absolute -right-2 bottom-0 border border-black w-[35px] h-[35px] bg-white rounded-full">
+            <i class="text-red-500 text-xl fa-solid fa-heart"></i>
+          </span>
+          <span *ngIf="notif.type === 'like'" class="grid place-items-center absolute -right-2  bottom-0 border border-black w-[35px] h-[35px] bg-white rounded-full">
+            <i class="text-blue-500 text-xl fa-regular fa-thumbs-up"></i>
+          </span>
+          <span *ngIf="notif.type === 'wow'" class="grid place-items-center absolute -right-2 bottom-0 border border-black w-[35px] h-[35px] bg-white rounded-full">
+            <i class="inline-flex justify-center items-center bg-black rounded-full w-[20px] h-[20px] overflow-hidden text-yellow-400 text-xl fa-solid fa-face-surprise"></i>
+          </span>
+          <span *ngIf="notif.type === 'comment'" class="grid place-items-center absolute -right-2 bottom-0 border border-black w-[35px] h-[35px] bg-white rounded-full">
+            <i class="fa-solid fa-comment text-blue-900"></i>
+          </span>
+          <span *ngIf="notif.type === 'reply'" class="grid place-items-center absolute -right-2 bottom-0 border border-black w-[35px] h-[35px] bg-white rounded-full">
+            <i class="fa-sharp fa-solid fa-reply text-violet-600"></i>
+          </span>
+        </div>
+        <div>
+          <h4 class="font-semibold xs:text-md sm:text-lg">{{notif.sender[0].name}}</h4>
+          <p class="text-black/60 xs:text-xs sm:text-md">{{notif.about_what}}</p>
+        </div>
+      </div>
+      <p class="text-black/60 text-sm justify-self-end">{{notif.happenedAt | date: 'short'}}</p>
+    </a>
+  </ng-container>
+</ul>
+
+<!-- Transparent overlay to close the notifications menu -->
+<ng-container *ngIf="notificationsMenuOpened">
+  <div (click)="notificationsMenuOpened = false" class="left-0 top-0 fixed flex items-center justify-center w-full h-full bg-transparent z-40">
+  </div>
+</ng-container>
 

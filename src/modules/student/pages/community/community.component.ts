@@ -29,8 +29,6 @@ export class CommunityComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: NgToastService,
-    private socketService: SocketioService,
-    private cd: ChangeDetectorRef
   ) {
     this.getAllStudents();
     this.getAccount();
@@ -45,8 +43,6 @@ export class CommunityComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         this.account = student
-        this.socketService.online(student._id);
-        this.socketService.setupSocketConnection(student.email);
       });
   }
 
@@ -139,4 +135,5 @@ export class CommunityComponent implements OnInit {
     if(emitted)
       this.getAllPosts()
   }
+
 }

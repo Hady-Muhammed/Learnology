@@ -21,6 +21,7 @@ export class QuizResultsComponent implements OnInit {
     this.id = this.route.snapshot.params['id'];
     this.getScore();
   }
+  
   getScore() {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
