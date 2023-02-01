@@ -33,7 +33,6 @@ export class ChatComponent implements OnInit {
     private socketService: SocketioService
   ) {
     this.id = this.route.snapshot.params['id'];
-    this.socketService.joinChat(this.id);
     this.route.params.subscribe((val) => {
       this.id = this.route.snapshot.params['id'];
       const teacher: any = jwt_decode(localStorage.getItem('token') || '');
@@ -42,8 +41,6 @@ export class ChatComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.listenForNewMessagesRealtime();
-    this.listenForTyping()
   }
 
   getChat() {
@@ -58,6 +55,8 @@ export class ChatComponent implements OnInit {
         } else {
           this.getPerson2(chat.person1.email);
         }
+        this.listenForNewMessagesRealtime();
+        this.listenForTyping();
         console.log(this.messages);
       });
   }
@@ -67,6 +66,7 @@ export class ChatComponent implements OnInit {
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
+        this.socketService.joinChat(this.id);
         this.getOnlineUsers();
         this.getChat();
       });

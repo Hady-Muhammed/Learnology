@@ -23,6 +23,8 @@ import { QuizDetailComponent } from './pages/quizzes/quiz-detail/quiz-detail.com
 import { QuizResultsComponent } from './pages/quizzes/quiz-results/quiz-results.component';
 import { QuizzesComponent } from './pages/quizzes/quizzes.component';
 import { NotifiedPostComponent } from './pages/notified-post/notified-post.component';
+import { PostsComponent } from './pages/account/subpages/posts/posts.component';
+import { FriendsComponent } from './pages/account/subpages/friends/friends.component';
 
 const routes: Routes = [
   {
@@ -139,6 +141,14 @@ const routes: Routes = [
       {
         path: 'messages/:id',
         component: ConversationComponent,
+      },
+      {
+        path: 'posts',
+        component: PostsComponent,
+      },
+      {
+        path: 'friends',
+        component: FriendsComponent,
       },
     ],
   },

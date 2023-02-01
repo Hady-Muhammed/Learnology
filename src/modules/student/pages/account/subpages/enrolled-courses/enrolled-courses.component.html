@@ -20,10 +20,10 @@
     </ng-container>
     <ng-container *ngIf="!enrolledCourses">
       <div *ngFor="let item of [1,2,3]">
-        <app-course-skeleton></app-course-skeleton>
+        <app-course-skeleton data-aos="fade-in" data-aos-duration="600"></app-course-skeleton>
       </div>
     </ng-container>
   </div>
-  <p class="text-2xl font-bold text-center" data-aos="zoom-in" data-aos-duration="800" *ngIf="enrolledCourses && enrolledCourses.length == 0">
+  <p class="text-2xl font-bold text-center mt-10" data-aos="zoom-in" data-aos-duration="800" *ngIf="enrolledCourses && enrolledCourses.length == 0">
     No Courses Enrolled!
   </p>

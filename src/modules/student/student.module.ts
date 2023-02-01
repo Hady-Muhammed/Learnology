@@ -42,6 +42,9 @@ import { ArticleSkeletonComponent } from './components/skeletons/article-skeleto
 import { CourseSkeletonComponent } from './components/skeletons/course-skeleton/course-skeleton.component';
 import { PostSkeletonComponent } from './components/skeletons/post-skeleton/post-skeleton.component';
 import { NotifiedPostComponent } from './pages/notified-post/notified-post.component';
+import { FriendsComponent } from './pages/account/subpages/friends/friends.component';
+import { PostsComponent } from './pages/account/subpages/posts/posts.component';
+import { FriendCardComponent } from './components/cards/friend-card/friend-card.component';
 
 
 
@@ -84,6 +87,9 @@ import { NotifiedPostComponent } from './pages/notified-post/notified-post.compo
     CourseSkeletonComponent,
     PostSkeletonComponent,
     NotifiedPostComponent,
+    FriendsComponent,
+    PostsComponent,
+    FriendCardComponent,
   ],
   imports: [
     CommonModule,

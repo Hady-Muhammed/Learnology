@@ -3,8 +3,8 @@
   <div class="flex p-4 justify-between">
     <div class="flex items-center space-x-3">
       <div class="relative">
-        <img class="object-cover w-[50px] h-[50px] rounded-full" [src]="post && post.author[0].picture == 'default' ? '../../../assets/user.webp': post && post.author[0].picture" alt="profile">
-        <span *ngIf="post.author[0].online && post.author[0].email !== account?.email" class="absolute right-0 bottom-0 border-2 border-white w-[15px] h-[15px] rounded-full bg-green-600"></span>
+          <img class="object-cover w-[50px] h-[50px] rounded-full" [src]="post && post.author[0].picture == 'default' ? '../../../assets/user.webp': post && post.author[0].picture" alt="profile">
+          <span *ngIf="post.author[0].online && post.author[0].email !== account?.email" class="absolute right-0 bottom-0 border-2 border-white w-[15px] h-[15px] rounded-full bg-green-600"></span>
       </div>
       <div>
         <h3 class="font-semibold text-lg">{{post.author[0].name}}</h3>

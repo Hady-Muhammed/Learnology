@@ -1,0 +1,16 @@
+<div class="mx-auto w-[80%]">
+  <h2 class="text-center font-semibold text-3xl mb-10 relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2">Your Posts</h2>
+  <div class="space-y-8">
+    <div class="space-y-4" *ngFor="let post of myPosts && myPosts">
+        <app-post [post]="post" [account]="account" (reactHappened)="refresh($event)"></app-post>
+    </div>
+    <ng-container *ngIf="!myPosts">
+      <div *ngFor="let item of [1,2,3]">
+        <app-post-skeleton data-aos="fade-in" data-aos-duration="600"></app-post-skeleton>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<p class="text-2xl font-bold text-center mt-20" data-aos="zoom-in" data-aos-duration="800" *ngIf="myPosts && myPosts.length == 0">
+  No Posts Yet!
+</p>

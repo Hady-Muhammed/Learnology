@@ -21,3 +21,15 @@
   }
  }
 
+
+ .btn {
+  background-color: transparent;
+  border: .3px solid #8d46ff;
+  transition: .5s;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  z-index: 1;
+  color: #8d46ff;
+ }
+

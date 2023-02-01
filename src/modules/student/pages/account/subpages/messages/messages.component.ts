@@ -1,3 +1,4 @@
+import { Teacher } from './../../../../../../app/models/teacher';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -14,9 +15,11 @@ import jwtDecode from 'jwt-decode';
   styleUrls: ['./messages.component.css'],
 })
 export class MessagesComponent implements OnInit {
+
   account!: string;
   chats!: Chat[];
   onlineUsers!: Student[];
+  
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -48,14 +51,7 @@ export class MessagesComponent implements OnInit {
           }
         }
         console.log(persons);
-        this.http
-          .get<Student[]>(API_URL + `/api/students/getOnlineUsers/${persons}`)
-          .subscribe(
-            (students: Student[]) =>
-              (this.onlineUsers = students.filter(
-                std => std.online === true
-              ))
-          );
+        this.getOnlineUsers(persons)
       });
   }
 
@@ -93,5 +89,16 @@ export class MessagesComponent implements OnInit {
       .subscribe((student: Student) => {
         this.account = student.email
       });
+  }
+
+  getOnlineUsers(persons: string[]) {
+    this.http
+          .get<Student[]>(API_URL + `/api/students/getOnlineUsers/${persons}`)
+          .subscribe(
+            (onlineUsers: any[]) =>
+              {this.onlineUsers = onlineUsers
+                console.log(onlineUsers)
+              }
+      );
   }
 }

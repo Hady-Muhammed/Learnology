@@ -43,6 +43,10 @@ export class SocketioService {
   typingMessage(chatID: string, message: string) {
     this.socket.emit('typing-message', chatID, message);
   }
+
+  disconnect() {
+    this.socket.disconnect()
+  }
 }
 
 export const environment = {

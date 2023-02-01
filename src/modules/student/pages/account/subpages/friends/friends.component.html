@@ -1,0 +1,42 @@
+<div>
+  <h2 class="text-center font-semibold text-3xl mb-10 relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2">Your Friends</h2>
+  <button class="bg-black space-x-2 text-white p-1 px-4 rounded-md mb-5" (click)="openRequests()">
+    <span class="inline-block">Show friend requests</span>
+    <span *ngIf="numOfUnreadRequests" class="text-white px-1 bg-red-600 rounded-full text-xs inline-block text-center">{{numOfUnreadRequests}} New</span>
+  </button>
+  <div class="mt-10">
+    <div class="grid gap-5" *ngFor="let frnd of friends | async">
+      <app-friend-card data-aos="fade-in" data-aos-duration="500" [friend]="frnd" [account]="account" (friendRemoved)="getFriends()"></app-friend-card>
+    </div>
+  </div>
+</div>
+<p class="text-2xl font-bold text-center mt-20" data-aos="zoom-in" data-aos-duration="800" *ngIf="friends && (friends | async)?.length === 0">
+  No Friends Yet!
+</p>
+
+<!-- Overlay screen -->
+<div (click)="showRequests = false" [ngClass]="showRequests ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="fixed w-full h-full left-0 top-0 bg-black/50 duration-500 flex justify-center items-center z-40"></div>
+
+<!-- Friend requests popup -->
+<div [ngClass]="showRequests ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="bg-white xs:w-[95%] lg:w-1/2 rounded-md p-3 fixed left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] z-50 duration-500 font-mont overflow-auto max-h-[600px]">
+  <h4 class="p-4 text-center font-bold text-lg">Friend requests</h4>
+  <hr>
+  <ng-container *ngIf="showRequests">
+    <ng-container *ngFor="let req of friendRequests">
+      <div class="flex justify-between my-4">
+        <div class="flex xs:flex-col sm:flex-row items-center xs:space-x-0 sm:space-x-4">
+          <img class="xs:w-[50px] xs:h-[50px] sm:w-[70px] sm:h-[70px] rounded-full object-cover" [src]="req.sender[0].picture === 'default' ? '../../../assets/user.webp': req.sender[0].picture" alt="photo">
+          <div>
+            <h2 class="font-bold text-xl xs:text-center sm:text-left">{{req.sender[0].name}}</h2>
+          </div>
+        </div>
+        <div class="flex xxs:flex-col msm:flex-row space-x-2 items-center">
+          <button (click)="acceptRequest(req.sender[0],req._id)" class="block text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium h-fit">Accept Request</button>
+          <button (click)="rejectRequest(req._id)" class="block btn shadow-black/20 shadow-lg rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium xxs:mt-4 msm:mt-0 h-fit">Reject Request</button>
+        </div>
+      </div>
+    </ng-container>
+    <p data-aos="zoom-in" data-aos-duration="500" class="p-5 text-center text-lg font-semibold" *ngIf="showRequests && friendRequests.length === 0">No requests</p>
+  </ng-container>
+</div>
+

@@ -71,6 +71,7 @@ export class SignUpComponent implements OnInit {
             liked_teachers: [],
             taken_quizzes: [],
             reacts: [],
+            friends: [],
           })
           .subscribe({
             next: (data) => {

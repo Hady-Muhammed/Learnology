@@ -1,7 +1,6 @@
 import { API_URL } from './../../../../app/services/socketio.service';
 import { Student } from './../../../../app/models/student';
 import { Teacher } from 'src/app/models/teacher';
-import { SocketioService } from 'src/app/services/socketio.service';
 import { Chat } from './../../../../app/models/chat';
 import { FormControl } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
@@ -28,7 +27,6 @@ export class TeacherMessagesComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private toast: NgToastService,
-    private socketService: SocketioService
   ) {
     this.getChats();
   }
@@ -36,7 +34,6 @@ export class TeacherMessagesComponent implements OnInit {
     this.getAccount()
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
-    this.socketService.setupSocketConnection(student.email);
   }
 
   getAccount() {
@@ -46,7 +43,6 @@ export class TeacherMessagesComponent implements OnInit {
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.teacher = teacher;
-        // this.socketService.setupSocketConnection(teacher.email)
       });
   }
 

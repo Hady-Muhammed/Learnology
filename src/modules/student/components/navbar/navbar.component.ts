@@ -33,6 +33,7 @@ export class NavbarComponent implements OnInit {
   logOut() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/signup');
+    this.socketService.disconnect()
   }
 
   getAccount() {

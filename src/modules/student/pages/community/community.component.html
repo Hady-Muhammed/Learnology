@@ -11,7 +11,21 @@
             <h3>courses: {{std.enrolled_courses.length}}</h3>
           </div>
         </div>
-        <button (click)="createChat(std.name,std.email,std.picture)" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium">SEND MESSAGE</button>
+        <div class="flex xxs:flex-col msm:flex-row space-x-2">
+          <ng-container *ngIf="!std.friendRequest">
+            <button (click)="createChat(std.name,std.email,std.picture)" class="block text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium">SEND MESSAGE</button>
+            <ng-container *ngIf="!std.alreadyFriend">
+              <button [disabled]="std.pendingRequest" (click)="sendFriendRequest(std)" class="block btn disabled:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none shadow-black/20 shadow-lg rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium xxs:mt-4 msm:mt-0">{{std.pendingRequest ? 'REQUEST SENT' :'ADD FRIEND'}}</button>
+            </ng-container>
+            <ng-container *ngIf="std.alreadyFriend">
+              <button [disabled]="true" class="block btn disabled:bg-gray-300 disabled:opacity-50 disabled:pointer-events-none shadow-black/20 shadow-lg rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium xxs:mt-4 msm:mt-0">Already a friend</button>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="std.friendRequest">
+            <button (click)="acceptRequest(std)" class="block text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium">ACCEPT REQUEST</button>
+            <button (click)="rejectRequest(std)" class="block btn shadow-black/20 shadow-lg rounded-full xs:text-sm sm:text-base xs:p-1 sm:p-2 xs:px-4 sm:px-8 font-medium xxs:mt-4 msm:mt-0">REJECT REQUEST</button>
+          </ng-container>
+        </div>
       </ng-container>
     </div>
   </div>

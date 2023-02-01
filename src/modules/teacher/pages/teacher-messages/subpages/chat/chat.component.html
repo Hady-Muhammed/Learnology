@@ -29,11 +29,11 @@
             <p class="text-center text-black/50">{{msg.sentAt | date}}</p>
         </div>
         <p class="font-bold text-center p-16" *ngIf="messages && messages.length === 0">No messages sent yet..</p>
-        <p *ngIf="typing" data-aos="fade-in" data-aos-duration="1000" class="mt-5 p-4 text-2xl text-black/60">typing...</p>
+        <p [ngClass]="typing ? 'opacity-[1]' : 'opacity-0'" class="mt-5 p-4 text-2xl text-black/60 duration-500">typing...</p>
         <div>
           <mat-form-field class="w-full" appearance="fill">
             <mat-label>Write a message</mat-label>
-            <textarea (keyup)="isTyping()" [(ngModel)]="message" matInput></textarea>
+            <textarea (keyup.enter)="sendMessage()" (keyup)="isTyping()" [(ngModel)]="message" matInput></textarea>
           </mat-form-field>
           <button (click)="sendMessage()" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2">Send Message</button>
         </div>

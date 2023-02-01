@@ -10,7 +10,12 @@ export interface Student {
   liked_teachers: string[],
   taken_quizzes: quiz[],
   online: boolean,
-  reacts: any[]
+  reacts: any[],
+  friends: string[],
+  // Utlities (Not in the database schema)
+  pendingRequest: boolean,
+  friendRequest: boolean
+  alreadyFriend: boolean
 }
 type quiz = {
   id: string,
