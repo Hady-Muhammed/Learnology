@@ -1,7 +1,7 @@
 <div class="p-5">
   <div class="flex items-center justify-between">
     <h1 class="font-bold xs:text-md sm:text-2xl">Your Published Articles</h1>
-    <button routerLink="/teacher/articles/new-article" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-md p-2 relative z-40">Post a new article</button>
+    <button routerLink="/teacher/t/articles/new-article" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-md p-2 relative z-40">Post a new article</button>
   </div>
   <div class="xs:grid md:grid-cols-2 pt-10 xs:gap-5 md:gap-10 relative z-40">
     <div [attr.data-aos]="i % 2 == 0 ? 'fade-right' : 'fade-left'" class="bg-white rounded-md shadow-md overflow-hidden" *ngFor="let article of articles; let i = index">

@@ -100,6 +100,7 @@ export class CommentComponent implements OnInit {
           },
           notificationn: {
             belongsTo: comment.belongsTo,
+            sentBy: this.account._id,
             about_what: "Replied to your comment",
             type: "reply",
             happenedAt: new Date().toUTCString(),

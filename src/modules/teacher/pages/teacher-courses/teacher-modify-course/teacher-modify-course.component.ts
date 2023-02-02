@@ -26,7 +26,6 @@ export class TeacherModifyCourseComponent implements OnInit , AfterViewInit {
   displayedColumns: string[] = ['id', 'photo' , 'name', 'email', 'action'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-
   constructor(
     private http: HttpClient,
     private toast: NgToastService,

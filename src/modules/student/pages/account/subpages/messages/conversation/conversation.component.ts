@@ -17,9 +17,11 @@ export class ConversationComponent implements OnInit {
   account!: Student;
   person2!: Student | Teacher | any;
   id!: string;
-  message!: string;
+  message: string = '';
   newMessages!: number;
   typing: boolean = false;
+  isEmojiPickerVisible!: boolean;
+
   @ViewChild('lastMessage') lastMessage!: ElementRef
 
   constructor(
@@ -139,4 +141,8 @@ export class ConversationComponent implements OnInit {
     this.socketService.typingMessage(this.id, this.message);
   }
 
+  addEmoji(event: any) {
+    this.message = `${this.message}${event.emoji.native}`;
+    this.isEmojiPickerVisible = false;
+ }
 }

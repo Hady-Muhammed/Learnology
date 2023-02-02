@@ -11,16 +11,16 @@
     <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="exams" class="p-2 flex items-center space-x-2 font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">
       <span class="block">Taken Exams</span>
     </a>
-    <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="messages" class="p-2 flex items-center space-x-2 font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">
+    <a (click)="numOfUnreadMessages = 0" routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="messages" class="p-2 flex items-center space-x-2 font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">
       <span class="block">Messages</span>
-      <span class="text-white bg-red-600 rounded-full text-xs w-[17px] block text-center">2</span>
+      <span [ngClass]="numOfUnreadMessages ? 'opacity-[1]':'opacity-0'" class="text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500">{{numOfUnreadMessages}}</span>
     </a>
     <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="posts" class="p-2 flex items-center space-x-2 font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">
       <span class="block">Posts</span>
     </a>
-    <a routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="friends" class="p-2 flex items-center space-x-2 font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">
+    <a (click)="numOfUnreadRequests = 0" routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="friends" class="p-2 flex items-center space-x-2 font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">
       <span class="block">Friends</span>
-      <span class="text-white bg-red-600 rounded-full text-xs w-[17px] block text-center">2</span>
+      <span [ngClass]="numOfUnreadRequests ? 'opacity-[1]':'opacity-0'" class="text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500">{{numOfUnreadRequests}}</span>
     </a>
   </ul>
   <div class="xs:px-5 xs:py-10 sm:p-10 w-full">

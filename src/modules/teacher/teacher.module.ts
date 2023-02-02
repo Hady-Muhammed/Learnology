@@ -1,3 +1,4 @@
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { SharedModule } from 'src/modules/shared/shared.module';
 import { PictureDialog } from './../../modules/teacher/pages/teacher-account/teacher-account.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -46,6 +47,7 @@ import { TeacherCreateQuizComponent } from './pages/teacher-quizzes/teacher-crea
     FormsModule,
     SharedModule,
     ReactiveFormsModule,
+    PickerModule
   ],
   exports: [ChatComponent],
 })

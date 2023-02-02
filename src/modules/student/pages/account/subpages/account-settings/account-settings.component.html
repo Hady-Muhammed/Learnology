@@ -19,7 +19,7 @@
       </form>
       <div class="flex flex-col items-center space-y-5">
         <img class="w-[100px] h-[100px] object-cover rounded-full" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="photo">
-        <button (click)="uploadPicture()">Upload a picture</button>
+        <button class="hover:underline hover:decoration-[#6a43ff] hover:decoration-2 hover:underline-offset-2 cursor-pointer" (click)="uploadPicture()">Upload a picture</button>
         <div>
           <h3 class="uppercase">Balance</h3>
           <span class="text-xl text-center block">50<span class="text-green-600">$</span></span>

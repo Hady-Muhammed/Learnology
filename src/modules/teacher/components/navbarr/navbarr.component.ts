@@ -1,3 +1,4 @@
+import { Chat } from 'src/app/models/chat';
 import { API_URL, SocketioService } from './../../../../app/services/socketio.service';
 import { Teacher } from './../../../../app/models/teacher';
 import { HttpClient } from '@angular/common/http';
@@ -13,6 +14,7 @@ import jwtDecode from 'jwt-decode';
 export class NavbarrComponent implements OnInit {
 
   account!: Teacher;
+  numOfUnreadMessages: number = 0;
   @Input() toggle!: boolean;
 
   constructor(private router: Router, private http: HttpClient , private socketService: SocketioService) {
@@ -36,6 +38,7 @@ export class NavbarrComponent implements OnInit {
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
         this.connectToSocket()
+        this.getNoOfUnreadMessages()
       });
   }
 
@@ -50,5 +53,14 @@ export class NavbarrComponent implements OnInit {
 
   isConnectedToSocket(){
     return this.socketService?.socket?.connected
+  }
+
+  getNoOfUnreadMessages() {
+    this.http.post<Chat[]>(API_URL + `/api/chats/getChats`,{email: this.account.email})
+    .subscribe((chats: Chat[]) =>{
+      for (let i = 0; i < chats.length; i++) {
+        this.numOfUnreadMessages += chats[i].newMessages
+      }
+    })
   }
 }

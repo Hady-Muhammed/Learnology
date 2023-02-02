@@ -1,6 +1,6 @@
 <div>
   <h2 class="text-center font-semibold text-3xl mb-10 relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2">Your Friends</h2>
-  <button class="bg-black space-x-2 text-white p-1 px-4 rounded-md mb-5" (click)="openRequests()">
+  <button class="bg-black btn duration-500 space-x-2 text-white p-1 px-4 rounded-md mb-5" (click)="openRequests()">
     <span class="inline-block">Show friend requests</span>
     <span *ngIf="numOfUnreadRequests" class="text-white px-1 bg-red-600 rounded-full text-xs inline-block text-center">{{numOfUnreadRequests}} New</span>
   </button>
@@ -38,5 +38,8 @@
     </ng-container>
     <p data-aos="zoom-in" data-aos-duration="500" class="p-5 text-center text-lg font-semibold" *ngIf="showRequests && friendRequests.length === 0">No requests</p>
   </ng-container>
+  <button (click)="showRequests= false" class="absolute right-4 top-4 rounded-full flex justify-center items-center text-white bg-red-400 p-1">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>
 

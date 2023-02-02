@@ -7,7 +7,7 @@ import { message, Chat } from './../../../../../../app/models/chat';
 import { ActivatedRoute, Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 
 @Component({
   selector: 'app-chat',
@@ -19,11 +19,13 @@ export class ChatComponent implements OnInit {
   account!: Teacher;
   person2!: Student;
   id!: string;
-  message!: string;
+  message: string = '';
   newMessages!: number;
   onlineUsers: any[] = [];
   typing!: boolean;
   chat!: Chat;
+  isEmojiPickerVisible!: boolean;
+  @ViewChild('lastMessage') lastMessage!: ElementRef
 
   constructor(
     private http: HttpClient,
@@ -58,6 +60,9 @@ export class ChatComponent implements OnInit {
         this.listenForNewMessagesRealtime();
         this.listenForTyping();
         console.log(this.messages);
+        setTimeout(() => {
+          this.scrollToLastMessage()
+        }, 100);
       });
   }
 
@@ -88,6 +93,7 @@ export class ChatComponent implements OnInit {
         sentAt: new Date().toUTCString(),
       };
       this.messages.push(message);
+      this.scrollToLastMessage()
       this.socketService.sendMessage(message, this.id);
       this.http
         .post(API_URL + `/api/chats/sendMessage`, {
@@ -123,9 +129,14 @@ export class ChatComponent implements OnInit {
       });
   }
 
+  scrollToLastMessage() {
+    this.lastMessage?.nativeElement?.scrollIntoView({behavior: 'smooth', block: 'nearest' , inline: 'start'})
+  }
+
   listenForNewMessagesRealtime() {
     this.socketService.socket.on('receive-message', (message: message) => {
       this.messages.push(message);
+      this.scrollToLastMessage()
     });
   }
 
@@ -155,4 +166,9 @@ export class ChatComponent implements OnInit {
       }
   })
   }
+
+  addEmoji(event: any) {
+    this.message = `${this.message}${event.emoji.native}`;
+    this.isEmojiPickerVisible = false;
+ }
 }

@@ -15,11 +15,16 @@ export class NotifiedPostComponent implements OnInit {
   account!: Student;
   post!: Post;
   id!: any;
-  constructor(private http:HttpClient, private route: ActivatedRoute) { }
+  constructor(private http:HttpClient, private route: ActivatedRoute) {
+    this.id = this.route.snapshot.params['id']
+    this.route.params.subscribe(() => {
+      this.id = this.route.snapshot.params['id']
+      this.getPost()
+    })
+  }
 
   ngOnInit(): void {
     window.scrollTo(0, 0);
-    this.id = this.route.snapshot.params['id']
     this.getAccount()
     this.getPost()
   }

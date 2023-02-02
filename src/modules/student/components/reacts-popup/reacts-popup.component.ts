@@ -38,6 +38,7 @@ export class ReactsPopupComponent implements OnInit {
         react,
         notificationn: {
           belongsTo: postOwner._id,
+          sentBy: this.account._id,
           about_what: 'Reacted to your post',
           type: react.type,
           happenedAt: new Date().toUTCString(),
@@ -68,6 +69,7 @@ export class ReactsPopupComponent implements OnInit {
         commentID: comment._id,
         notificationn: {
           belongsTo: comment.belongsTo,
+          sentBy: this.account._id,
           about_what: 'Reacted to your comment',
           type: react.type,
           happenedAt: new Date().toUTCString(),
@@ -100,6 +102,7 @@ export class ReactsPopupComponent implements OnInit {
         replyID: reply._id,
         notificationn: {
           belongsTo: reply.replier[0]._id,
+          sentBy: this.account._id,
           about_what: 'Reacted to your reply',
           type: react.type,
           happenedAt: new Date().toUTCString(),

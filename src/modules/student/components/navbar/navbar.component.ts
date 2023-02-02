@@ -100,4 +100,8 @@ export class NavbarComponent implements OnInit {
   isConnectedToSocket(){
     return this.socketService?.socket?.connected
   }
+
+  navigate(postID: string) {
+    this.router.navigate(['notified-post',postID])
+  }
 }

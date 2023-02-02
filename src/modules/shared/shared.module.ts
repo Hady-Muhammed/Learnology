@@ -4,9 +4,12 @@ import { CommonModule } from '@angular/common';
 import { LoaderComponent } from '../student/components/loader/loader.component';
 import { LogoComponent } from '../student/components/logo/logo.component';
 
+
 @NgModule({
   declarations: [LogoComponent, LoaderComponent],
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+  ],
   exports: [LogoComponent, LoaderComponent, MaterialModule],
 })
 export class SharedModule {}

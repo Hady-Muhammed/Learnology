@@ -63,6 +63,7 @@ export class PostComponent implements OnInit {
           },
           notificationn: {
             belongsTo: post.author[0]._id,
+            sentBy: this.account._id,
             about_what: "Commented on your post",
             type: "comment",
             happenedAt: new Date().toUTCString(),

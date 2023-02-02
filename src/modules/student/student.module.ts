@@ -1,3 +1,4 @@
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { SwiperModule } from 'swiper/angular';
 import { SharedModule } from 'src/modules/shared/shared.module';
 import { NgModule } from '@angular/core';
@@ -101,6 +102,7 @@ import { FriendCardComponent } from './components/cards/friend-card/friend-card.
     SwiperModule,
     StudentRoutingModule,
     FontAwesomeModule,
+    PickerModule
   ]
 })
 export class StudentModule { }

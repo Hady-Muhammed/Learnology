@@ -30,6 +30,7 @@ export class TeacherMessagesComponent implements OnInit {
   ) {
     this.getChats();
   }
+  
   ngOnInit(): void {
     this.getAccount()
     const token: any = localStorage.getItem('token');
