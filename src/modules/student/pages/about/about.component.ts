@@ -36,7 +36,7 @@ export class AboutComponent implements OnInit {
 
   getAllTeachers() {
     this.http
-      .get(API_URL + '/api/teachers/getAllTeachers')
-      .subscribe((data: any) => (this.teachers = data.allTeachers));
+      .get<Teacher[]>(API_URL + '/api/teachers/getAllTeachers')
+      .subscribe((teachers: Teacher[]) => (this.teachers = teachers));
   }
 }

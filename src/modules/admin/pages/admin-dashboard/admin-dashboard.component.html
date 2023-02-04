@@ -1,9 +1,57 @@
-<app-naavbar></app-naavbar>
-<div class="relative w-[80vw] h-[80vh] mx-auto">
-  <canvas class="w-[60%] mx-auto" baseChart
-  [type]="'bar'"
-  [data]="barChartData"
-  [options]="barChartOptions"
-  >
-  </canvas>
+<div class="mx-auto w-fit py-5">
+  <app-logo [size]="20"></app-logo>
 </div>
+<app-naavbar></app-naavbar>
+<main class="px-5">
+  <div class="flex xs:flex-col xl:flex-row xs:space-y-4 xl:space-y-0 xl:space-x-4">
+    <div class="relative w-[70vw] xs:h-[70vh] md:h-[50vh] mx-auto rounded-xl shadow-lg border p-4">
+      <canvas baseChart
+      [type]="'bar'"
+      [data]="barChartData"
+      [options]="barChartOptions"
+      >
+      </canvas>
+    </div>
+    <div class="relative xs:w-[70vw] xl:w-[40vw] xs:h-[70vh] md:h-[50vh] mx-auto rounded-xl shadow-lg border p-4">
+      <canvas baseChart
+      [type]="'polarArea'"
+      [data]="polarChartData"
+      [options]="polarChartOptions"
+      >
+      </canvas>
+    </div>
+  </div>
+  <div class="mt-10">
+    <div class="flex xs:flex-col xl:flex-row items-center xs:space-y-4 xl:space-y-0 justify-evenly">
+      <div data-aos="fade-right" data-aos-duration="600" data-aos-delay="100" class="flex items-center rounded-md bg-[#17a2b8] xs:w-full xl:w-[400px] p-5 justify-between h-[150px]">
+        <div class="space-y-4">
+          <span class="text-white font-bold text-4xl">150</span>
+          <h3 class="text-white">New Orders</h3>
+        </div>
+        <div class="text-6xl w-fit">
+          <i class="fa-sharp fa-solid fa-bag-shopping text-black/20"></i>
+        </div>
+      </div>
+      <div data-aos="fade-right" data-aos-duration="600" data-aos-delay="300" class="flex items-center rounded-md bg-[#28a745] xs:w-full xl:w-[400px] p-5 justify-between h-[150px]">
+        <div class="space-y-4">
+          <span class="text-white font-bold text-4xl">53
+             <sup>%</sup>
+          </span>
+          <h3 class="text-white">Bounce Rate</h3>
+        </div>
+        <div class="text-6xl w-fit">
+          <i class="fa-solid fa-chart-line text-black/20"></i>
+        </div>
+      </div>
+      <div data-aos="fade-right" data-aos-duration="600" data-aos-delay="500" class="flex items-center rounded-md bg-[#ffc107] xs:w-full xl:w-[400px] p-5 justify-between h-[150px]">
+        <div class="space-y-4">
+          <span class="font-bold text-4xl">44</span>
+          <h3>User Registrations</h3>
+        </div>
+        <div class="text-6xl w-fit">
+          <i class="fa-solid fa-user-plus text-black/20"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

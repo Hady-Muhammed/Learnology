@@ -6,7 +6,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { Page404Component } from './pages/page404/page404.component';
-import { HomeComponent } from 'src/modules/student/pages/home/home.component';
 import { AdminGuard } from './guards/admin.guard';
 
 const routes: Routes = [

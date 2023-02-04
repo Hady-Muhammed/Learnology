@@ -1,0 +1,51 @@
+.mat-select-arrow {
+  color: white !important;
+}
+.mat-select-value {
+  color: white;
+}
+.mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: white;
+}
+
+.group {
+  display: flex;
+  line-height: 28px;
+  align-items: center;
+  position: relative;
+ }
+
+ .group .input {
+  width: 100%;
+  height: 40px;
+  line-height: 28px;
+  padding: 0 1rem;
+  padding-left: 2.5rem;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  outline: none;
+  background-color: #f3f3f4;
+  color: #0d0c22;
+  transition: .3s ease;
+ }
+
+ .group .input::placeholder {
+  color: #9e9ea7;
+ }
+
+ .group .input:focus,
+ .group .input:hover {
+  outline: none;
+  border-color: #6943ffdd;
+  background-color: #fff;
+  box-shadow: 0 0 0 4px #6943ff36;
+ }
+
+ .icon {
+  position: absolute;
+  left: 1rem;
+  fill: #9e9ea7;
+  width: 1rem;
+  height: 1rem;
+ }
+

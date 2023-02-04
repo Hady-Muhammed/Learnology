@@ -1,0 +1,93 @@
+<div class="mx-auto w-fit py-5">
+  <app-logo [size]="20"></app-logo>
+</div>
+<app-naavbar></app-naavbar>
+<div class="mx-auto mt-10 w-[80%]">
+    <div class="group w-[80%] mx-auto">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><g><path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path></g></svg>
+      <input (keyup)="applyFilter($event)" placeholder="Filter" type="search" class="input" #input>
+    </div>
+</div>
+
+<div class="w-[80%] mx-auto">
+  <div class="flex justify-end my-4 w-[80%] mx-auto">
+    <button data-aos="fade-right" data-aos-duration="300" *ngIf="selection.selected.length !== 0" (click)="deleteStudentsBySelection()" class="text-white bg-black rounded-md px-4 py-2">Seleted ({{selection.selected.length}}) | Delete All</button>
+  </div>
+</div>
+
+<div class="w-[80%] overflow-auto mx-auto">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 border w-[80%] mx-auto" matSort>
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Number Column -->
+    <ng-container matColumnDef="no">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
+      <td mat-cell *matCellDef="let element;let i = index"> {{i + 1}} </td>
+    </ng-container>
+
+    <!-- Avatar Column -->
+    <ng-container matColumnDef="avatar">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Avatar </th>
+      <td mat-cell *matCellDef="let element">
+        <img class="rounded-full w-[60px] h-[60px] p-2 object-cover" [src]="element.picture === 'default' ? '../../../../assets/user.webp': element.picture" alt="photo">
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+    </ng-container>
+
+    <!-- Email Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+    </ng-container>
+
+    <!-- Since Column -->
+    <ng-container matColumnDef="since">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Since </th>
+      <td mat-cell *matCellDef="let element"> {{element.createdAt | date}} </td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Actions </th>
+      <td mat-cell *matCellDef="let element">
+        <button (click)="deleteStudent(element.email)" class="rounded-md px-4 py-2 text-white bg-red-500 mx-auto">DELETE</button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr data-aos="fade-in" data-aos-duration="700" [attr.data-aos-delay]="i*100" mat-row *matRowDef="let row; columns: displayedColumns;let i = index">
+    </tr>
+    <!-- Row shown when there is no matching data. -->
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+    </tr>
+  </table>
+  <mat-paginator class="border w-[80%] mx-auto shadow-md bg-violet-600 text-white" [pageSizeOptions]="[5, 10, 20]"
+  showFirstLastButtons
+  aria-label="Select page of periodic elements">
+  </mat-paginator>
+</div>
+
+

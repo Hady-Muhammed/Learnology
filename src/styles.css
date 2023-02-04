@@ -73,3 +73,7 @@ background-color: #6a43ff  !important; /*inner circle color change*/
   background-image: var(--scroll-thumb, none);
   border-radius: var(--scroll-thumb-radius, var(--scroll-radius));
 }
+
+.mat-paginator-icon {
+  color: white !important
+}

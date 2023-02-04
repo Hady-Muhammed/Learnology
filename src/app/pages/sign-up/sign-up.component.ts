@@ -72,6 +72,7 @@ export class SignUpComponent implements OnInit {
             taken_quizzes: [],
             reacts: [],
             friends: [],
+            last_activity: new Date().toUTCString(),
           })
           .subscribe({
             next: (data) => {
@@ -106,6 +107,7 @@ export class SignUpComponent implements OnInit {
             articles_published: [],
             quizzes_published: [],
             likes: 0,
+            last_activity: new Date().toUTCString()
           })
           .subscribe({
             next: (data) => {

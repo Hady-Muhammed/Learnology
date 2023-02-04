@@ -10,4 +10,5 @@ export interface Teacher {
   articles_published: string[],
   quizzes_published: string[],
   likes: number,
+  last_activity: string,
 }
