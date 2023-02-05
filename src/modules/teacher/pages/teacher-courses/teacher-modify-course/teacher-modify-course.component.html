@@ -134,7 +134,7 @@
             <ng-container matColumnDef="action">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Action </th>
               <td mat-cell *matCellDef="let row">
-                <button (click)="createChat(row?.email,row?.name,row?.picture)" class="text-white bg-black p-3 font-bold">Send Message</button>
+                <button (click)="createChat(row._id)" class="text-white bg-black p-3 font-bold">Send Message</button>
               </td>
             </ng-container>
 

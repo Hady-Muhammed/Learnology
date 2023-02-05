@@ -10,6 +10,7 @@
           <div>
             <h2 class="font-bold text-xl">{{msg.belongsTo === account.email ? account && account.name : person2 && person2.name}}</h2>
             <span *ngIf="person2?.online && msg.belongsTo !== account.email" class="text-xs text-green-600 block">online</span>
+            <span *ngIf="!person2?.online && msg.belongsTo !== account.email" class="text-xs text-black/40 block">Last seen at {{person2.last_activity | date}} | {{(person2.last_activity | date : 'short')!.split(',')[1]}}</span>
           </div>
         </div>
         <p [ngClass]="msg.belongsTo === account.email ? 'text-right': ''" class="py-8">{{msg.content}}</p>

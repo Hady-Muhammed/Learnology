@@ -1,3 +1,4 @@
+import { map } from 'rxjs';
 import { NgToastService } from 'ng-angular-popup';
 import { API_URL } from './../../../../../../app/services/socketio.service';
 import { SocketioService } from 'src/app/services/socketio.service';
@@ -47,15 +48,29 @@ export class ChatComponent implements OnInit {
 
   getChat() {
     this.http
-      .get<Chat>(API_URL + `/api/chats/getSingleChat/${this.id}`)
+      .get<any>(API_URL + `/api/chats/getSingleChat/${this.id}`)
+      .pipe(map((chats) => {
+        for (const chat of chats) {
+          let personsArray = [...chat.person1a,...chat.person1b,...chat.person2a,...chat.person2b]
+          chat.person1 = personsArray[0]
+          chat.person2 = personsArray[1]
+        }
+        for (const chat of chats) {
+          delete chat.person1a
+          delete chat.person1b
+          delete chat.person2a
+          delete chat.person2b
+        }
+        return chats[0]
+      }))
       .subscribe((chat: Chat) => {
         this.messages = chat.messages;
         this.newMessages = chat.newMessages;
         this.chat = chat;
-        if (chat.person1.email === this.account.email) {
-          this.getPerson2(chat.person2.email);
+        if (chat.person1_ID === this.account._id) {
+          this.getPerson2(chat.person2_ID);
         } else {
-          this.getPerson2(chat.person1.email);
+          this.getPerson2(chat.person1_ID);
         }
         this.listenForNewMessagesRealtime();
         this.listenForTyping();
@@ -72,14 +87,13 @@ export class ChatComponent implements OnInit {
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
         this.socketService.joinChat(this.id);
-        this.getOnlineUsers();
         this.getChat();
       });
   }
 
-  getPerson2(email: string) {
+  getPerson2(id: string) {
     this.http
-      .get<Student>(API_URL + `/api/students/getStudent/${email}`)
+      .get<Student>(API_URL + `/api/students/getStudentByID/${id}`)
       .subscribe((student: Student) => {
         this.person2 = student;
       });
@@ -116,17 +130,6 @@ export class ChatComponent implements OnInit {
         })
         .subscribe((res: any) => console.log(res));
     }
-  }
-
-  getOnlineUsers() {
-    this.http
-      .get<Student[]>(API_URL + '/api/students/getActiveStudents')
-      .subscribe((students: Student[]) => {
-        for (let i = 0; i < students.length; i++) {
-          this.onlineUsers.push(students[i].email);
-        }
-        console.log(this.onlineUsers);
-      });
   }
 
   scrollToLastMessage() {

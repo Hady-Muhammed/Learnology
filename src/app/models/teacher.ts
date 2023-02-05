@@ -10,5 +10,6 @@ export interface Teacher {
   articles_published: string[],
   quizzes_published: string[],
   likes: number,
+  online: boolean,
   last_activity: string,
 }

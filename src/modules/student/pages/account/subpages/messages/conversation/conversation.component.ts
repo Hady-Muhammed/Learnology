@@ -1,3 +1,4 @@
+import { map } from 'rxjs';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -39,15 +40,29 @@ export class ConversationComponent implements OnInit {
 
   getChat() {
     this.http
-      .get<Chat>(API_URL + `/api/chats/getSingleChat/${this.id}`)
+      .get<any>(API_URL + `/api/chats/getSingleChat/${this.id}`)
+      .pipe(map((chats) => {
+        for (const chat of chats) {
+          let personsArray = [...chat.person1a,...chat.person1b,...chat.person2a,...chat.person2b]
+          chat.person1 = personsArray[0]
+          chat.person2 = personsArray[1]
+        }
+        for (const chat of chats) {
+          delete chat.person1a
+          delete chat.person1b
+          delete chat.person2a
+          delete chat.person2b
+        }
+        return chats[0]
+      }))
       .subscribe((chat: Chat) => {
         console.log(chat);
         this.messages = chat.messages;
         this.newMessages = chat.newMessages;
-        if (chat.person1.email === this.account.email) {
-          this.getPerson2(chat.person2.email);
+        if (chat.person1_ID === this.account._id) {
+          this.getPerson2(chat.person2_ID);
         } else {
-          this.getPerson2(chat.person1.email);
+          this.getPerson2(chat.person1_ID);
         }
         this.listenForNewMessagesRealtime();
         this.listenForTyping();
@@ -67,20 +82,22 @@ export class ConversationComponent implements OnInit {
       });
   }
 
-  getPerson2(email: string) {
+  getPerson2(id: string) {
     // Person2 may be a student or a teacher so
     // we'll check first who's he/she
     this.http
-      .get<Student>(API_URL + `/api/students/getStudent/${email}`)
+      .get<Student>(API_URL + `/api/students/getStudentByID/${id}`)
       .subscribe((student: Student) => {
         if (!student) {
           this.http
-            .get<Teacher>(API_URL + `/api/teachers/getTeacher/${email}`)
+            .get<Teacher>(API_URL + `/api/teachers/getTeacherByID/${id}`)
             .subscribe((teacher: Teacher) => {
               this.person2 = teacher;
+              console.log('person2: ',teacher)
             });
         } else {
           this.person2 = student;
+          console.log('person2: ',student)
         }
       });
   }

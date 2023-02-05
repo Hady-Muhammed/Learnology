@@ -8,6 +8,7 @@ import { Chat } from 'src/app/models/chat';
 import { Student } from 'src/app/models/student';
 import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 import jwtDecode from 'jwt-decode';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'app-messages',
@@ -16,16 +17,15 @@ import jwtDecode from 'jwt-decode';
 })
 export class MessagesComponent implements OnInit {
 
-  account!: string;
-  chats!: Chat[];
+  account!: Student;
+  chats!: any[];
   onlineUsers!: Student[];
-  
+
   constructor(
     private http: HttpClient,
     private router: Router,
     private toast: NgToastService,
   ) {
-    this.getChats();
   }
 
   ngOnInit(): void {
@@ -33,25 +33,24 @@ export class MessagesComponent implements OnInit {
   }
 
   getChats() {
-    const token: any = localStorage.getItem('token');
-    const student: any = jwt_decode(token);
-    this.account = student.email;
     this.http
-      .post<Chat[]>(API_URL + '/api/chats/getChats', {
-        email: student.email,
-      })
-      .subscribe((chats: Chat[]) => {
-        this.chats = chats;
-        let persons = [];
-        for (let i = 0; i < chats.length; i++) {
-          if (chats[i].person1.email !== student.email) {
-            persons.push(chats[i].person1.email);
-          } else if (chats[i].person2.email !== student.email) {
-            persons.push(chats[i].person2.email);
-          }
+      .get<any[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
+      .pipe(map((chats) => {
+        for (const chat of chats) {
+          let personsArray = [...chat.person1a,...chat.person1b,...chat.person2a,...chat.person2b]
+          chat.person1 = personsArray[0]
+          chat.person2 = personsArray[1]
         }
-        console.log(persons);
-        this.getOnlineUsers(persons)
+        for (const chat of chats) {
+          delete chat.person1a
+          delete chat.person1b
+          delete chat.person2a
+          delete chat.person2b
+        }
+        return chats
+      }))
+      .subscribe((chats: Chat[]) => {
+        this.chats = chats
       });
   }
 
@@ -77,28 +76,16 @@ export class MessagesComponent implements OnInit {
       });
   }
 
-  isOnline(email: string){
-    return this.onlineUsers?.find(user => user.email === email && user.online === true)
-  }
-
   getAccount() {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
-        this.account = student.email
+        this.account = student
+        this.getChats()
       });
   }
-
-  getOnlineUsers(persons: string[]) {
-    this.http
-          .get<Student[]>(API_URL + `/api/students/getOnlineUsers/${persons}`)
-          .subscribe(
-            (onlineUsers: any[]) =>
-              {this.onlineUsers = onlineUsers
-                console.log(onlineUsers)
-              }
-      );
-  }
 }
+
+

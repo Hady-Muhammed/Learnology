@@ -79,20 +79,12 @@ export class CommunityComponent implements OnInit {
       });
   }
 
-  createChat(name: string, email: string, picture: string) {
+  createChat(studentID: string) {
     this.http
       .post(API_URL + '/api/chats/createChat', {
         chat: {
-          person1: {
-            picture: this.account.picture,
-            name: this.account.name,
-            email: this.account.email,
-          },
-          person2: {
-            picture: picture,
-            name: name,
-            email: email,
-          },
+          person1_ID: this.account._id,
+          person2_ID: studentID,
           newMessages: 0,
           messages: [],
         },

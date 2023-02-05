@@ -43,7 +43,7 @@ export class AccountComponent implements OnInit {
   }
 
   getNoOfUnreadMessages() {
-    this.http.post<Chat[]>(API_URL + `/api/chats/getChats`,{email: this.account.email})
+    this.http.get<Chat[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
     .subscribe((chats: Chat[]) =>{
       for (let i = 0; i < chats.length; i++) {
         this.numOfUnreadMessages += chats[i].newMessages

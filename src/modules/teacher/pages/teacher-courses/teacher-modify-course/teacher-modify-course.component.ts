@@ -202,31 +202,22 @@ export class TeacherModifyCourseComponent implements OnInit , AfterViewInit {
     }
   }
 
-  createChat(email: string , name: string , picture: string) {
+  createChat(studentID: string) {
         this.http
           .post(API_URL + '/api/chats/createChat', {
             chat: {
-              person1: {
-                picture:
-                  this.account.picture,
-                name: this.account.name,
-                email: this.account.email,
-              },
-              person2: {
-                picture,
-                name,
-                email,
-              },
+              person1_ID: this.account._id,
+              person2_ID: studentID,
               newMessages: 0,
               messages: [],
             },
           }).subscribe((res:any) => {
             if (res.message === 'Chat already exists') {
               console.log(res);
-              this.router.navigateByUrl(`/teacher/messages/${res.id}`);
+              this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
             } else {
               console.log(res);
-              this.router.navigateByUrl(`/teacher/messages/${res.id}`);
+              this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
             }
           })
   }
