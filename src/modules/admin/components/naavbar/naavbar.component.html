@@ -2,18 +2,21 @@
   <i class="fa-solid fa-bars"></i>
 </button>
 <nav class="xs:w-[70%] lg:w-full mx-auto flex xs:flex-col lg:flex-row justify-evenly xs:hidden lg:flex py-4 font-mont">
-  <a routerLink="../dashboard" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">Dashboard</a>
-  <a routerLink="../students" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">Students</a>
-  <a routerLink="../teachers" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">Teachers</a>
-  <a routerLink="../emails" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">Emails</a>
+  <a (click)="navigate('dashboard')" class="border-b-4 cursor-pointer border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">Dashboard</a>
+  <a (click)="navigate('students')" class="border-b-4 cursor-pointer border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">Students</a>
+  <a (click)="navigate('teachers')" class="border-b-4 cursor-pointer border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">Teachers</a>
+  <a (click)="navigate('emails'); numOfUnreadEmails = 0" class="border-b-4 cursor-pointer relative border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] duration-500 rounded-md">
+    <span>Emails</span>
+    <span *ngIf="numOfUnreadEmails" class="absolute top-1 right-3 text-white bg-red-500 text-xs w-[15px] h-[15px] grid place-items-center rounded-full">{{numOfUnreadEmails}}</span>
+  </a>
   <a (click)="logOut()" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold hover:scale-[1.1] cursor-pointer duration-500 rounded-md">Logout</a>
 </nav>
 
 <!-- Small screens menu -->
 <nav *ngIf="opened" class="xs:w-[70%] lg:w-full mx-auto xs:flex lg:hidden xs:flex-col lg:flex-row justify-evenly py-4 font-mont">
-  <a routerLink="../dashboard" data-aos="fade-right" data-aos-duration="500" data-aos-delay="0" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Dashboard</a>
-  <a routerLink="../students" data-aos="fade-right" data-aos-duration="500" data-aos-delay="100" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Students</a>
-  <a routerLink="../teachers" data-aos="fade-right" data-aos-duration="500" data-aos-delay="200" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Teachers</a>
-  <a routerLink="../emails" data-aos="fade-right" data-aos-duration="500" data-aos-delay="300" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Emails</a>
+  <a (click)="navigate('dashboard')" data-aos="fade-right" data-aos-duration="500" data-aos-delay="0" class="border-b-4 cursor-pointer border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Dashboard</a>
+  <a (click)="navigate('students')" data-aos="fade-right" data-aos-duration="500" data-aos-delay="100" class="border-b-4 cursor-pointer border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Students</a>
+  <a (click)="navigate('teachers')" data-aos="fade-right" data-aos-duration="500" data-aos-delay="200" class="border-b-4 cursor-pointer border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Teachers</a>
+  <a (click)="navigate('emails')" data-aos="fade-right" data-aos-duration="500" data-aos-delay="300" class="border-b-4 cursor-pointer border-b-violet-600 p-3 px-6 font-bold lk rounded-md">Emails</a>
   <a (click)="logOut()" data-aos="fade-right" data-aos-duration="500" data-aos-delay="400" class="border-b-4 border-b-violet-600 p-3 px-6 font-bold lk rounded-md cursor-pointer">Logout</a>
 </nav>

@@ -8,6 +8,9 @@ import { NgChartsModule } from 'ng2-charts';
 import { AdminTeachersComponent } from './pages/admin-teachers/admin-teachers.component';
 import { AdminStudentsComponent } from './pages/admin-students/admin-students.component';
 import { AdminEmailsComponent } from './pages/admin-emails/admin-emails.component';
+import { AdminEmailDetailComponent } from './pages/admin-email-detail/admin-email-detail.component';
+import { AdminComponent } from './pages/admin/admin.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
@@ -16,13 +19,17 @@ import { AdminEmailsComponent } from './pages/admin-emails/admin-emails.componen
     NaavbarComponent,
     AdminTeachersComponent,
     AdminStudentsComponent,
-    AdminEmailsComponent
+    AdminEmailsComponent,
+    AdminEmailDetailComponent,
+    AdminComponent
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     NgChartsModule,
-    SharedModule
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class AdminModule { }

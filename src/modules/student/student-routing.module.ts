@@ -25,6 +25,8 @@ import { QuizzesComponent } from './pages/quizzes/quizzes.component';
 import { NotifiedPostComponent } from './pages/notified-post/notified-post.component';
 import { PostsComponent } from './pages/account/subpages/posts/posts.component';
 import { FriendsComponent } from './pages/account/subpages/friends/friends.component';
+import { InboxComponent } from './pages/account/subpages/inbox/inbox.component';
+import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbox-detail.component';
 
 const routes: Routes = [
   {
@@ -149,6 +151,14 @@ const routes: Routes = [
       {
         path: 'friends',
         component: FriendsComponent,
+      },
+      {
+        path: 'inbox',
+        component: InboxComponent,
+      },
+      {
+        path: 'inbox/:id',
+        component: InboxDetailComponent,
       },
     ],
   },

@@ -1,3 +1,5 @@
+import { AdminComponent } from './pages/admin/admin.component';
+import { AdminEmailDetailComponent } from './pages/admin-email-detail/admin-email-detail.component';
 import { AdminDashboardComponent } from './pages/admin-dashboard/admin-dashboard.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -9,23 +11,33 @@ const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'dashboard',
+    redirectTo: 'd/dashboard',
   },
   {
-    path: "dashboard",
-    component: AdminDashboardComponent,
-  },
-  {
-    path: "students",
-    component: AdminStudentsComponent,
-  },
-  {
-    path: "teachers",
-    component: AdminTeachersComponent,
-  },
-  {
-    path: "emails",
-    component: AdminEmailsComponent,
+    path: 'd',
+    component: AdminComponent,
+    children: [
+      {
+        path: "dashboard",
+        component: AdminDashboardComponent,
+      },
+      {
+        path: "students",
+        component: AdminStudentsComponent,
+      },
+      {
+        path: "teachers",
+        component: AdminTeachersComponent,
+      },
+      {
+        path: "emails",
+        component: AdminEmailsComponent,
+      },
+      {
+        path: "emails/:id",
+        component: AdminEmailDetailComponent,
+      },
+    ]
   },
 ];
 

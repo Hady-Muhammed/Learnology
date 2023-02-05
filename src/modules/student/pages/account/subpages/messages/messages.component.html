@@ -17,8 +17,6 @@
       class="text-xs text-green-600 block">online</span>
       <span *ngIf="chat.person1.email !== account.email && !chat.person1.online" class="text-xs text-black/40 block">Last seen at {{chat.person1.last_activity | date}} | {{(chat.person1.last_activity | date : 'short')!.split(',')[1]}}</span>
       <span *ngIf="chat.person2.email !== account.email && !chat.person2.online" class="text-xs text-black/40 block">Last seen at {{chat.person2.last_activity | date}} | {{(chat.person2.last_activity | date : 'short')!.split(',')[1]}}</span>
-
-
       <ng-container *ngIf="chat.newMessages">
         <p class="font-bold text-red-400 flex items-center"><span class="text-white bg-red-600 rounded-full w-[20px] h-[20px] text-sm grid place-items-center mr-1">{{chat.newMessages}}</span> new message</p>
       </ng-container>

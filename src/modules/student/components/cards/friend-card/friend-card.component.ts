@@ -44,16 +44,8 @@ export class FriendCardComponent implements OnInit {
     this.http
       .post(API_URL + '/api/chats/createChat', {
         chat: {
-          person1: {
-            picture: this.account.picture,
-            name: this.account.name,
-            email: this.account.email,
-          },
-          person2: {
-            picture: this.friend.picture,
-            name: this.friend.name,
-            email: this.friend.email,
-          },
+          person1_ID: this.account._id,
+          person2_ID: this.friend._id,
           newMessages: 0,
           messages: [],
         },

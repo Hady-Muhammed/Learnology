@@ -46,6 +46,8 @@ import { NotifiedPostComponent } from './pages/notified-post/notified-post.compo
 import { FriendsComponent } from './pages/account/subpages/friends/friends.component';
 import { PostsComponent } from './pages/account/subpages/posts/posts.component';
 import { FriendCardComponent } from './components/cards/friend-card/friend-card.component';
+import { InboxComponent } from './pages/account/subpages/inbox/inbox.component';
+import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbox-detail.component';
 
 
 
@@ -91,6 +93,8 @@ import { FriendCardComponent } from './components/cards/friend-card/friend-card.
     FriendsComponent,
     PostsComponent,
     FriendCardComponent,
+    InboxComponent,
+    InboxDetailComponent,
   ],
   imports: [
     CommonModule,

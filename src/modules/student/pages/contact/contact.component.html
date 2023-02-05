@@ -7,8 +7,8 @@
         <input [formControl]="fname"  class="p-2 border rounded-sm  outline-none" placeholder="First Name" type="text" />
         <input [formControl]="lname"  class="p-2 border rounded-sm  outline-none" placeholder="Last Name" type="text" />
       </div>
-      <input [formControl]="email" placeholder="Your Email Address" type="text">
-      <textarea [formControl]="message"  name="" id="" cols="30" rows="10" placeholder="Write your message"></textarea>
+      <input [formControl]="subject" placeholder="Your Subject" type="text">
+      <textarea [formControl]="body"  name="" id="" cols="30" rows="10" placeholder="Write your message"></textarea>
       <button (click)="sendEmail()" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2">Send Message</button>
     </form>
     <div data-aos="flip-right" class="xs:relative xl:absolute xl:left-10 xl:-top-12 flex xs:mb-10 xl:mb-0 shadow-black/40 shadow-lg  px-10 p-5 space-y-8 rounded-md text-white flex-col bg-[#8d46ff]">

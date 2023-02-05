@@ -1,5 +1,57 @@
-<div class="mx-auto w-fit py-5">
-  <app-logo [size]="20"></app-logo>
+<main class="font-mont mt-10 space-y-4">
+  <div class="flex justify-end">
+    <button (click)="openModal()" class="text-white px-6 shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-full p-2 mr-5">Broadcast <i class="fa-solid fa-tower-broadcast"></i></button>
+  </div>
+  <ng-container *ngFor="let email of emails | async; let i = index">
+    <div data-aos="fade-right" [attr.data-aos-delay]="i*100" class="bg-violet-100 p-5 xs:w-[90%] md:w-[60%] mx-auto rounded-md relative">
+      <a (click)="emailRead(email)" [routerLink]="['/admin/d/emails', email._id]" class="flex justify-between">
+        <div class="flex space-x-2">
+          <img class="w-[80px] h-[80px] object-cover rounded-md" [src]="email.sender.picture === 'default' ? '../../../../assets/user.webp' : email.sender.picture" alt="photo">
+          <div>
+            <h3 class="font-semibold text-lg">{{email.sender.name}}</h3>
+            <p>{{email.subject}}</p>
+            <p class="text-black/40">{{email.body.slice(0,30) + '...'}}</p>
+          </div>
+        </div>
+        <span>{{email.sentAt | date}}</span>
+        <!-- New -->
+        <span *ngIf="!email.read" class="bg-red-500 text-white p-1 text-xs rounded-flg absolute left-0 top-0 before:absolute before:border-t-[18.5px] before:border-t-transparent before:border-l-red-500 before:border-b-transparent before:border-b-[18.5px] before:border-l-[18.5px] before:w-0 before:h-0 before:left-1/2 before:translate-x-[-50%] before:rotate-90 before:top-[1.2em]">New</span>
+        <span *ngIf="email.replied" class="text-sm text-green-600 flex items-center space-x-1 absolute bottom-2 right-2"><i class="fa-solid fa-circle-check"></i><span class="italic">replied</span></span>
+      </a>
+      <button (click)="deleteEmail(email._id)" class="text-red-500 absolute -top-2 -right-2 duration-300 hover:scale-[1.3]"><mat-icon class="mat-18">delete</mat-icon></button>
+    </div>
+  </ng-container>
+</main>
+
+
+<!-- Overlay screen -->
+<div (click)="this.opened = false" [ngClass]="opened? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="fixed w-full h-full left-0 top-0 bg-black/50 duration-500 flex justify-center items-center z-40"></div>
+
+<!-- Popup of broadcast -->
+<div [ngClass]="opened ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="bg-white xs:w-[95%] lg:w-1/2 rounded-md p-3 fixed left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] z-50 duration-500 font-mont">
+  <h4 class="p-4 text-center font-bold text-lg">Broadcast a message</h4>
+  <hr>
+  <h5 class="p-4"> <span class="mr-2 inline-block">Sharing to</span>
+      <mat-radio-group
+            class="space-x-3 bg-slate-200 text-black px-5 py-1 rounded-full"
+            [(ngModel)]="selectedOption"
+            aria-label="Select an option"
+          >
+            <mat-radio-button class="font-mont" value="Student"
+              >Students</mat-radio-button
+            >
+            <mat-radio-button class="font-mont" value="Teacher"
+              >Teachers</mat-radio-button
+            >
+      </mat-radio-group>
+  </h5>
+  <hr>
+  <div class="flex flex-col w-[95%] mx-auto space-y-4 my-4">
+    <input [formControl]="subject" placeholder="Your Subject" type="text">
+    <textarea [formControl]="body"  name="" id="" cols="30" rows="10" placeholder="Write your message"></textarea>
+  </div>
+  <button (click)="handleBroadcasting()" class="w-full py-4 rounded-md bg-[#6a43ff] text-white text-center">BROADCAST</button>
+    <button (click)="opened = false" class="absolute right-4 top-4 rounded-full flex justify-center items-center text-white bg-red-400 p-1">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>
-<app-naavbar></app-naavbar>
-<p>admin-emails works!</p>

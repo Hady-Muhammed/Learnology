@@ -22,6 +22,10 @@
       <span class="block">Friends</span>
       <span [ngClass]="numOfUnreadRequests ? 'opacity-[1]':'opacity-0'" class="text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500">{{numOfUnreadRequests}}</span>
     </a>
+    <a (click)="numOfUnreadInboxes = 0" routerLinkActive="pl-12 bg-[#8d46ff]/40 text-white" routerLink="inbox" class="p-2 flex items-center space-x-2 font-bold hover:pl-12 text-lg duration-500 hover:bg-[#8d46ff]/40 rounded-2xl">
+      <span class="block">Inbox</span>
+      <span [ngClass]="numOfUnreadInboxes ? 'opacity-[1]':'opacity-0'" class="text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500">{{numOfUnreadInboxes}}</span>
+    </a>
   </ul>
   <div class="xs:px-5 xs:py-10 sm:p-10 w-full">
     <router-outlet></router-outlet>

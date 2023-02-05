@@ -1,0 +1,33 @@
+<main class="font-mont xs:p-10 md:p-20 mt-10 space-y-4">
+  <img class="w-[80px] h-[80px] object-cover rounded-md" [src]="email?.sender?.picture === 'default' ? '../../../../assets/user.webp' : email?.sender?.picture" alt="photo">
+  <h2 class="text-xl font-semibold"><span class="text-violet-500">From:</span>  {{email?.sender?.name}}</h2>
+  <h3 class="text-lg font-semibold"><span class="text-violet-500">Subject:</span> {{email?.subject}}</h3>
+  <div>
+    <span class="font-extrabold text-2xl">
+      Content :
+    </span>
+    <p class="mt-5">
+      {{email?.body}}
+    </p>
+  </div>
+  <button [disabled]="email?.replied" (click)="opened = true" class="text-white disabled:opacity-50 bg-violet-500 p-4 px-8 duration-300 hover:bg-violet-800">{{email?.replied ? "ALREADY REPLIED":"REPLY"}}</button>
+</main>
+
+
+<!-- Overlay screen -->
+<div (click)="this.opened = false" [ngClass]="opened? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="fixed w-full h-full left-0 top-0 bg-black/50 duration-500 flex justify-center items-center z-40"></div>
+
+<!-- Popup of Replying to an email -->
+<div [ngClass]="opened ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="bg-white xs:w-[95%] lg:w-1/2 rounded-md p-3 fixed left-1/2 top-1/2 translate-x-[-50%] translate-y-[-50%] z-50 duration-500 font-mont">
+  <h4 class="p-4 text-center font-bold text-lg">Replying to an email?</h4>
+  <hr>
+  <div class="flex flex-col w-[95%] mx-auto space-y-4 my-4">
+    <input [formControl]="subject" placeholder="Your Subject" type="text">
+    <textarea [formControl]="body"  name="" id="" cols="30" rows="10" placeholder="Write your message"></textarea>
+  </div>
+  <button (click)="sendInbox()" class="w-full py-4 rounded-md bg-[#6a43ff] text-white text-center">SEND</button>
+    <button (click)="opened = false" class="absolute right-4 top-4 rounded-full flex justify-center items-center text-white bg-red-400 p-1">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+

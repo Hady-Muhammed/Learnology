@@ -8,18 +8,18 @@ import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 @Component({
   selector: 'app-account',
   templateUrl: './account.component.html',
-  styleUrls: ['./account.component.css']
+  styleUrls: ['./account.component.css'],
 })
 export class AccountComponent implements OnInit {
   account!: Student;
   numOfUnreadRequests!: number;
   numOfUnreadMessages: number = 0;
+  numOfUnreadInboxes!: number;
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.getAccount()
+    this.getAccount();
   }
 
   getAccount() {
@@ -28,26 +28,39 @@ export class AccountComponent implements OnInit {
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
-        this.account = student
+        this.account = student;
         this.getNoOfUnreadFriendRequests();
         this.getNoOfUnreadMessages();
+        this.getNoOfUnreadInboxes()
       });
   }
 
   getNoOfUnreadFriendRequests() {
-    this.http.get<any>(API_URL + `/api/frequests/getNoOfUnreadFriendRequests/${this.account._id}`)
-    .subscribe((res: any) =>{
-      console.log(res)
-      this.numOfUnreadRequests = res.numOfRequests
-    })
+    this.http
+      .get<any>(
+        API_URL +
+          `/api/frequests/getNoOfUnreadFriendRequests/${this.account._id}`
+      )
+      .subscribe((res: any) => {
+        this.numOfUnreadRequests = res.numOfRequests;
+      });
   }
 
   getNoOfUnreadMessages() {
-    this.http.get<Chat[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
-    .subscribe((chats: Chat[]) =>{
-      for (let i = 0; i < chats.length; i++) {
-        this.numOfUnreadMessages += chats[i].newMessages
-      }
-    })
+    this.http
+      .get<Chat[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
+      .subscribe((chats: Chat[]) => {
+        for (let i = 0; i < chats.length; i++) {
+          this.numOfUnreadMessages += chats[i].newMessages;
+        }
+      });
+  }
+
+  getNoOfUnreadInboxes() {
+    this.http
+      .get<any>(API_URL + `/api/inboxes/getAllUnreadInboxes/${this.account._id}`)
+      .subscribe((res: any) => {
+        this.numOfUnreadInboxes = res.numOfUnread;
+      });
   }
 }
