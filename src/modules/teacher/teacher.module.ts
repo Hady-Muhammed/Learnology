@@ -21,6 +21,8 @@ import { TeacherQuizzesComponent } from './pages/teacher-quizzes/teacher-quizzes
 import { TeacherStatisticsComponent } from './pages/teacher-statistics/teacher-statistics.component';
 import { TeacherModifyQuizComponent } from './pages/teacher-quizzes/teacher-modify-quiz/teacher-modify-quiz.component';
 import { TeacherCreateQuizComponent } from './pages/teacher-quizzes/teacher-create-quiz/teacher-create-quiz.component';
+import { TeacherInboxComponent } from './pages/teacher-inbox/teacher-inbox.component';
+import { TeacherInboxDetailComponent } from './pages/teacher-inbox-detail/teacher-inbox-detail.component';
 @NgModule({
   declarations: [
     TeacherComponent,
@@ -40,6 +42,8 @@ import { TeacherCreateQuizComponent } from './pages/teacher-quizzes/teacher-crea
     TeacherStatisticsComponent,
     TeacherModifyQuizComponent,
     TeacherCreateQuizComponent,
+    TeacherInboxComponent,
+    TeacherInboxDetailComponent,
   ],
   imports: [
     CommonModule,

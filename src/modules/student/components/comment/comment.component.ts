@@ -1,6 +1,14 @@
 import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  Output,
+  EventEmitter,
+} from '@angular/core';
 import { NgToastService } from 'ng-angular-popup';
 import { comment, Post, react, reply } from 'src/app/models/post';
 import { Student } from 'src/app/models/student';
@@ -14,8 +22,8 @@ import { Observable } from 'rxjs';
 })
 export class CommentComponent implements OnInit {
   replies!: reply[];
-  timeout!: any
-  opened!: boolean
+  timeout!: any;
+  opened!: boolean;
   openReactMenuOfComment!: boolean;
   reactsOnComment!: Observable<react[]>;
   reactsOnReply!: Observable<react[]>;
@@ -25,21 +33,19 @@ export class CommentComponent implements OnInit {
   showReplyInput!: boolean;
   @ViewChild('replyInp') replyInp!: ElementRef;
 
-  @Input('post') post!: Post
-  @Input('comment') comment!: comment
-  @Input('account') account!: Student
-  @Output() reactHappened = new EventEmitter()
-  @Output() commentDeleted = new EventEmitter()
+  @Input('post') post!: Post;
+  @Input('comment') comment!: comment;
+  @Input('account') account!: Student;
+  @Output() reactHappened = new EventEmitter();
+  @Output() commentDeleted = new EventEmitter();
 
   constructor(
     private http: HttpClient,
     private socketService: SocketioService,
-    private toast: NgToastService,
-  ) {
-  }
+    private toast: NgToastService
+  ) {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   handleReactMenuOfCommentMouseOver() {
     this.timeout = window.setTimeout(() => {
@@ -60,30 +66,21 @@ export class CommentComponent implements OnInit {
     );
   }
 
-  deleteComment(
-    commentID: string,
-    postID: string,
-  ) {
+  deleteComment(commentID: string, postID: string) {
     this.http
       .post(API_URL + '/api/comments/deleteComment', { commentID, postID })
       .subscribe({
         next: (res: any) => {
-          console.log(res);
           this.toast.success({ detail: res.message });
-          this.commentDeleted.emit(true)
+          this.commentDeleted.emit(true);
         },
         error: (err) => {
-          console.log(err);
           this.toast.error({ detail: err.message });
         },
       });
   }
 
-  addReply(
-    post: Post,
-    comment: comment,
-    input: HTMLInputElement
-  ) {
+  addReply(post: Post, comment: comment, input: HTMLInputElement) {
     if (this.replyContent.value) {
       this.http
         .post(API_URL + '/api/replies/addReply', {
@@ -101,24 +98,22 @@ export class CommentComponent implements OnInit {
           notificationn: {
             belongsTo: comment.belongsTo,
             sentBy: this.account._id,
-            about_what: "Replied to your comment",
-            type: "reply",
+            about_what: 'Replied to your comment',
+            type: 'reply',
             happenedAt: new Date().toUTCString(),
-            postID: post._id
-          }
+            postID: post._id,
+          },
         })
         .subscribe({
           next: (res: any) => {
-            console.log(res);
             this.toast.success({ detail: res.message });
             this.replyContent.setValue('');
-            if(comment.belongsTo !== this.account._id) {
+            if (comment.belongsTo !== this.account._id) {
               this.socketService.notifyForANewReply(comment.commenter[0].email);
             }
-            this.getReplies(comment._id)
+            this.getReplies(comment._id);
           },
           error: (err) => {
-            console.log(err);
             this.toast.error({ detail: err.message });
           },
         });
@@ -126,11 +121,11 @@ export class CommentComponent implements OnInit {
   }
 
   getReplies(commentID: string) {
-      this.http
-        .get<reply[]>(API_URL + `/api/replies/getReplies/${commentID}`)
-        .subscribe((replies: reply[]) => {
-          this.replies = replies;
-        });
+    this.http
+      .get<reply[]>(API_URL + `/api/replies/getReplies/${commentID}`)
+      .subscribe((replies: reply[]) => {
+        this.replies = replies;
+      });
   }
 
   openReplyField() {
@@ -141,10 +136,6 @@ export class CommentComponent implements OnInit {
   }
 
   detectChanges() {
-    this.reactHappened.emit(true)
-  }
-
-  test(){
-    console.log('changed')
+    this.reactHappened.emit(true);
   }
 }

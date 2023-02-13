@@ -64,24 +64,22 @@ export class PostComponent implements OnInit {
           notificationn: {
             belongsTo: post.author[0]._id,
             sentBy: this.account._id,
-            about_what: "Commented on your post",
-            type: "comment",
+            about_what: 'Commented on your post',
+            type: 'comment',
             happenedAt: new Date().toUTCString(),
-            postID: post._id
-          }
+            postID: post._id,
+          },
         })
         .subscribe({
           next: (res: any) => {
-            console.log(res);
             this.toast.success({ detail: res.message });
             this.commentContent.setValue('');
-            if(post.author[0]._id !== this.account._id) {
+            if (post.author[0]._id !== this.account._id) {
               this.socketService.notifyForANewComment(post.author[0].email);
             }
             this.getComments(post._id, input, false);
           },
           error: (err) => {
-            console.log(err);
             this.toast.error({ detail: err.message });
           },
         });
@@ -108,12 +106,10 @@ export class PostComponent implements OnInit {
       .get<comment[]>(API_URL + `/api/comments/getComments/${postID}`)
       .subscribe((comments: comment[]) => {
         this.comments = comments;
-        console.log(comments);
       });
   }
 
   minimizeContent(content: string) {
-    console.log(this.seeMore);
     return this.seeMore ? content : content.slice(0, 400);
   }
 
@@ -142,11 +138,9 @@ export class PostComponent implements OnInit {
       .post(API_URL + '/api/posts/deletePost', { postID: id })
       .subscribe({
         next: (res: any) => {
-          console.log(res);
           this.toast.success({ detail: res.message });
         },
         error: (err) => {
-          console.log(err);
           this.toast.error({ detail: err.message });
         },
       });

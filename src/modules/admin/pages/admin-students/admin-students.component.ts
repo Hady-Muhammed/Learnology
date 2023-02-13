@@ -9,16 +9,16 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
 const ELEMENT_DATA: any[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
+  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
+  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
+  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
+  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
+  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
+  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
+  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
+  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
+  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
 ];
 
 @Component({
@@ -26,7 +26,6 @@ const ELEMENT_DATA: any[] = [
   templateUrl: './admin-students.component.html',
   styleUrls: ['./admin-students.component.css'],
 })
-
 export class AdminStudentsComponent implements OnInit {
   displayedColumns: string[] = [
     'select',
@@ -42,12 +41,11 @@ export class AdminStudentsComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private http: HttpClient , private toast: NgToastService) {
-    this.getAllStudents()
+  constructor(private http: HttpClient, private toast: NgToastService) {
+    this.getAllStudents();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   isAllSelected() {
     const numSelected = this.selection?.selected.length;
@@ -72,10 +70,6 @@ export class AdminStudentsComponent implements OnInit {
     }`;
   }
 
-  checkSelected() {
-    console.log(this.selection)
-  }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -86,61 +80,66 @@ export class AdminStudentsComponent implements OnInit {
   }
 
   getAllStudents() {
-    this.http.get<Student[]>(API_URL + '/api/students/getAllStudents')
-    .subscribe((students: Student[]) => {
-      this.dataSource = new MatTableDataSource(students);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
+    this.http
+      .get<Student[]>(API_URL + '/api/students/getAllStudents')
+      .subscribe((students: Student[]) => {
+        this.dataSource = new MatTableDataSource(students);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
   }
 
   deleteStudentsBySelection() {
-    if(this.selection.selected.length == 1 ) {
-      this.http.post(API_URL + "/api/students/deleteStudent",
-      {
-        email: this.selection.selected[0].email
-      }).subscribe({
-        next: (res:any) => {
-          this.toast.success({detail: res.message})
-          this.getAllStudents()
-          this.selection.clear()
-        },
-        error: err => {
-          this.toast.error({detail: err.message})
-        }
-      })
+    if (this.selection.selected.length == 1) {
+      this.http
+        .post(API_URL + '/api/students/deleteStudent', {
+          email: this.selection.selected[0].email,
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.toast.success({ detail: res.message });
+            this.getAllStudents();
+            this.selection.clear();
+          },
+          error: (err) => {
+            this.toast.error({ detail: err.message });
+          },
+        });
     } else {
-      let emails: string[] = []
+      let emails: string[] = [];
       for (const student of this.selection.selected) {
-        emails.push(student.email)
+        emails.push(student.email);
       }
-      this.http.post(API_URL + "/api/students/deleteManyStudents",{
-        emails
-      }).subscribe({
-        next: (res:any) => {
-          this.toast.success({detail: res.message})
-          this.getAllStudents()
-          this.selection.clear()
-        },
-        error: err => {
-          this.toast.error({detail: err.message})
-        }
-      })
+      this.http
+        .post(API_URL + '/api/students/deleteManyStudents', {
+          emails,
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.toast.success({ detail: res.message });
+            this.getAllStudents();
+            this.selection.clear();
+          },
+          error: (err) => {
+            this.toast.error({ detail: err.message });
+          },
+        });
     }
   }
 
   deleteStudent(email: string) {
-    this.http.post(API_URL + "/api/students/deleteStudent",
-    {
-      email
-    }).subscribe({
-      next: (res:any) => {
-        this.toast.success({detail: res.message})
-        this.getAllStudents()
-      },
-      error: err => {
-        this.toast.error({detail: err.message})
-      }
-    })
+    this.http
+      .post(API_URL + '/api/students/deleteStudent', {
+        email,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.toast.success({ detail: res.message });
+          this.getAllStudents();
+        },
+        error: (err) => {
+          this.toast.error({ detail: err.message });
+        },
+      });
   }
 }

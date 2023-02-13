@@ -18,7 +18,7 @@ export class FriendsComponent implements OnInit {
   account!: Student;
   showRequests!: boolean;
   opened!: boolean;
-  numOfUnreadRequests!: number
+  numOfUnreadRequests!: number;
 
   constructor(private http: HttpClient, private toast: NgToastService) {
     this.getAccount();
@@ -52,7 +52,6 @@ export class FriendsComponent implements OnInit {
         API_URL + `/api/frequests/getFriendRequests/${this.account._id}`
       )
       .subscribe((requests: FriendRequest[]) => {
-        console.log(requests);
         this.friendRequests = requests;
         this.numOfUnreadRequests = 0;
       });
@@ -82,24 +81,29 @@ export class FriendsComponent implements OnInit {
   }
 
   rejectRequest(requestID: string) {
-    this.http.post(API_URL + '/api/frequests/rejectRequest', {
-      requestID,
-    }).subscribe({
-      next: (res:any) => {
-        this.toast.success({detail: res.message})
-        this.getFriendRequests()
-      },
-      error: err => {
-        this.toast.success({detail: err.message})
-      }
-    })
+    this.http
+      .post(API_URL + '/api/frequests/rejectRequest', {
+        requestID,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.toast.success({ detail: res.message });
+          this.getFriendRequests();
+        },
+        error: (err) => {
+          this.toast.success({ detail: err.message });
+        },
+      });
   }
 
   getNoOfUnreadFriendRequests() {
-    this.http.get<any>(API_URL + `/api/frequests/getNoOfUnreadFriendRequests/${this.account._id}`)
-    .subscribe((res: any) =>{
-      console.log(res)
-      this.numOfUnreadRequests = res.numOfRequests
-    })
+    this.http
+      .get<any>(
+        API_URL +
+          `/api/frequests/getNoOfUnreadFriendRequests/${this.account._id}`
+      )
+      .subscribe((res: any) => {
+        this.numOfUnreadRequests = res.numOfRequests;
+      });
   }
 }

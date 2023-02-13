@@ -20,7 +20,7 @@ export class InstructorComponent implements OnInit {
   courses!: Course[];
   liked!: boolean;
   statusText!: string;
-  
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -46,7 +46,6 @@ export class InstructorComponent implements OnInit {
       });
   }
 
-
   getInstructor(id: string) {
     this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacherById/${id}`)
@@ -60,26 +59,16 @@ export class InstructorComponent implements OnInit {
     this.http
       .post(API_URL + '/api/chats/createChat', {
         chat: {
-          person1: {
-            picture: this.account.picture,
-            name: this.account.name,
-            email: this.account.email,
-          },
-          person2: {
-            picture: this.teacher.picture,
-            name: this.teacher.name,
-            email: this.teacher.email,
-          },
+          person1_ID: this.account._id,
+          person2_ID: this.teacher._id,
           newMessages: 0,
           messages: [],
         },
       })
       .subscribe((res: any) => {
         if (res.message === 'Chat already exists') {
-          console.log(res);
           this.router.navigateByUrl(`/account/messages/${res.id}`);
         } else {
-          console.log(res);
           this.router.navigateByUrl(`/account/messages/${res.id}`);
         }
       });
@@ -105,13 +94,11 @@ export class InstructorComponent implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
-          console.log(res);
           this.toast.success({ detail: res.message });
           this.getAccount(this.account.email);
           this.getInstructor(this.id);
         },
         error: (res) => {
-          console.log(res);
           this.toast.error({ detail: 'Something went wrong!' });
         },
       });

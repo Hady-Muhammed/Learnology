@@ -67,46 +67,60 @@ export class QuestionComponent implements OnInit {
   }
 
   nextQuestion(id: string, qnum: any, ans: string) {
-    if(ans){
-      let answeredQuestions = localStorage.getItem('answeredQuestions')
-      console.log(answeredQuestions)
-      if(!answeredQuestions){
-        localStorage.setItem('answeredQuestions',JSON.stringify([{
-          questionNo: qnum - 1,
-          answer: ans
-        }]))
-        this.router.navigate(['quiz', id, qnum])
+    if (ans) {
+      let answeredQuestions = localStorage.getItem('answeredQuestions');
+
+      if (!answeredQuestions) {
+        localStorage.setItem(
+          'answeredQuestions',
+          JSON.stringify([
+            {
+              questionNo: qnum - 1,
+              answer: ans,
+            },
+          ])
+        );
+        this.router.navigate(['quiz', id, qnum]);
       } else {
-        let answeredQuestions = JSON.parse(localStorage.getItem('answeredQuestions') || '')
+        let answeredQuestions = JSON.parse(
+          localStorage.getItem('answeredQuestions') || ''
+        );
         answeredQuestions.push({
           questionNo: qnum - 1,
-          answer: ans
-        })
-        localStorage.setItem('answeredQuestions',JSON.stringify(answeredQuestions))
-        this.router.navigate(['quiz', id, qnum])
+          answer: ans,
+        });
+        localStorage.setItem(
+          'answeredQuestions',
+          JSON.stringify(answeredQuestions)
+        );
+        this.router.navigate(['quiz', id, qnum]);
       }
-    }
-    else {
-      this.toast.error({detail: 'Choose an answer!'})
+    } else {
+      this.toast.error({ detail: 'Choose an answer!' });
     }
   }
 
   submitQuiz(ans: string) {
-    if(ans){
-      let answeredQuestions = JSON.parse(localStorage.getItem('answeredQuestions') || '')
+    if (ans) {
+      let answeredQuestions = JSON.parse(
+        localStorage.getItem('answeredQuestions') || ''
+      );
       answeredQuestions.push({
         questionNo: this.quiz.questions.length - 1,
-        answer: ans
-      })
-      localStorage.setItem('answeredQuestions',JSON.stringify(answeredQuestions))
+        answer: ans,
+      });
+      localStorage.setItem(
+        'answeredQuestions',
+        JSON.stringify(answeredQuestions)
+      );
 
-      let studentAnswers = JSON.parse(localStorage.getItem('answeredQuestions') || '')
+      let studentAnswers = JSON.parse(
+        localStorage.getItem('answeredQuestions') || ''
+      );
       let correct = 0;
 
       for (let i = 0; i < this.quiz.questions.length; i++) {
-        if (
-          this.quiz.questions[i].correctAnswer === studentAnswers[i].answer
-        )
+        if (this.quiz.questions[i].correctAnswer === studentAnswers[i].answer)
           correct++;
       }
 
@@ -119,14 +133,12 @@ export class QuestionComponent implements OnInit {
           score: `${correct}/${this.quiz.questions.length}`,
         })
         .subscribe((res) => {
-          console.log(res);
           this.router.navigate(['quiz-results', this.quiz._id], {
             state: { correct },
           });
         });
-    }
-    else {
-      this.toast.error({detail: 'Choose an answer!'})
+    } else {
+      this.toast.error({ detail: 'Choose an answer!' });
     }
   }
 }

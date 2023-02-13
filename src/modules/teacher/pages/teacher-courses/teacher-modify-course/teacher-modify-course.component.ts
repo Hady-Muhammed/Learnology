@@ -3,8 +3,8 @@ import { Student } from './../../../../../app/models/student';
 import { Course } from './../../../../../app/models/course';
 import { NgToastService } from 'ng-angular-popup';
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild, Input } from '@angular/core';
-import { FormArray, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import jwtDecode from 'jwt-decode';
 import { Teacher } from 'src/app/models/teacher';
@@ -17,13 +17,13 @@ import { MatSort } from '@angular/material/sort';
   templateUrl: './teacher-modify-course.component.html',
   styleUrls: ['./teacher-modify-course.component.css'],
 })
-export class TeacherModifyCourseComponent implements OnInit , AfterViewInit {
+export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
   account!: Teacher;
   form: any;
   id!: string;
   course!: Course;
   dataSource!: MatTableDataSource<Student>;
-  displayedColumns: string[] = ['id', 'photo' , 'name', 'email', 'action'];
+  displayedColumns: string[] = ['id', 'photo', 'name', 'email', 'action'];
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -48,8 +48,8 @@ export class TeacherModifyCourseComponent implements OnInit , AfterViewInit {
   get courseTitle() {
     return this.form.get('courseTitle');
   }
-  get WhatYouWillLearn() : FormArray {
-    return this.form.get("WhatYouWillLearn") as FormArray
+  get WhatYouWillLearn(): FormArray {
+    return this.form.get('WhatYouWillLearn') as FormArray;
   }
   get courseCateg() {
     return this.form.get('courseCateg');
@@ -86,63 +86,64 @@ export class TeacherModifyCourseComponent implements OnInit , AfterViewInit {
   return() {
     window.history.back();
   }
+  
   getAccount() {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-    console.log(teacher);
+
     this.http
-      .get<Teacher>(
-        API_URL + `/api/teachers/getTeacher/${teacher.email}`
-      )
+      .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
         let courseID = teacher.courses_teaching.find((crs) => crs === this.id);
         this.http
           .get<Course>(API_URL + `/api/courses/getCourse/${courseID}`)
-          .subscribe((course: Course) =>{
+          .subscribe((course: Course) => {
             this.course = course;
-            this.getOriginalData(course)
-            this.getEnrolledStudents(course.enrolled_students)
-            });
+            this.getOriginalData(course);
+            this.getEnrolledStudents(course.enrolled_students);
+          });
       });
   }
 
-  getOriginalData(course: Course){
-    this.courseCateg.setValue(course.category)
-    this.courseOverview.setValue(course.overview)
-    this.courseTitle.setValue(course.course_title)
-    this.coursePrice.setValue(course.price)
-    this.courseShortDesc.setValue(course.short_desc)
-    this.coursePostedAt.setValue(course.postedAt)
-    this.imageURL.setValue(course.image)
+  getOriginalData(course: Course) {
+    this.courseCateg.setValue(course.category);
+    this.courseOverview.setValue(course.overview);
+    this.courseTitle.setValue(course.course_title);
+    this.coursePrice.setValue(course.price);
+    this.courseShortDesc.setValue(course.short_desc);
+    this.coursePostedAt.setValue(course.postedAt);
+    this.imageURL.setValue(course.image);
     for (let i = 0; i < course.WhatYouWillLearn.length; i++) {
-      this.addOldPoints(course.WhatYouWillLearn[i])
+      this.addOldPoints(course.WhatYouWillLearn[i]);
     }
   }
 
-  addOldPoints(point: string){
-    this.WhatYouWillLearn.push(this.point(point))
+  addOldPoints(point: string) {
+    this.WhatYouWillLearn.push(this.point(point));
   }
 
   point(point: string): FormGroup {
     return this.fb.group({
       point,
-    })
+    });
   }
 
-  addNewPoint(){
-    this.WhatYouWillLearn.push(this.fb.group({
-      point: '',
-    }))
+  addNewPoint() {
+    this.WhatYouWillLearn.push(
+      this.fb.group({
+        point: '',
+      })
+    );
   }
 
-  deletePoint(index: number){
-    this.WhatYouWillLearn.removeAt(index)
-    this.WhatYouWillLearn.markAsTouched()
+  deletePoint(index: number) {
+    this.WhatYouWillLearn.removeAt(index);
+    this.WhatYouWillLearn.markAsTouched();
   }
 
-  saveChanges(){
-    let points = this.WhatYouWillLearn.value.map((x: any) => x.point)
+  saveChanges() {
+    let points = this.WhatYouWillLearn.value.map((x: any) => x.point);
     let modifiedCourse = {
       course_title: this.courseTitle.value,
       short_desc: this.courseShortDesc.value,
@@ -152,45 +153,45 @@ export class TeacherModifyCourseComponent implements OnInit , AfterViewInit {
       overview: this.courseOverview.value,
       price: this.coursePrice.value,
       WhatYouWillLearn: points,
-    }
-    console.log(modifiedCourse)
-    this.http.post(API_URL + '/api/courses/modifyCourse' , {
-      id: this.id,
-      modifiedCourse
-    }).subscribe({
-      next: (res:any) => {
-        this.toast.success({detail: res.message})
-        this.return()
-      },
-      error: (res:any) => {
-        this.toast.error({detail: res.message})
-      }
-    })
+    };
+
+    this.http
+      .post(API_URL + '/api/courses/modifyCourse', {
+        id: this.id,
+        modifiedCourse,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.toast.success({ detail: res.message });
+          this.return();
+        },
+        error: (res: any) => {
+          this.toast.error({ detail: res.message });
+        },
+      });
   }
 
-  cancelChanges(){
-    this.form.reset()
-    this.getOriginalData(this.course)
-    this.WhatYouWillLearn.clear()
+  cancelChanges() {
+    this.form.reset();
+    this.getOriginalData(this.course);
+    this.WhatYouWillLearn.clear();
     for (let i = 0; i < this.course.WhatYouWillLearn.length; i++) {
-      this.addOldPoints(this.course.WhatYouWillLearn[i])
+      this.addOldPoints(this.course.WhatYouWillLearn[i]);
     }
   }
 
-  getEnrolledStudents(students: string[]){
-    this.http.post<Student[]>(API_URL + '/api/students/getStudentsByIds',
-    {
-      students
-    }).subscribe({
-      next: (students: Student[])=>{
-        console.log(students)
-        // Assign data to table
-        this.dataSource = new MatTableDataSource(students);
-      },
-      error: err => {
-        console.log(err)
-      }
-    })
+  getEnrolledStudents(students: string[]) {
+    this.http
+      .post<Student[]>(API_URL + '/api/students/getStudentsByIds', {
+        students,
+      })
+      .subscribe({
+        next: (students: Student[]) => {
+          // Assign data to table
+          this.dataSource = new MatTableDataSource(students);
+        },
+        error: (err) => {},
+      });
   }
 
   applyFilter(event: Event) {
@@ -203,23 +204,21 @@ export class TeacherModifyCourseComponent implements OnInit , AfterViewInit {
   }
 
   createChat(studentID: string) {
-        this.http
-          .post(API_URL + '/api/chats/createChat', {
-            chat: {
-              person1_ID: this.account._id,
-              person2_ID: studentID,
-              newMessages: 0,
-              messages: [],
-            },
-          }).subscribe((res:any) => {
-            if (res.message === 'Chat already exists') {
-              console.log(res);
-              this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
-            } else {
-              console.log(res);
-              this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
-            }
-          })
+    this.http
+      .post(API_URL + '/api/chats/createChat', {
+        chat: {
+          person1_ID: this.account._id,
+          person2_ID: studentID,
+          newMessages: 0,
+          messages: [],
+        },
+      })
+      .subscribe((res: any) => {
+        if (res.message === 'Chat already exists') {
+          this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
+        } else {
+          this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
+        }
+      });
   }
-
 }

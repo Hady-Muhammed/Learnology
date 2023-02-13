@@ -2,7 +2,7 @@ import { NgToastService } from 'ng-angular-popup';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
-import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import { API_URL } from 'src/app/services/socketio.service';
 import jwtDecode from 'jwt-decode';
 import { Student } from 'src/app/models/student';
 
@@ -18,7 +18,7 @@ export class ContactComponent implements OnInit {
   body = new FormControl('', [Validators.required]);
   account!: Student;
 
-  constructor(private http: HttpClient , private toast: NgToastService) {
+  constructor(private http: HttpClient, private toast: NgToastService) {
     window.scrollTo(0, 0);
     this.getAccount();
   }

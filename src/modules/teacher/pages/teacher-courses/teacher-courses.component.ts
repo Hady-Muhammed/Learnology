@@ -47,12 +47,10 @@ export class TeacherCoursesComponent implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
-          console.log(res);
           this.toast.success({ detail: res.message });
           this.getAccount();
         },
         error: (err) => {
-          console.log(err);
           this.toast.error({ detail: err.message });
         },
       });

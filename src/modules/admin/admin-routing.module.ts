@@ -18,29 +18,28 @@ const routes: Routes = [
     component: AdminComponent,
     children: [
       {
-        path: "dashboard",
+        path: 'dashboard',
         component: AdminDashboardComponent,
       },
       {
-        path: "students",
+        path: 'students',
         component: AdminStudentsComponent,
       },
       {
-        path: "teachers",
+        path: 'teachers',
         component: AdminTeachersComponent,
       },
       {
-        path: "emails",
+        path: 'emails',
         component: AdminEmailsComponent,
       },
       {
-        path: "emails/:id",
+        path: 'emails/:id',
         component: AdminEmailDetailComponent,
       },
-    ]
+    ],
   },
 ];
-
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

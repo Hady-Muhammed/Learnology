@@ -1,3 +1,4 @@
+import { TeacherInboxComponent } from './pages/teacher-inbox/teacher-inbox.component';
 import { TeacherModifyQuizComponent } from './pages/teacher-quizzes/teacher-modify-quiz/teacher-modify-quiz.component';
 import { TeacherCreateQuizComponent } from './pages/teacher-quizzes/teacher-create-quiz/teacher-create-quiz.component';
 import { TeacherStatisticsComponent } from './pages/teacher-statistics/teacher-statistics.component';
@@ -16,6 +17,7 @@ import { TeacherDashboardComponent } from './pages/teacher-dashboard/teacher-das
 import { TeacherComponent } from './pages/teacher/teacher.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TeacherInboxDetailComponent } from './pages/teacher-inbox-detail/teacher-inbox-detail.component';
 
 const routes: Routes = [
   {
@@ -98,6 +100,16 @@ const routes: Routes = [
       {
         path: 'statistics',
         component: TeacherStatisticsComponent,
+        canActivate: [TeacherGuard],
+      },
+      {
+        path: 'inbox',
+        component: TeacherInboxComponent,
+        canActivate: [TeacherGuard],
+      },
+      {
+        path: 'inbox/:id',
+        component: TeacherInboxDetailComponent,
         canActivate: [TeacherGuard],
       },
     ],

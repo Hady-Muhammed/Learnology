@@ -11,7 +11,6 @@ import { Notification } from 'src/app/models/notification';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-
 export class NavbarComponent implements OnInit {
   isOpened: boolean = false;
   account!: Student;
@@ -27,13 +26,12 @@ export class NavbarComponent implements OnInit {
     this.getAccount();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   logOut() {
     localStorage.removeItem('token');
     this.router.navigateByUrl('/signup');
-    this.socketService.disconnect()
+    this.socketService.disconnect();
   }
 
   getAccount() {
@@ -43,7 +41,7 @@ export class NavbarComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${account.email}`)
       .subscribe((student: Student) => {
         this.account = student;
-        this.connectToSocket()
+        this.connectToSocket();
         this.listenForNewNotifications();
       });
   }
@@ -57,51 +55,48 @@ export class NavbarComponent implements OnInit {
         }
       }
     );
-    this.socketService.socket?.on(
-      'listen-someone-replied',
-      (email: string) => {
-        if (this.account.email === email) {
-          this.numOfNotifications++;
-        }
+    this.socketService.socket?.on('listen-someone-replied', (email: string) => {
+      if (this.account.email === email) {
+        this.numOfNotifications++;
       }
-    );
-    this.socketService.socket?.on(
-      'listen-someone-reacted',
-      (email: string) => {
-        if (this.account.email === email) {
-          this.numOfNotifications++;
-        }
+    });
+    this.socketService.socket?.on('listen-someone-reacted', (email: string) => {
+      if (this.account.email === email) {
+        this.numOfNotifications++;
       }
-    );
+    });
   }
 
   toggleNotificationMenu() {
     this.notificationsMenuOpened = !this.notificationsMenuOpened;
-    if(this.notificationsMenuOpened){
-      this.getNotifications()
+    if (this.notificationsMenuOpened) {
+      this.getNotifications();
     }
-    this.numOfNotifications = 0
+    this.numOfNotifications = 0;
   }
 
   getNotifications() {
-    this.http.get<Notification[]>(API_URL + `/api/notifications/getAllNotifications/${this.account._id}`)
-    .subscribe((notifications: Notification[]) => {this.notifications = notifications; console.log(notifications)})
+    this.http
+      .get<Notification[]>(
+        API_URL + `/api/notifications/getAllNotifications/${this.account._id}`
+      )
+      .subscribe(
+        (notifications: Notification[]) => (this.notifications = notifications)
+      );
   }
 
-  connectToSocket(){
-    if(!this.isConnectedToSocket()) {
-      this.socketService.setupSocketConnection(this.account.email)
-      this.socketService.online(this.account._id)
-    } else {
-      console.log("connected before!")
+  connectToSocket() {
+    if (!this.isConnectedToSocket()) {
+      this.socketService.setupSocketConnection(this.account.email);
+      this.socketService.online(this.account._id);
     }
   }
 
-  isConnectedToSocket(){
-    return this.socketService?.socket?.connected
+  isConnectedToSocket() {
+    return this.socketService?.socket?.connected;
   }
 
   navigate(postID: string) {
-    this.router.navigate(['notified-post',postID])
+    this.router.navigate(['notified-post', postID]);
   }
 }

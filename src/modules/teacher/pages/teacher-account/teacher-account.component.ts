@@ -94,15 +94,15 @@ export class TeacherAccountComponent implements OnInit {
   }
 
   updateTeacher() {
-    if(this.form.status === "INVALID"){
-      this.toast.error({detail: "Enter valid data!"})
-      return
+    if (this.form.status === 'INVALID') {
+      this.toast.error({ detail: 'Enter valid data!' });
+      return;
     }
-    let validatedPassword
-    if(this.password?.value === this.account.password){
-      validatedPassword = ''
+    let validatedPassword;
+    if (this.password?.value === this.account.password) {
+      validatedPassword = '';
     } else {
-      validatedPassword = this.password?.value
+      validatedPassword = this.password?.value;
     }
     this.http
       .post(API_URL + `/api/teachers/updateTeacher`, {
@@ -158,12 +158,10 @@ export class PictureDialog {
     if (this.Img) {
       const token: any = localStorage.getItem('token');
       const teacher: any = jwt_decode(token);
-      this.http
-        .post(API_URL + '/api/teachers/uploadPicture', {
-          email: teacher.email,
-          Img: this.Img,
-        })
-        .subscribe((res) => console.log(res));
+      this.http.post(API_URL + '/api/teachers/uploadPicture', {
+        email: teacher.email,
+        Img: this.Img,
+      });
       this.dialogRef.close();
       location.reload();
     }

@@ -41,7 +41,7 @@
   <!-- Replies -->
   <ng-container *ngIf="replies">
     <ng-container *ngFor="let reply of replies; let k = index">
-      <app-reply data-aos="fade-in" data-aos-duration="500" [attr.data-aos-delay]="100*k" (showReply)="openReplyField()" [reply]="reply" [comment]="comment" [account]="account" [post]="post" (replyDeleted)="getReplies(comment._id)" (reactHappened)="getReplies(comment._id)"></app-reply>
+      <app-reply [attr.data-aos-delay]="100*k" (showReply)="openReplyField()" [reply]="reply" [comment]="comment" [account]="account" [post]="post" (replyDeleted)="getReplies(comment._id)" (reactHappened)="getReplies(comment._id)"></app-reply>
     </ng-container>
   </ng-container>
   <!-- Reply Input -->

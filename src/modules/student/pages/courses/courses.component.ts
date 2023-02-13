@@ -2,9 +2,7 @@ import { FormControl } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Course } from 'src/app/models/course';
-import { API_URL, SocketioService } from 'src/app/services/socketio.service';
-import jwtDecode from 'jwt-decode';
-import { Student } from 'src/app/models/student';
+import { API_URL } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-courses',
@@ -31,7 +29,6 @@ export class CoursesComponent implements OnInit {
       this.filteredCourses = this.courses;
     }
   }
-
 
   getAllCourses() {
     this.http

@@ -30,11 +30,9 @@ export class AdminEmailsComponent implements OnInit {
 
   emailRead(email: Email) {
     if (!email.read) {
-      this.http
-        .patch(API_URL + '/api/emails/emailRead', {
-          id: email._id,
-        })
-        .subscribe((res) => console.log(res));
+      this.http.patch(API_URL + '/api/emails/emailRead', {
+        id: email._id,
+      });
     }
   }
 
@@ -66,11 +64,10 @@ export class AdminEmailsComponent implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
-          console.log(res)
           this.toast.success({ detail: res.message });
-          this.subject.setValue("")
-          this.body.setValue("")
-          this.opened = false
+          this.subject.setValue('');
+          this.body.setValue('');
+          this.opened = false;
         },
         error: (err) => {
           this.toast.success({ detail: err.message });
@@ -91,9 +88,9 @@ export class AdminEmailsComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          this.subject.setValue("")
-          this.body.setValue("")
-          this.opened = false
+          this.subject.setValue('');
+          this.body.setValue('');
+          this.opened = false;
         },
         error: (err) => {
           this.toast.success({ detail: err.message });
@@ -102,11 +99,11 @@ export class AdminEmailsComponent implements OnInit {
   }
 
   handleBroadcasting() {
-    if(!this.body.errors && !this.subject.errors) {
-      if(this.selectedOption === "Student") {
-        this.broadcastToAllStudents()
+    if (!this.body.errors && !this.subject.errors) {
+      if (this.selectedOption === 'Student') {
+        this.broadcastToAllStudents();
       } else {
-        this.broadcastToAllTeachers()
+        this.broadcastToAllTeachers();
       }
     }
   }

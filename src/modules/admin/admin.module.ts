@@ -12,7 +12,6 @@ import { AdminEmailDetailComponent } from './pages/admin-email-detail/admin-emai
 import { AdminComponent } from './pages/admin/admin.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-
 @NgModule({
   declarations: [
     AdminDashboardComponent,
@@ -21,7 +20,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AdminStudentsComponent,
     AdminEmailsComponent,
     AdminEmailDetailComponent,
-    AdminComponent
+    AdminComponent,
   ],
   imports: [
     CommonModule,
@@ -29,7 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     NgChartsModule,
     SharedModule,
     FormsModule,
-    ReactiveFormsModule
-  ]
+    ReactiveFormsModule,
+  ],
 })
-export class AdminModule { }
+export class AdminModule {}

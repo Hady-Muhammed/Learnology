@@ -1,19 +1,32 @@
-@import '~@ctrl/ngx-emoji-mart/picker';
+@import "~@ctrl/ngx-emoji-mart/picker";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-html, body { height: 100%; scroll-behavior: smooth; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 .font-mont {
   font-family: Montserrat;
 }
 
 @keyframes float1 {
-  0%{transform: translate(0, 0)}
-  50%{transform: translate(-10px, 0)}
-  100%{transform: translate(0, 0)}
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-10px, 0);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 .triangle-float1 {
@@ -21,9 +34,15 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 @keyframes float2 {
-  0%{transform: translate(0, 0)}
-  50%{transform: translate(-5px, -5px)}
-  100%{transform: translate(0, 0)}
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-5px, -5px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 .triangle-float2 {
@@ -31,34 +50,39 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 @keyframes float3 {
-  0%{transform: translate(0, 0)}
-  50%{transform: translate(0, -10px)}
-  100%{transform: translate(0, 0)}
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(0, -10px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
 }
 
 .triangle-float3 {
   animation: float3 6s infinite;
 }
 
-
 .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
-  background-color: #6a43ff  !important;
+  background-color: #6a43ff !important;
 }
 
 .mat-radio-button.mat-accent .mat-radio-inner-circle {
-background-color: #6a43ff  !important; /*inner circle color change*/
+  background-color: #6a43ff !important; /*inner circle color change*/
 }
 
 .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-  border-color: #6a43ff  !important; /*outer ring color change*/
+  border-color: #6a43ff !important; /*outer ring color change*/
 }
 
 :root {
   --scroll-size: 15px;
   --scroll-radius: 20px;
   --scroll-track: rgb(255 255 255 / 10%);
-  --scroll-thumb: linear-gradient(45deg,#6a43ff , #a68eff);
-  }
+  --scroll-thumb: linear-gradient(45deg, #6a43ff, #a68eff);
+}
 
 ::-webkit-scrollbar {
   width: var(--scroll-size, 10px);
@@ -75,5 +99,5 @@ background-color: #6a43ff  !important; /*inner circle color change*/
 }
 
 .mat-paginator-icon {
-  color: white !important
+  color: white !important;
 }

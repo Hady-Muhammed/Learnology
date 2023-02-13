@@ -14,7 +14,7 @@ export class NaavbarComponent implements OnInit {
   constructor(private router: Router, private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.getAllUnreadEmails()
+    this.getAllUnreadEmails();
   }
 
   logOut() {
@@ -23,13 +23,14 @@ export class NaavbarComponent implements OnInit {
   }
 
   navigate(url: string) {
-    this.router.navigate(['admin','d', url]);
+    this.router.navigate(['admin', 'd', url]);
   }
 
   getAllUnreadEmails() {
-    this.http.get(API_URL + "/api/emails/getAllUnreadEmails")
-    .subscribe((res: any) => {
-      this.numOfUnreadEmails = res.numOfUnread;
-    })
+    this.http
+      .get(API_URL + '/api/emails/getAllUnreadEmails')
+      .subscribe((res: any) => {
+        this.numOfUnreadEmails = res.numOfUnread;
+      });
   }
 }

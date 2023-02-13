@@ -19,7 +19,7 @@ export class QuizDetailComponent implements OnInit {
   math = Math;
   totalTime: number = 0;
   taken: boolean = false;
-  
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -55,9 +55,7 @@ export class QuizDetailComponent implements OnInit {
         email: student.email,
         quizID: this.id,
       })
-      .subscribe((res) => {
-        console.log(res);
-      });
+      .subscribe((res) => {});
   }
 
   quizIsTakenBefore() {

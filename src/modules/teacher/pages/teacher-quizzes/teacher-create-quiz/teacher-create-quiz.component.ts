@@ -60,26 +60,28 @@ export class TeacherCreateQuizComponent implements OnInit {
       this.name?.value &&
       this.selectedValue?.value
     ) {
-      this.http.post(API_URL + '/api/quizzes/createQuiz', {
-        quizz: {
-          name: this.name.value,
-          image: this.imageURL.value,
-          author: {
-            name: this.account.name,
-            id: this.account._id,
+      this.http
+        .post(API_URL + '/api/quizzes/createQuiz', {
+          quizz: {
+            name: this.name.value,
+            image: this.imageURL.value,
+            author: {
+              name: this.account.name,
+              id: this.account._id,
+            },
+            publishedAt: new Date().toUTCString(),
+            category: this.category.value,
+            difficulty: this.selectedValue.value,
+            questions: [],
           },
-          publishedAt: new Date().toUTCString(),
-          category: this.category.value,
-          difficulty: this.selectedValue.value,
-          questions: [],
-        },
-      }).subscribe({
-        next: (res: any) => {
-          this.toast.success({detail: res.message})
-          this.return()
-        },
-        error: err => this.toast.error({detail: err.message})
-      })
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.toast.success({ detail: res.message });
+            this.return();
+          },
+          error: (err) => this.toast.error({ detail: err.message }),
+        });
     } else {
       this.toast.error({ detail: 'Enter valid data!' });
     }

@@ -11,7 +11,6 @@ import { Student } from 'src/app/models/student';
   styleUrls: ['./reacts-popup.component.css'],
 })
 export class ReactsPopupComponent implements OnInit {
-
   @Input('type') type!: string;
   @Input('isOpened') isOpened!: boolean;
   @Input('post') post!: Post;
@@ -48,7 +47,7 @@ export class ReactsPopupComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          if(postOwner._id !== this.account._id) {
+          if (postOwner._id !== this.account._id) {
             this.socketService.notifyForANewReact(postOwner.email);
           }
           this.reactHappened.emit(true);
@@ -78,15 +77,13 @@ export class ReactsPopupComponent implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
-          console.log('res: ', res);
           this.toast.success({ detail: res.message });
-          if(comment.commenter[0]._id !== this.account._id) {
+          if (comment.commenter[0]._id !== this.account._id) {
             this.socketService.notifyForANewReact(comment.commenter[0].email);
           }
           this.reactHappened.emit(true);
         },
         error: (err) => {
-          console.log('err: ', err);
           this.toast.error({ detail: err.message });
         },
       });
@@ -111,15 +108,13 @@ export class ReactsPopupComponent implements OnInit {
       })
       .subscribe({
         next: (res: any) => {
-          console.log('res: ', res);
           this.toast.success({ detail: res.message });
-          if(reply.replier[0]._id !== this.account._id) {
+          if (reply.replier[0]._id !== this.account._id) {
             this.socketService.notifyForANewReact(reply.replier[0].email);
           }
           this.reactHappened.emit(true);
         },
         error: (err) => {
-          console.log('err: ', err);
           this.toast.error({ detail: err.message });
         },
       });

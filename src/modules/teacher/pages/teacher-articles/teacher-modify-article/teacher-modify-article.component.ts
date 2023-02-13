@@ -86,7 +86,6 @@ export class TeacherModifyArticleComponent implements OnInit {
           this.router.navigateByUrl('/teacher/articles');
         },
         error: (err) => {
-          console.log(err);
           this.toast.error({ detail: 'Something went wrong!' });
         },
       });

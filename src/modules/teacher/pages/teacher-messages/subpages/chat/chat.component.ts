@@ -26,7 +26,7 @@ export class ChatComponent implements OnInit {
   typing!: boolean;
   chat!: Chat;
   isEmojiPickerVisible!: boolean;
-  @ViewChild('lastMessage') lastMessage!: ElementRef
+  @ViewChild('lastMessage') lastMessage!: ElementRef;
 
   constructor(
     private http: HttpClient,
@@ -43,26 +43,32 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getChat() {
     this.http
       .get<any>(API_URL + `/api/chats/getSingleChat/${this.id}`)
-      .pipe(map((chats) => {
-        for (const chat of chats) {
-          let personsArray = [...chat.person1a,...chat.person1b,...chat.person2a,...chat.person2b]
-          chat.person1 = personsArray[0]
-          chat.person2 = personsArray[1]
-        }
-        for (const chat of chats) {
-          delete chat.person1a
-          delete chat.person1b
-          delete chat.person2a
-          delete chat.person2b
-        }
-        return chats[0]
-      }))
+      .pipe(
+        map((chats) => {
+          for (const chat of chats) {
+            let personsArray = [
+              ...chat.person1a,
+              ...chat.person1b,
+              ...chat.person2a,
+              ...chat.person2b,
+            ];
+            chat.person1 = personsArray[0];
+            chat.person2 = personsArray[1];
+          }
+          for (const chat of chats) {
+            delete chat.person1a;
+            delete chat.person1b;
+            delete chat.person2a;
+            delete chat.person2b;
+          }
+          return chats[0];
+        })
+      )
       .subscribe((chat: Chat) => {
         this.messages = chat.messages;
         this.newMessages = chat.newMessages;
@@ -74,9 +80,9 @@ export class ChatComponent implements OnInit {
         }
         this.listenForNewMessagesRealtime();
         this.listenForTyping();
-        console.log(this.messages);
+
         setTimeout(() => {
-          this.scrollToLastMessage()
+          this.scrollToLastMessage();
         }, 100);
       });
   }
@@ -107,7 +113,7 @@ export class ChatComponent implements OnInit {
         sentAt: new Date().toUTCString(),
       };
       this.messages.push(message);
-      this.scrollToLastMessage()
+      this.scrollToLastMessage();
       this.socketService.sendMessage(message, this.id);
       this.http
         .post(API_URL + `/api/chats/sendMessage`, {
@@ -119,59 +125,60 @@ export class ChatComponent implements OnInit {
           },
         })
         .subscribe((res: any) => {
-          console.log('sendMessage res:', res);
           this.message = '';
           this.getChat();
         });
-      this.http
-        .post(API_URL + '/api/chats/setNewMessages', {
-          id: this.id,
-          newMessages: this.newMessages + 1,
-        })
-        .subscribe((res: any) => console.log(res));
+      this.http.post(API_URL + '/api/chats/setNewMessages', {
+        id: this.id,
+        newMessages: this.newMessages + 1,
+      });
     }
   }
 
   scrollToLastMessage() {
-    this.lastMessage?.nativeElement?.scrollIntoView({behavior: 'smooth', block: 'nearest' , inline: 'start'})
+    this.lastMessage?.nativeElement?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'start',
+    });
   }
 
   listenForNewMessagesRealtime() {
     this.socketService.socket.on('receive-message', (message: message) => {
       this.messages.push(message);
-      this.scrollToLastMessage()
+      this.scrollToLastMessage();
     });
   }
 
-  listenForTyping(){
+  listenForTyping() {
     this.socketService.socket.on('listen-typing-message', (typing: any) => {
-      if(typing)
-        this.typing = true
-      else
-        this.typing = false
+      if (typing) this.typing = true;
+      else this.typing = false;
     });
   }
 
-  isTyping(){
-    this.socketService.typingMessage(this.id , this.message)
+  isTyping() {
+    this.socketService.typingMessage(this.id, this.message);
   }
 
-  deleteChat(id:string){
-    this.http.post(API_URL + '/api/chats/deleteChat', {
-      id
-    }).subscribe({
-      next: res => {
-      this.toast.success({detail: 'Chat deleted successfully!'})
-      this.router.navigateByUrl('teacher/messages')
-      },
-      error: res => {
-      this.toast.error({detail: 'Something went wrong!'})
-      }
-  })
+  deleteChat(id: string) {
+    this.http
+      .post(API_URL + '/api/chats/deleteChat', {
+        id,
+      })
+      .subscribe({
+        next: (res) => {
+          this.toast.success({ detail: 'Chat deleted successfully!' });
+          this.router.navigateByUrl('teacher/messages');
+        },
+        error: (res) => {
+          this.toast.error({ detail: 'Something went wrong!' });
+        },
+      });
   }
 
   addEmoji(event: any) {
     this.message = `${this.message}${event.emoji.native}`;
     this.isEmojiPickerVisible = false;
- }
+  }
 }

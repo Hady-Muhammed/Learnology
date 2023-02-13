@@ -40,7 +40,7 @@
       <a (click)="numOfUnreadMessages = 0" routerLink="messages" [matTooltipDisabled]="!toggle" matTooltip="Messages" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
         <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-regular fa-paper-plane"></i>
         <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Messages</span>
-        <span [ngClass]="numOfUnreadMessages ? 'opacity-[1]':'opacity-0'" class="absolute left-12 top-4 text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500">{{numOfUnreadMessages}}</span>
+        <span [ngClass]="numOfUnreadMessages ? 'opacity-[1]':'opacity-0'" class="absolute left-12 top-4 text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500 z-10">{{numOfUnreadMessages}}</span>
       </a>
       <a routerLink="articles" [matTooltipDisabled]="!toggle" matTooltip="Articles" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
         <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-regular fa-newspaper"></i>
@@ -53,6 +53,11 @@
       <a routerLink="statistics" [matTooltipDisabled]="!toggle" matTooltip="Statistics" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
         <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-solid fa-signal"></i>
         <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Statistics</span>
+      </a>
+      <a (click)="numOfUnreadInboxes = 0" routerLink="inbox" [matTooltipDisabled]="!toggle" matTooltip="Inbox" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-solid fa-envelope"></i>
+        <span [ngClass]="toggle?'hidden':'block'" class="group-hover:text-white relative z-10 duration-500">Inbox</span>
+        <span [ngClass]="numOfUnreadInboxes ? 'opacity-[1]':'opacity-0'" class="absolute left-16 top-4 z-10 text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500">{{numOfUnreadInboxes}}</span>
       </a>
       <a [matTooltipDisabled]="!toggle" matTooltip="Logout" (click)="logOut()" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium">
         <i class="fa-sharp fa-solid fa-right-from-bracket"></i>
@@ -105,6 +110,10 @@
       </a>
       <a (click)="toggle = !toggle" routerLink="statistics" [matTooltipDisabled]="!toggle" matTooltip="Statistics" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
         <i class="group-hover:text-white relative z-10 duration-500 fa-solid fa-signal"></i>
+      </a>
+      <a (click)="toggle = !toggle; numOfUnreadInboxes=0" routerLink="inbox" [matTooltipDisabled]="!toggle" matTooltip="Inbox" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium border-b border-b-black">
+        <i class="text-xl group-hover:text-white relative z-10 duration-500 fa-solid fa-envelope"></i>
+        <div [ngClass]="numOfUnreadInboxes ? 'opacity-[1]':'opacity-0'" class="absolute left-0 text-white bg-red-600 rounded-full text-xs w-[17px] block text-center duration-500">{{numOfUnreadInboxes}}</div>
       </a>
       <a (click)="toggle = !toggle" [matTooltipDisabled]="!toggle" matTooltip="Logout" (click)="logOut()" class="flex group justify-center items-center space-x-2 p-4 relative before:absolute before:left-1/2 before:top-1/2 before:translate-x-[-50%] before:translate-y-[-50%] before:rounded-full before:w-[20px] before:scale-0 duration-500 hover:before:scale-[14] before:duration-500 before:h-[20px] overflow-hidden before:bg-[#6a43ff]/30 cursor-pointer font-medium">
         <i class="fa-sharp fa-solid fa-right-from-bracket"></i>

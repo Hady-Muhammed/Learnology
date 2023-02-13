@@ -12,10 +12,9 @@ import { MatTableDataSource } from '@angular/material/table';
   selector: 'app-admin-teachers',
   templateUrl: './admin-teachers.component.html',
   styleUrls: ['./admin-teachers.component.css'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class AdminTeachersComponent implements OnInit {
-
   displayedColumns: string[] = [
     'select',
     'no',
@@ -32,9 +31,8 @@ export class AdminTeachersComponent implements OnInit {
 
   constructor(private http: HttpClient, private toast: NgToastService) {}
 
-
   ngOnInit(): void {
-    this.getAllTeachers()
+    this.getAllTeachers();
   }
 
   isAllSelected() {
@@ -60,10 +58,6 @@ export class AdminTeachersComponent implements OnInit {
     }`;
   }
 
-  checkSelected() {
-    console.log(this.selection)
-  }
-
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
@@ -74,61 +68,64 @@ export class AdminTeachersComponent implements OnInit {
   }
 
   getAllTeachers() {
-    this.http.get<Teacher[]>(API_URL + '/api/teachers/getAllTeachers')
-    .subscribe((teachers: Teacher[]) => {
-      this.dataSource = new MatTableDataSource(teachers);
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-    })
+    this.http
+      .get<Teacher[]>(API_URL + '/api/teachers/getAllTeachers')
+      .subscribe((teachers: Teacher[]) => {
+        this.dataSource = new MatTableDataSource(teachers);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
   }
 
   deleteTeachersBySelection() {
-    if(this.selection.selected.length == 1 ) {
-      this.http.post(API_URL + "/api/teachers/deleteTeacher",
-      {
-        email: this.selection.selected[0].email
-      }).subscribe({
-        next: (res:any) => {
-          this.toast.success({detail: res.message})
-          this.getAllTeachers()
-        },
-        error: err => {
-          this.toast.error({detail: err.message})
-        }
-      })
+    if (this.selection.selected.length == 1) {
+      this.http
+        .post(API_URL + '/api/teachers/deleteTeacher', {
+          email: this.selection.selected[0].email,
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.toast.success({ detail: res.message });
+            this.getAllTeachers();
+          },
+          error: (err) => {
+            this.toast.error({ detail: err.message });
+          },
+        });
     } else {
-      let emails: string[] = []
+      let emails: string[] = [];
       for (const teacher of this.selection.selected) {
-        emails.push(teacher.email)
+        emails.push(teacher.email);
       }
-      this.http.post(API_URL + "/api/teachers/deleteManyTeachers",{
-        emails
-      }).subscribe({
-        next: (res:any) => {
-          this.toast.success({detail: res.message})
-          this.getAllTeachers()
-        },
-        error: err => {
-          this.toast.error({detail: err.message})
-        }
-      })
+      this.http
+        .post(API_URL + '/api/teachers/deleteManyTeachers', {
+          emails,
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.toast.success({ detail: res.message });
+            this.getAllTeachers();
+          },
+          error: (err) => {
+            this.toast.error({ detail: err.message });
+          },
+        });
     }
   }
 
   deleteTeacher(email: string) {
-    this.http.post(API_URL + "/api/teachers/deleteTeacher",
-    {
-      email
-    }).subscribe({
-      next: (res:any) => {
-        this.toast.success({detail: res.message})
-        this.getAllTeachers()
-      },
-      error: err => {
-        this.toast.error({detail: err.message})
-      }
-    })
+    this.http
+      .post(API_URL + '/api/teachers/deleteTeacher', {
+        email,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.toast.success({ detail: res.message });
+          this.getAllTeachers();
+        },
+        error: (err) => {
+          this.toast.error({ detail: err.message });
+        },
+      });
   }
-
 }
-

@@ -8,9 +8,9 @@ export type comment = {
   replies: number;
   commentedAt: string;
   reacts: number;
-  commentHasLikes: boolean,
-  commentHasLoves: boolean,
-  commentHasWows: boolean,
+  commentHasLikes: boolean;
+  commentHasLoves: boolean;
+  commentHasWows: boolean;
 };
 export type reply = {
   _id: string;
@@ -20,9 +20,9 @@ export type reply = {
   replier: any[];
   reacts: number;
   repliedAt: string;
-  replyHasLikes: boolean,
-  replyHasLoves: boolean,
-  replyHasWows: boolean,
+  replyHasLikes: boolean;
+  replyHasLoves: boolean;
+  replyHasWows: boolean;
 };
 
 export type react = {
@@ -30,7 +30,7 @@ export type react = {
   owner: string;
   belongsTo: string;
   postID: string;
-  reacter: any[],
+  reacter: any[];
 };
 
 export interface Post {
@@ -42,7 +42,7 @@ export interface Post {
   content: string;
   comments: number;
   reacts: number;
-  postHasLikes: boolean,
-  postHasLoves: boolean,
-  postHasWows: boolean,
+  postHasLikes: boolean;
+  postHasLoves: boolean;
+  postHasWows: boolean;
 }

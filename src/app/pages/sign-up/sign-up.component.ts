@@ -37,6 +37,7 @@ export class SignUpComponent implements OnInit {
     private dialog: MatDialog
   ) {}
   ngOnInit(): void {}
+
   signUp() {
     // Validating confirm password field
     if (this.password.value !== this.confirmPassword.value)
@@ -54,6 +55,7 @@ export class SignUpComponent implements OnInit {
       this.openDialog();
     }
   }
+
   openDialog() {
     const dialg = this.dialog.open(DialogComponent);
     dialg.afterClosed().subscribe((result) => {
@@ -76,7 +78,6 @@ export class SignUpComponent implements OnInit {
           })
           .subscribe({
             next: (data) => {
-              console.log(data);
               setTimeout(() => {
                 this.loading = false;
                 this.toast.success({ detail: 'Account created successfully' });
@@ -86,7 +87,6 @@ export class SignUpComponent implements OnInit {
               }, 4000);
             },
             error: (error) => {
-              console.log(error);
               setTimeout(() => {
                 this.loading = false;
                 this.toast.error({ detail: 'Account already exists' });
@@ -107,11 +107,10 @@ export class SignUpComponent implements OnInit {
             articles_published: [],
             quizzes_published: [],
             likes: 0,
-            last_activity: new Date().toUTCString()
+            last_activity: new Date().toUTCString(),
           })
           .subscribe({
             next: (data) => {
-              console.log(data);
               setTimeout(() => {
                 this.loading = false;
                 this.toast.success({ detail: 'Account created successfully' });
@@ -121,7 +120,6 @@ export class SignUpComponent implements OnInit {
               }, 4000);
             },
             error: (error) => {
-              console.log(error);
               setTimeout(() => {
                 this.loading = false;
                 this.toast.error({ detail: 'Account already exists' });
@@ -129,9 +127,9 @@ export class SignUpComponent implements OnInit {
             },
           });
       }
-      console.log(result);
     });
   }
+
 }
 
 @Component({
@@ -164,7 +162,6 @@ export class SignUpComponent implements OnInit {
       </div>
     </div>
   `,
-  // styleUrls: ['./dialog.component.css']
 })
 export class DialogComponent implements OnInit {
   selectedOption!: any;

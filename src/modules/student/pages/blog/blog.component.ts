@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { Article } from 'src/app/models/article';
-import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import { API_URL } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-blog',
@@ -17,7 +17,7 @@ export class BlogComponent implements OnInit {
   constructor(private http: HttpClient) {
     this.getAllArticles();
     window.scrollTo(0, 0);
-    this.getAccount()
+    this.getAccount();
   }
 
   ngOnInit(): void {}
@@ -43,7 +43,6 @@ export class BlogComponent implements OnInit {
     const student: any = jwtDecode(token);
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
-      .subscribe((student: Student) => {
-      });
+      .subscribe((student: Student) => {});
   }
 }

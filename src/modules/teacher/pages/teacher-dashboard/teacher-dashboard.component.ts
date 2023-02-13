@@ -6,21 +6,21 @@ import jwtDecode from 'jwt-decode';
 @Component({
   selector: 'app-teacher-dashboard',
   templateUrl: './teacher-dashboard.component.html',
-  styleUrls: ['./teacher-dashboard.component.css']
+  styleUrls: ['./teacher-dashboard.component.css'],
 })
 export class TeacherDashboardComponent implements OnInit {
   quote!: any;
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
-    this.getRandomQuote()
+    this.getRandomQuote();
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
   }
 
-  getRandomQuote(){
-    this.http.get(API_URL + '/api/teachers/getQuote')
-    .subscribe((res: any) => this.quote = res)
+  getRandomQuote() {
+    this.http
+      .get(API_URL + '/api/teachers/getQuote')
+      .subscribe((res: any) => (this.quote = res));
   }
-
 }

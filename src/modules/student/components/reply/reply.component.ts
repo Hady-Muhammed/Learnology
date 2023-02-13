@@ -17,9 +17,9 @@ export class ReplyComponent implements OnInit {
   openReactMenuOfReply!: boolean;
   reactListOpened!: boolean;
   opened!: boolean;
-  @Output() showReply = new EventEmitter()
-  @Output() reactHappened = new EventEmitter()
-  @Output() replyDeleted = new EventEmitter()
+  @Output() showReply = new EventEmitter();
+  @Output() reactHappened = new EventEmitter();
+  @Output() replyDeleted = new EventEmitter();
   @Input('reply') reply!: reply;
   @Input('comment') comment!: comment;
   @Input('post') post!: Post;
@@ -45,12 +45,10 @@ export class ReplyComponent implements OnInit {
       .post(API_URL + '/api/replies/deleteReply', { replyID, commentID })
       .subscribe({
         next: (res: any) => {
-          console.log(res);
           this.toast.success({ detail: res.message });
-          this.replyDeleted.emit(true)
+          this.replyDeleted.emit(true);
         },
         error: (err) => {
-          console.log(err);
           this.toast.error({ detail: err.message });
         },
       });
@@ -63,5 +61,4 @@ export class ReplyComponent implements OnInit {
       API_URL + `/api/reacts/getAllReactsOfReply/${replyID}`
     );
   }
-
 }

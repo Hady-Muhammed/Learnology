@@ -1,27 +1,28 @@
 import { AuthService } from './../services/auth.service';
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivate, Router, UrlTree } from '@angular/router';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 
-    /* Documentation */
+/* Documentation */
 
 /// This is basically an authenticattion guard for the student page specifcally
-
 export class StudentGuard implements CanActivate {
-  constructor(private auth: AuthService , private router: Router){}
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-      const token = localStorage.getItem('token');
-      if(token) {
-        return this.isStudent();
-      }
-      this.router.navigateByUrl('/signin');
-      return false
+  constructor(private auth: AuthService, private router: Router) {}
+  canActivate():
+    | Observable<boolean | UrlTree>
+    | Promise<boolean | UrlTree>
+    | boolean
+    | UrlTree {
+    const token = localStorage.getItem('token');
+    if (token) {
+      return this.isStudent();
+    }
+    this.router.navigateByUrl('/signin');
+    return false;
   }
   isStudent() {
     return this.auth.getTeacher().pipe(
@@ -36,4 +37,3 @@ export class StudentGuard implements CanActivate {
     );
   }
 }
-

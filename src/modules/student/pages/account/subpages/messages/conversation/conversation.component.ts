@@ -1,6 +1,6 @@
 import { map } from 'rxjs';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import { API_URL, SocketioService } from 'src/app/services/socketio.service';
@@ -23,7 +23,7 @@ export class ConversationComponent implements OnInit {
   typing: boolean = false;
   isEmojiPickerVisible!: boolean;
 
-  @ViewChild('lastMessage') lastMessage!: ElementRef
+  @ViewChild('lastMessage') lastMessage!: ElementRef;
 
   constructor(
     private http: HttpClient,
@@ -35,28 +35,33 @@ export class ConversationComponent implements OnInit {
     this.getAccount(student.email);
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getChat() {
     this.http
       .get<any>(API_URL + `/api/chats/getSingleChat/${this.id}`)
-      .pipe(map((chats) => {
-        for (const chat of chats) {
-          let personsArray = [...chat.person1a,...chat.person1b,...chat.person2a,...chat.person2b]
-          chat.person1 = personsArray[0]
-          chat.person2 = personsArray[1]
-        }
-        for (const chat of chats) {
-          delete chat.person1a
-          delete chat.person1b
-          delete chat.person2a
-          delete chat.person2b
-        }
-        return chats[0]
-      }))
+      .pipe(
+        map((chats) => {
+          for (const chat of chats) {
+            let personsArray = [
+              ...chat.person1a,
+              ...chat.person1b,
+              ...chat.person2a,
+              ...chat.person2b,
+            ];
+            chat.person1 = personsArray[0];
+            chat.person2 = personsArray[1];
+          }
+          for (const chat of chats) {
+            delete chat.person1a;
+            delete chat.person1b;
+            delete chat.person2a;
+            delete chat.person2b;
+          }
+          return chats[0];
+        })
+      )
       .subscribe((chat: Chat) => {
-        console.log(chat);
         this.messages = chat.messages;
         this.newMessages = chat.newMessages;
         if (chat.person1_ID === this.account._id) {
@@ -67,7 +72,7 @@ export class ConversationComponent implements OnInit {
         this.listenForNewMessagesRealtime();
         this.listenForTyping();
         setTimeout(() => {
-          this.scrollToLastMessage()
+          this.scrollToLastMessage();
         }, 100);
       });
   }
@@ -77,7 +82,7 @@ export class ConversationComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${email}`)
       .subscribe((student: Student) => {
         this.account = student;
-        this.socketService.joinChat(this.id)
+        this.socketService.joinChat(this.id);
         this.getChat();
       });
   }
@@ -93,11 +98,9 @@ export class ConversationComponent implements OnInit {
             .get<Teacher>(API_URL + `/api/teachers/getTeacherByID/${id}`)
             .subscribe((teacher: Teacher) => {
               this.person2 = teacher;
-              console.log('person2: ',teacher)
             });
         } else {
           this.person2 = student;
-          console.log('person2: ',student)
         }
       });
   }
@@ -110,7 +113,7 @@ export class ConversationComponent implements OnInit {
         sentAt: new Date().toUTCString(),
       };
       this.messages.push(message);
-      this.scrollToLastMessage()
+      this.scrollToLastMessage();
       this.socketService.sendMessage(message, this.id);
       this.http
         .post(API_URL + `/api/chats/sendMessage`, {
@@ -122,36 +125,39 @@ export class ConversationComponent implements OnInit {
           },
         })
         .subscribe((res: any) => {
-          console.log('sendMessage res:', res);
           this.message = '';
-          this.socketService.typingMessage(this.id, '')
+          this.socketService.typingMessage(this.id, '');
         });
-      this.http
-        .post(API_URL + '/api/chats/setNewMessages', {
-          id: this.id,
-          newMessages: this.newMessages + 1,
-        })
-        .subscribe((res: any) => console.log(res));
+      this.http.post(API_URL + '/api/chats/setNewMessages', {
+        id: this.id,
+        newMessages: this.newMessages + 1,
+      });
     }
   }
 
   listenForNewMessagesRealtime() {
     this.socketService.socket?.on('receive-message', (message: message) => {
       this.messages.push(message);
-      this.scrollToLastMessage()
+      this.scrollToLastMessage();
     });
   }
 
   scrollToLastMessage() {
-    this.lastMessage?.nativeElement?.scrollIntoView({behavior: 'smooth', block: 'nearest' , inline: 'start'})
+    this.lastMessage?.nativeElement?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'nearest',
+      inline: 'start',
+    });
   }
 
   listenForTyping() {
-    this.socketService.socket?.on('listen-typing-message', (typing: boolean) => {
-      console.log(typing);
-      if (typing) this.typing = true;
-      else this.typing = false;
-    });
+    this.socketService.socket?.on(
+      'listen-typing-message',
+      (typing: boolean) => {
+        if (typing) this.typing = true;
+        else this.typing = false;
+      }
+    );
   }
 
   isTyping() {
@@ -161,5 +167,5 @@ export class ConversationComponent implements OnInit {
   addEmoji(event: any) {
     this.message = `${this.message}${event.emoji.native}`;
     this.isEmojiPickerVisible = false;
- }
+  }
 }

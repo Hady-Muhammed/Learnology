@@ -11,10 +11,9 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./friend-card.component.css'],
 })
 export class FriendCardComponent implements OnInit {
-
   @Input('friend') friend!: Student;
   @Input('account') account!: Student;
-  @Output() friendRemoved = new EventEmitter()
+  @Output() friendRemoved = new EventEmitter();
   constructor(
     private http: HttpClient,
     private toast: NgToastService,
@@ -32,7 +31,7 @@ export class FriendCardComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          this.friendRemoved.emit(true)
+          this.friendRemoved.emit(true);
         },
         error: (err) => {
           this.toast.error({ detail: err.message });
@@ -52,10 +51,8 @@ export class FriendCardComponent implements OnInit {
       })
       .subscribe((res: any) => {
         if (res.message === 'Chat already exists') {
-          console.log(res);
           this.router.navigateByUrl(`/account/messages/${res.id}`);
         } else {
-          console.log(res);
           this.router.navigateByUrl(`/account/messages/${res.id}`);
         }
       });

@@ -1,4 +1,3 @@
-import { NgToastService } from 'ng-angular-popup';
 import { Observable } from 'rxjs';
 import { Inbox } from './../../../../../../app/models/inbox';
 import { API_URL } from 'src/app/services/socketio.service';
@@ -15,7 +14,7 @@ import { Student } from 'src/app/models/student';
 export class InboxComponent implements OnInit {
   account!: Student;
   inboxes!: Observable<Inbox[]>;
-  constructor(private http: HttpClient , private toast: NgToastService) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit(): void {
     this.getAccount();
@@ -36,28 +35,5 @@ export class InboxComponent implements OnInit {
     this.inboxes = this.http.get<Inbox[]>(
       API_URL + `/api/inboxes/getInboxesForStudent/${this.account._id}`
     );
-  }
-
-  inboxRead(inbox: Inbox) {
-    if (!inbox.read) {
-      this.http
-        .patch(API_URL + '/api/inboxes/inboxRead', {
-          id: inbox._id,
-        })
-        .subscribe((res) => console.log(res));
-    }
-  }
-
-  deleteInbox(id: string) {
-    this.http.delete(API_URL + `/api/inboxes/deleteInbox/${id}`)
-    .subscribe({
-      next: (res:any) => {
-        this.toast.success({detail: res.message})
-        this.getInboxesForStudent()
-      },
-      error: err => {
-        this.toast.error({detail: err.message})
-      }
-    })
   }
 }

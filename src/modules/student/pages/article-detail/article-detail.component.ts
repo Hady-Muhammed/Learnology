@@ -15,11 +15,15 @@ export class ArticleDetailComponent implements OnInit {
   article!: Article;
   id: string;
 
-  constructor(private route: ActivatedRoute, private http: HttpClient, private socketService: SocketioService) {
+  constructor(
+    private route: ActivatedRoute,
+    private http: HttpClient,
+    private socketService: SocketioService
+  ) {
     this.id = route.snapshot.params['id'];
     window.scrollTo(0, 0);
     this.getArticle();
-    this.getAccount()
+    this.getAccount();
   }
 
   ngOnInit(): void {}
@@ -29,6 +33,7 @@ export class ArticleDetailComponent implements OnInit {
       .get<Article>(API_URL + `/api/articles/getArticle/${this.id}`)
       .subscribe((article: Article) => (this.article = article));
   }
+  
   return() {
     window.history.back();
   }

@@ -14,7 +14,10 @@ import { FooterComponent } from './components/footer/footer.component';
 import { StudentRoutingModule } from './student-routing.module';
 import { AboutComponent } from './pages/about/about.component';
 import { AccountComponent } from './pages/account/account.component';
-import { AccountSettingsComponent, PictureDialog } from './pages/account/subpages/account-settings/account-settings.component';
+import {
+  AccountSettingsComponent,
+  PictureDialog,
+} from './pages/account/subpages/account-settings/account-settings.component';
 import { EnrolledCoursesComponent } from './pages/account/subpages/enrolled-courses/enrolled-courses.component';
 import { MessagesComponent } from './pages/account/subpages/messages/messages.component';
 import { TakenExamsComponent } from './pages/account/subpages/taken-exams/taken-exams.component';
@@ -48,8 +51,6 @@ import { PostsComponent } from './pages/account/subpages/posts/posts.component';
 import { FriendCardComponent } from './components/cards/friend-card/friend-card.component';
 import { InboxComponent } from './pages/account/subpages/inbox/inbox.component';
 import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbox-detail.component';
-
-
 
 @NgModule({
   declarations: [
@@ -106,7 +107,7 @@ import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbo
     SwiperModule,
     StudentRoutingModule,
     FontAwesomeModule,
-    PickerModule
-  ]
+    PickerModule,
+  ],
 })
-export class StudentModule { }
+export class StudentModule {}

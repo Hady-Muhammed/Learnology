@@ -1,10 +1,8 @@
 import { map } from 'rxjs';
 import { API_URL } from './../../../../app/services/socketio.service';
-import { Student } from './../../../../app/models/student';
 import { Teacher } from 'src/app/models/teacher';
 import { Chat } from './../../../../app/models/chat';
 import { FormControl } from '@angular/forms';
-import jwt_decode from 'jwt-decode';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -25,12 +23,11 @@ export class TeacherMessagesComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private router: Router,
-    private toast: NgToastService,
-  ) {
-  }
+    private toast: NgToastService
+  ) {}
 
   ngOnInit(): void {
-    this.getAccount()
+    this.getAccount();
   }
 
   getAccount() {
@@ -40,7 +37,7 @@ export class TeacherMessagesComponent implements OnInit {
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
-        this.getChats()
+        this.getChats();
       });
   }
 
@@ -60,53 +57,59 @@ export class TeacherMessagesComponent implements OnInit {
     }
   }
 
-  goToConversation(id: string,chat: Chat) {
+  goToConversation(id: string, chat: Chat) {
     chat.newMessages = 0;
-    this.http
-      .post(API_URL + '/api/chats/setNewMessages', {
-        id,
-        newMessages: 0,
-      })
-      .subscribe((res: any) => console.log(res));
+    this.http.post(API_URL + '/api/chats/setNewMessages', {
+      id,
+      newMessages: 0,
+    });
     this.router.navigateByUrl('teacher/t/messages/' + id);
   }
 
   getChats() {
     this.http
       .get<any[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
-      .pipe(map((chats) => {
-        for (const chat of chats) {
-          let personsArray = [...chat.person1a,...chat.person1b,...chat.person2a,...chat.person2b]
-          chat.person1 = personsArray[0]
-          chat.person2 = personsArray[1]
-        }
-        for (const chat of chats) {
-          delete chat.person1a
-          delete chat.person1b
-          delete chat.person2a
-          delete chat.person2b
-        }
-        return chats
-      }))
+      .pipe(
+        map((chats) => {
+          for (const chat of chats) {
+            let personsArray = [
+              ...chat.person1a,
+              ...chat.person1b,
+              ...chat.person2a,
+              ...chat.person2b,
+            ];
+            chat.person1 = personsArray[0];
+            chat.person2 = personsArray[1];
+          }
+          for (const chat of chats) {
+            delete chat.person1a;
+            delete chat.person1b;
+            delete chat.person2a;
+            delete chat.person2b;
+          }
+          return chats;
+        })
+      )
       .subscribe((chats: Chat[]) => {
         this.filteredChats = chats;
         this.chats = chats;
       });
   }
 
-  deleteChat(id:string){
-    this.http.post(API_URL + '/api/chats/deleteChat', {
-      id
-    }).subscribe({
-      next: res => {
-      this.toast.success({detail: 'Chat deleted successfully!'})
-      this.getChats()
-      this.router.navigateByUrl('teacher/messages')
-      },
-      error: res => {
-      this.toast.error({detail: 'Something went wrong!'})
-      }
-  })
+  deleteChat(id: string) {
+    this.http
+      .post(API_URL + '/api/chats/deleteChat', {
+        id,
+      })
+      .subscribe({
+        next: (res) => {
+          this.toast.success({ detail: 'Chat deleted successfully!' });
+          this.getChats();
+          this.router.navigateByUrl('teacher/messages');
+        },
+        error: (res) => {
+          this.toast.error({ detail: 'Something went wrong!' });
+        },
+      });
   }
-
 }

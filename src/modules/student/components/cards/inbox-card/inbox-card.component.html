@@ -1,0 +1,12 @@
+<a class="space-y-4" (click)="inboxRead(inbox)" [routerLink]="inbox._id">
+  <div class="flex items-center space-x-2">
+    <i class="fa-solid fa-user-tie text-2xl bg-yellow-500 p-2 rounded-full"></i>
+    <h2 class="font-bold text-4xl">Admin</h2>
+  </div>
+  <h3 class="text-xl font-semibold">{{inbox.subject}}</h3>
+  <p class="text-md">{{inbox.body.slice(0,30) + "..."}}</p>
+  <div class="flex justify-end">
+    <span class="text-red-500 italic font-bold" *ngIf="!inbox.read">New</span>
+  </div>
+</a>
+<button (click)="deleteInbox(inbox._id)" class="absolute right-0 top-0 flex justify-center items-center bg-red-500 text-white  w-[30px] h-[30px] rounded-full"><mat-icon class="mat-18 text-md">delete</mat-icon></button>

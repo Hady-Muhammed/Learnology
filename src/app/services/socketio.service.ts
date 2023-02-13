@@ -11,7 +11,7 @@ export class SocketioService {
 
   setupSocketConnection(email: string) {
     this.socket = io(environment.SOCKET_ENDPOINT, {
-      query: { studentEmail: email, transports: ['websocket'], upgrade: false},
+      query: { studentEmail: email, transports: ['websocket'], upgrade: false },
     });
   }
 
@@ -19,16 +19,16 @@ export class SocketioService {
     this.socket.emit('send-message', msg, chatID);
   }
 
-  notifyForANewComment(targetEmail: string){
-    this.socket.emit("add-comment",targetEmail)
+  notifyForANewComment(targetEmail: string) {
+    this.socket.emit('add-comment', targetEmail);
   }
 
-  notifyForANewReply(targetEmail: string){
-    this.socket.emit("add-reply",targetEmail)
+  notifyForANewReply(targetEmail: string) {
+    this.socket.emit('add-reply', targetEmail);
   }
 
-  notifyForANewReact(targetEmail: string){
-    this.socket.emit("add-react",targetEmail)
+  notifyForANewReact(targetEmail: string) {
+    this.socket.emit('add-react', targetEmail);
   }
 
   online(id: string) {
@@ -36,8 +36,7 @@ export class SocketioService {
   }
 
   joinChat(chatID: string) {
-    if(this.socket)
-      this.socket.emit('join-chat', chatID);
+    if (this.socket) this.socket.emit('join-chat', chatID);
   }
 
   typingMessage(chatID: string, message: string) {
@@ -45,13 +44,13 @@ export class SocketioService {
   }
 
   disconnect() {
-    this.socket.disconnect()
+    this.socket.disconnect();
   }
 }
 
 export const environment = {
   production: false,
-  SOCKET_ENDPOINT: 'http://localhost:1234',
+  SOCKET_ENDPOINT: 'https://learnology-backend.onrender.com',
 };
 
-export const API_URL = 'http://localhost:1234';
+export const API_URL = 'https://learnology-backend.onrender.com';

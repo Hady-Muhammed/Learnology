@@ -8,16 +8,17 @@ import { Teacher } from 'src/app/models/teacher';
 @Component({
   selector: 'app-teacher-statistics',
   templateUrl: './teacher-statistics.component.html',
-  styleUrls: ['./teacher-statistics.component.css']
+  styleUrls: ['./teacher-statistics.component.css'],
 })
 export class TeacherStatisticsComponent implements OnInit {
-
-  account!: Teacher
-  constructor(private http: HttpClient , private socketService: SocketioService) { }
-
+  account!: Teacher;
+  constructor(
+    private http: HttpClient,
+    private socketService: SocketioService
+  ) {}
 
   ngOnInit(): void {
-    this.getAccount()
+    this.getAccount();
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
     this.socketService.setupSocketConnection(student.email);
@@ -26,9 +27,10 @@ export class TeacherStatisticsComponent implements OnInit {
   getAccount() {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-    this.http.get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
-    .subscribe((teacher: Teacher) => {
-      this.account = teacher
-      })
+    this.http
+      .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
+      .subscribe((teacher: Teacher) => {
+        this.account = teacher;
+      });
   }
 }

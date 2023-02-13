@@ -21,14 +21,13 @@ export class QuizResultsComponent implements OnInit {
     this.id = this.route.snapshot.params['id'];
     this.getScore();
   }
-  
+
   getScore() {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
-        console.log(student);
         for (let i = 0; i < student.taken_quizzes.length; i++)
           if (student.taken_quizzes[i].id === this.id)
             this.score = student.taken_quizzes[i].score;

@@ -17,33 +17,13 @@ export class QuizzesComponent implements OnInit {
   loading!: boolean;
   grid!: boolean;
   searchTerm!: string;
-  
+
   constructor(private http: HttpClient) {
     window.scrollTo(0, 0);
   }
 
   ngOnInit(): void {
     this.getAllQuizzes();
-  }
-
-  createQuiz() {
-    this.http
-      .post(API_URL + '/api/quizzes/createQuiz', {
-        quizz: {
-          name: 'The Winning Team',
-          author: {
-            name: 'marwa',
-            id: '63b580bf517a402d4629fb0d',
-          },
-          publishedAt: new Date().toUTCString(),
-          category: 'Data Science',
-          difficulty: 'Easy',
-          image:
-            'https://avatars.mds.yandex.net/i?id=94eb57822638ff25bc8332b40238f788-4477047-images-thumbs&n=13',
-          questions: [],
-        },
-      })
-      .subscribe((res) => console.log(res));
   }
 
   getAllQuizzes() {

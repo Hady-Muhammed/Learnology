@@ -17,17 +17,20 @@ export class EnrolledCoursesComponent implements OnInit {
   ngOnInit(): void {
     this.getStudent();
   }
+  
   getStudent() {
     const token: any = localStorage.getItem('token');
     const student: any = jwt_decode(token);
     this.http
-      .get<Student>(API_URL+`/api/students/getStudent/${student.email}`)
+      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
-        this.http.post<Course[]>(API_URL+'/api/courses/getCoursesByIds', {
-          courses: student.enrolled_courses
-        }).subscribe((courses: Course[]) => {
-          this.enrolledCourses = courses
-        })
+        this.http
+          .post<Course[]>(API_URL + '/api/courses/getCoursesByIds', {
+            courses: student.enrolled_courses,
+          })
+          .subscribe((courses: Course[]) => {
+            this.enrolledCourses = courses;
+          });
       });
   }
 }

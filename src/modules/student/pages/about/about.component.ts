@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { Student } from 'src/app/models/student';
 import { Teacher } from 'src/app/models/teacher';
-import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import { API_URL } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-about',
@@ -13,16 +13,13 @@ import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 export class AboutComponent implements OnInit {
   teachers!: Teacher[];
   account!: Student;
-  constructor(
-    private http: HttpClient,
-  ) {
+  constructor(private http: HttpClient) {
     window.scrollTo(0, 0);
     this.getAllTeachers();
     this.getAccount();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getAccount() {
     const token: any = localStorage.getItem('token');
@@ -30,7 +27,7 @@ export class AboutComponent implements OnInit {
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
-        this.account = student
+        this.account = student;
       });
   }
 

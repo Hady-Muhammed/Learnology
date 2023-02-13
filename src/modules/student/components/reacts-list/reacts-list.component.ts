@@ -15,7 +15,6 @@ export class ReactsListComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.reacts.subscribe(res => console.log(res))
   }
 
 }

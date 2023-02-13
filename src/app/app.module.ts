@@ -1,10 +1,14 @@
+import { environment } from './../environments/environment';
 import { SignInComponent } from './pages/sign-in/sign-in.component';
-import { SignUpComponent, DialogComponent } from './pages/sign-up/sign-up.component';
+import {
+  SignUpComponent,
+  DialogComponent,
+} from './pages/sign-up/sign-up.component';
 import { SharedModule } from './../modules/shared/shared.module';
 import { TeacherModule } from 'src/modules/teacher/teacher.module';
 import { StudentModule } from './../modules/student/student.module';
 import { SocketioService } from './services/socketio.service';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +20,7 @@ import { NgToastModule } from 'ng-angular-popup';
 import { SwiperModule } from 'swiper/angular';
 import { TooltipListPipe } from './pipes/tooltip-list.pipe';
 import { Page404Component } from './pages/page404/page404.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -24,7 +29,7 @@ import { Page404Component } from './pages/page404/page404.component';
     SignInComponent,
     SignUpComponent,
     DialogComponent,
-    Page404Component
+    Page404Component,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +44,12 @@ import { Page404Component } from './pages/page404/page404.component';
     StudentModule,
     TeacherModule,
     SharedModule,
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+      // Register the ServiceWorker as soon as the application is stable
+      // or after 30 seconds (whichever comes first).
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
   ],
   providers: [SocketioService],
   bootstrap: [AppComponent],

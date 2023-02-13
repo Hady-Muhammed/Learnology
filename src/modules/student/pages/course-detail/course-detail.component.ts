@@ -2,15 +2,11 @@ import { NgToastService } from 'ng-angular-popup';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
 import { Teacher } from 'src/app/models/teacher';
-import { API_URL, SocketioService } from 'src/app/services/socketio.service';
-import jwtDecode from 'jwt-decode';
+import { API_URL } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-course-detail',
@@ -48,7 +44,7 @@ export class CourseDetailComponent implements OnInit {
           const courseExists = student.enrolled_courses.find(
             (crs: any) => crs === this.id
           );
-          console.log(courseExists);
+
           if (!courseExists) {
             this.text = 'Enroll Course';
             this.isEnrolled = false;
@@ -57,9 +53,7 @@ export class CourseDetailComponent implements OnInit {
             this.isEnrolled = true;
           }
         },
-        error: (data) => {
-          console.log(data);
-        },
+        error: (data) => {},
       });
   }
 
@@ -72,12 +66,9 @@ export class CourseDetailComponent implements OnInit {
   getCourse(id: string) {
     this.http.get<Course>(API_URL + `/api/courses/getCourse/${id}`).subscribe({
       next: (course: Course) => {
-        console.log(course);
         this.course = course;
       },
-      error: (err) => {
-        console.log(err);
-      },
+      error: (err) => {},
     });
   }
 
@@ -91,13 +82,10 @@ export class CourseDetailComponent implements OnInit {
       })
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           this.toast.success({ detail: data.message });
           this.router.navigateByUrl('/courses');
         },
-        error: (err) => {
-          console.log(err);
-        },
+        error: (err) => {},
       });
   }
 }

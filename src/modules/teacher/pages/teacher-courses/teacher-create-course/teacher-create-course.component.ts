@@ -10,14 +10,18 @@ import { NgToastService } from 'ng-angular-popup';
 @Component({
   selector: 'app-teacher-create-course',
   templateUrl: './teacher-create-course.component.html',
-  styleUrls: ['./teacher-create-course.component.css']
+  styleUrls: ['./teacher-create-course.component.css'],
 })
 export class TeacherCreateCourseComponent implements OnInit {
-
-  selectedValue!: any
+  selectedValue!: any;
   account!: Teacher;
   form: any;
-  constructor(private http: HttpClient, private toast: NgToastService , private router: Router , private fb: FormBuilder) {
+  constructor(
+    private http: HttpClient,
+    private toast: NgToastService,
+    private router: Router,
+    private fb: FormBuilder
+  ) {
     this.form = this.fb.group({
       courseTitle: ['', Validators.required],
       courseCateg: ['', Validators.required],
@@ -25,7 +29,7 @@ export class TeacherCreateCourseComponent implements OnInit {
       courseOverview: ['', Validators.required],
       coursePrice: ['', Validators.required],
       imageURL: ['', Validators.required],
-    })
+    });
   }
   /* FormGroup Fields Getters */
   get courseTitle() {
@@ -55,51 +59,53 @@ export class TeacherCreateCourseComponent implements OnInit {
   /* FormGroup Fields Getters */
 
   ngOnInit(): void {
-    this.getAccount()
+    this.getAccount();
   }
   return() {
-    window.history.back()
+    window.history.back();
   }
-  getAccount(){
+  getAccount() {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-    console.log(teacher)
-    this.http.get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
-    .subscribe((teacher: Teacher) => {this.account = teacher})
+
+    this.http
+      .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
+      .subscribe((teacher: Teacher) => {
+        this.account = teacher;
+      });
   }
-  publishCourse(){
-    if(this.form.status === 'VALID'){
-      this.http.post(API_URL + '/api/courses/publishCourse',
-      {
-        coursee: {
-          instructor_name: this.account.name,
-          instructor_title: this.account.title,
-          course_title: this.courseTitle.value,
-          short_desc: this.courseShortDesc.value,
-          image: this.imageURL.value,
-          postedAt: new Date().toUTCString(),
-          num_of_likes: 0,
-          rating: [1,1,1],
-          overview: this.courseOverview.value,
-          category: this.courseCateg.value,
-          price: this.coursePrice.value,
-          WhatYouWillLearn: [],
-          videos: []
-        },
-        email: this.account.email
-      }).subscribe({
-        next: (res:any) => {
-          console.log(res)
-          this.toast.success({detail: 'Course published successfully!'})
-          this.router.navigateByUrl("/teacher/courses")
-        },
-        error: res => {
-          console.log(res)
-          this.toast.success({detail: "error!!"})
-        }
-      })
+  publishCourse() {
+    if (this.form.status === 'VALID') {
+      this.http
+        .post(API_URL + '/api/courses/publishCourse', {
+          coursee: {
+            instructor_name: this.account.name,
+            instructor_title: this.account.title,
+            course_title: this.courseTitle.value,
+            short_desc: this.courseShortDesc.value,
+            image: this.imageURL.value,
+            postedAt: new Date().toUTCString(),
+            num_of_likes: 0,
+            rating: [1, 1, 1],
+            overview: this.courseOverview.value,
+            category: this.courseCateg.value,
+            price: this.coursePrice.value,
+            WhatYouWillLearn: [],
+            videos: [],
+          },
+          email: this.account.email,
+        })
+        .subscribe({
+          next: (res: any) => {
+            this.toast.success({ detail: 'Course published successfully!' });
+            this.router.navigateByUrl('/teacher/courses');
+          },
+          error: (res) => {
+            this.toast.success({ detail: 'error!!' });
+          },
+        });
     } else {
-      this.toast.error({detail: 'Enter valid data'})
+      this.toast.error({ detail: 'Enter valid data' });
     }
   }
 }

@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { Student } from 'src/app/models/student';
-import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import { API_URL } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-account',
@@ -31,7 +31,7 @@ export class AccountComponent implements OnInit {
         this.account = student;
         this.getNoOfUnreadFriendRequests();
         this.getNoOfUnreadMessages();
-        this.getNoOfUnreadInboxes()
+        this.getNoOfUnreadInboxes();
       });
   }
 
@@ -58,7 +58,9 @@ export class AccountComponent implements OnInit {
 
   getNoOfUnreadInboxes() {
     this.http
-      .get<any>(API_URL + `/api/inboxes/getAllUnreadInboxes/${this.account._id}`)
+      .get<any>(
+        API_URL + `/api/inboxes/getAllUnreadInboxes/${this.account._id}`
+      )
       .subscribe((res: any) => {
         this.numOfUnreadInboxes = res.numOfUnread;
       });

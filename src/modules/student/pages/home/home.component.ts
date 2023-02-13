@@ -12,7 +12,7 @@ import SwiperCore, {
 import jwtDecode from 'jwt-decode';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
-import { SocketioService, API_URL } from 'src/app/services/socketio.service';
+import { API_URL } from 'src/app/services/socketio.service';
 
 // install Swiper modules
 SwiperCore.use([EffectFade, Autoplay, Navigation, Pagination, Scrollbar, A11y]);
@@ -57,16 +57,13 @@ export class HomeComponent implements OnInit {
   popularCourses!: Course[];
   account!: Student;
 
-  constructor(
-    private http: HttpClient,
-  ) {
+  constructor(private http: HttpClient) {
     this.getPopularCourses();
     window.scrollTo(0, 0);
     this.getAccount();
   }
-  
-  ngOnInit(): void {
-  }
+
+  ngOnInit(): void {}
 
   getAccount() {
     const token: any = localStorage.getItem('token');
@@ -82,8 +79,7 @@ export class HomeComponent implements OnInit {
     this.http
       .get<Course[]>(API_URL + '/api/courses/getPopularCourses')
       .subscribe((courses: Course[]) => {
-        this.popularCourses = courses
+        this.popularCourses = courses;
       });
   }
-
 }

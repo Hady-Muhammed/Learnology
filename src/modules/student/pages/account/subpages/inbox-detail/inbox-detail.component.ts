@@ -27,6 +27,6 @@ export class InboxDetailComponent implements OnInit {
   }
 
   return() {
-    window.history.back()
+    window.history.back();
   }
 }
