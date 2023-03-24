@@ -21,7 +21,7 @@ export class PostsComponent implements OnInit {
   ngOnInit(): void {}
 
   getAccount() {
-    const token: string = localStorage.getItem('token') || '';
+    const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
     this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)

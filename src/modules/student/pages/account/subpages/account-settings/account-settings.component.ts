@@ -23,9 +23,9 @@ export class AccountSettingsComponent implements OnInit {
   loading: boolean = false;
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private router: Router,
-    private dialog: MatDialog
+    public toast: NgToastService,
+    public router: Router,
+    public dialog: MatDialog
   ) {
     this.getAccount();
   }
@@ -43,13 +43,12 @@ export class AccountSettingsComponent implements OnInit {
   ngOnInit(): void {}
 
   getAccount() {
-    const token = localStorage.getItem('token') || '';
+    const token: any = localStorage.getItem('token');
     const account: any = jwt_decode(token);
     this.http
       .get(API_URL + `/api/students/getStudent/${account.email}`)
       .subscribe((res: any) => {
         this.account = res;
-
         this.name?.setValue(this.account.name);
         this.email?.setValue(this.account.email);
         this.email?.disable();
@@ -96,7 +95,7 @@ export class AccountSettingsComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          window.location.reload();
+          this.getAccount()
         },
         error: (err) => {
           this.toast.error({ detail: err.message });
@@ -145,9 +144,12 @@ export class PictureDialog {
       this.http.post(API_URL + '/api/students/uploadPicture', {
         email: student.email,
         Img: this.Img,
-      });
+      }).subscribe()
       this.dialogRef.close();
-      location.reload();
+      this.refreshPage()
     }
+  }
+  refreshPage() {
+    location.reload();
   }
 }

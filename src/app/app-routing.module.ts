@@ -8,7 +8,7 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
 import { Page404Component } from './pages/page404/page404.component';
 import { AdminGuard } from './guards/admin.guard';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     canActivate: [StudentGuard],

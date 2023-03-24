@@ -12,13 +12,18 @@ export class AdminGuard implements CanActivate {
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    let token = JSON.parse(localStorage.getItem('token') || '');
-    if (token) {
-      if (token?.email === 'admin@gmail.com' && token?.password === 'admin') {
-        return true;
+    try {
+      let token = JSON.parse(localStorage.getItem('token') || '');
+      if (token) {
+        if (token?.email === 'admin@gmail.com' && token?.password === 'admin') {
+          return true;
+        }
       }
+      this.router.navigate(['/signin']);
+      return false;
+    } catch (error) {
+      this.router.navigate(['/signin']);
+      return false;
     }
-    this.router.navigate(['/signin']);
-    return false;
   }
 }

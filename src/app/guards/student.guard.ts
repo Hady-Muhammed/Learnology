@@ -7,9 +7,6 @@ import { Observable, map } from 'rxjs';
   providedIn: 'root',
 })
 
-/* Documentation */
-
-/// This is basically an authenticattion guard for the student page specifcally
 export class StudentGuard implements CanActivate {
   constructor(private auth: AuthService, private router: Router) {}
   canActivate():

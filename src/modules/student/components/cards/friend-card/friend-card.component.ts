@@ -16,8 +16,8 @@ export class FriendCardComponent implements OnInit {
   @Output() friendRemoved = new EventEmitter();
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private router: Router
+    public toast: NgToastService,
+    public router: Router
   ) {}
 
   ngOnInit(): void {}
@@ -50,11 +50,7 @@ export class FriendCardComponent implements OnInit {
         },
       })
       .subscribe((res: any) => {
-        if (res.message === 'Chat already exists') {
-          this.router.navigateByUrl(`/account/messages/${res.id}`);
-        } else {
-          this.router.navigateByUrl(`/account/messages/${res.id}`);
-        }
+        this.router.navigateByUrl(`/account/messages/${res.id}`);
       });
   }
 }

@@ -17,22 +17,24 @@ export class MessagesComponent implements OnInit {
   account!: Student;
   chats!: any[];
   onlineUsers!: Student[];
+  messages: any;
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private toast: NgToastService
-  ) {}
+    public router: Router,
+    public toast: NgToastService
+  ) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
   }
 
   getChats() {
     this.http
       .get<any[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
       .pipe(
-        map((chats) => {
+        map((chats: any) => {
           for (const chat of chats) {
             let personsArray = [
               ...chat.person1a,
@@ -58,7 +60,7 @@ export class MessagesComponent implements OnInit {
   }
 
   goToConversation(id: string) {
-    this.http.post(API_URL + '/api/chats/setNewMessages', {
+    this.messages = this.http.post(API_URL + '/api/chats/setNewMessages', {
       id,
       newMessages: 0,
     });

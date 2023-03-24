@@ -12,16 +12,18 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./admin-email-detail.component.css'],
 })
 export class AdminEmailDetailComponent implements OnInit {
+  [x: string]: any;
   email!: Email;
   id!: string;
   opened!: boolean;
   subject = new FormControl('', [Validators.required]);
   body = new FormControl('', [Validators.required]);
+  component: any;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private toast: NgToastService
+    public toast: NgToastService
   ) {
     this.id = this.route.snapshot.params['id'];
     this.getEmail(this.id);
@@ -39,7 +41,7 @@ export class AdminEmailDetailComponent implements OnInit {
     this.http
       .post(API_URL + '/api/inboxes/sendInbox', {
         inbox: {
-          to: this.email.sender._id,
+          to: this.email.sender?._id,
           subject: this.subject.value,
           sentAt: new Date().toUTCString(),
           body: this.body.value,

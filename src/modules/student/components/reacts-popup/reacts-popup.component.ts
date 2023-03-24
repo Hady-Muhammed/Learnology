@@ -22,18 +22,18 @@ export class ReactsPopupComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private socketService: SocketioService
+    public toast: NgToastService,
+    public socketService: SocketioService
   ) {}
 
   ngOnInit(): void {}
 
-  reactOnPost(id: string, react: any, postOwner: Student) {
+  reactOnPost(postID: string, react: any, postOwner: Student) {
     this.openReactMenu.emit(false);
     this.http
       .post(API_URL + '/api/reacts/reactOnPost', {
         studentID: this.account._id,
-        postID: id,
+        postID,
         react,
         notificationn: {
           belongsTo: postOwner._id,
@@ -41,7 +41,7 @@ export class ReactsPopupComponent implements OnInit {
           about_what: 'Reacted to your post',
           type: react.type,
           happenedAt: new Date().toUTCString(),
-          postID: id,
+          postID,
         },
       })
       .subscribe({

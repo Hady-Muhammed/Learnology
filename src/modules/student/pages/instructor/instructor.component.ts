@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
-import { API_URL, SocketioService } from 'src/app/services/socketio.service';
+import { API_URL } from 'src/app/services/socketio.service';
 
 @Component({
   selector: 'app-instructor',
@@ -24,8 +24,8 @@ export class InstructorComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router,
-    private toast: NgToastService
+    public router: Router,
+    public toast: NgToastService
   ) {
     window.scrollTo(0, 0);
     this.id = this.route.snapshot.params['id'];
@@ -66,11 +66,7 @@ export class InstructorComponent implements OnInit {
         },
       })
       .subscribe((res: any) => {
-        if (res.message === 'Chat already exists') {
-          this.router.navigateByUrl(`/account/messages/${res.id}`);
-        } else {
-          this.router.navigateByUrl(`/account/messages/${res.id}`);
-        }
+        this.router.navigateByUrl(`/account/messages/${res.id}`);
       });
   }
 

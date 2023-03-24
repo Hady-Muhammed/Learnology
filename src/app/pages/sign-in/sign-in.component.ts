@@ -16,79 +16,94 @@ export class SignInComponent implements OnInit {
     Validators.required,
     Validators.minLength(5),
   ]);
-  checked: boolean = false;
   loading: boolean = false;
-  selectedOption!: string;
   constructor(
     private http: HttpClient,
     private toast: NgToastService,
-    private router: Router
+    public router: Router
   ) {}
 
   ngOnInit(): void {}
 
-  signIn() {
+  proceedSignIn() {
     if (!this.email.errors && !this.password.errors) {
       this.loading = true;
-      if (
-        this.email.value === 'admin@gmail.com' &&
-        this.password.value === 'admin'
-      ) {
-        localStorage.setItem(
-          'token',
-          JSON.stringify({
-            email: 'admin@gmail.com',
-            password: 'admin',
-          })
-        );
-        this.router.navigateByUrl('/admin');
+      if (this.isAdmin()) {
+        this.signInAsAdmin()
         return;
       }
-      this.http
-        .post<any>(API_URL + '/api/students/login', {
-          email: this.email.value,
-          password: this.password.value,
-        })
-        .subscribe({
-          next: (data) => {
-            localStorage.setItem('token', data.token);
-            setTimeout(() => {
-              this.loading = false;
-              this.toast.success({ detail: 'Logged in successfully!' });
-              this.router.navigateByUrl('/');
-            }, 4000);
-          },
-          error: (error) => {
-            if (error.error.message === 'Email not valid!') {
-              this.http
-                .post<any>(API_URL + '/api/teachers/login', {
-                  email: this.email.value,
-                  password: this.password.value,
-                })
-                .subscribe({
-                  next: (data) => {
-                    localStorage.setItem('token', data.token);
-                    setTimeout(() => {
-                      this.loading = false;
-                      this.toast.success({ detail: 'Logged in successfully!' });
-                      this.router.navigateByUrl('/teacher');
-                    }, 4000);
-                  },
-                  error: (error) => {
-                    setTimeout(() => {
-                      this.loading = false;
-                      this.toast.error({ detail: error.error.message });
-                    }, 4000);
-                  },
-                });
-            } else {
-              setTimeout(() => {
-                this.loading = false;
-                this.toast.error({ detail: error.error.message });
-              }, 4000);
-            }
-          },
-        });
+      this.signInAsStudent()
     }
+  }
+
+  signInAsStudent() {
+    this.http.post(API_URL + "/api/students/login", {
+      email: this.email.value,
+      password: this.password.value,
+    }).subscribe({
+      next: (res:any) => {
+        localStorage.setItem('token', res.token);
+        setTimeout(() => {
+          this.loading = false;
+          this.toast.success({ detail: 'Logged in successfully!' });
+          this.navigateToStudentAuthorities()
+        }, 4000);
+      },
+      error: err => {
+        if(err.error.message === 'Email not valid!') {
+          this.signInAsTeacher()
+        } else {
+          this.toast.error({detail: err.error.message})
+          this.loading = false
+        }
+      }
+    })
+  }
+
+  signInAsTeacher() {
+    this.http.post(API_URL + "/api/teachers/login", {
+      email: this.email.value,
+      password: this.password.value,
+    }).subscribe({
+      next: (res:any) => {
+        localStorage.setItem('token', res.token);
+        setTimeout(() => {
+          this.loading = false;
+          this.toast.success({ detail: 'Logged in successfully!' });
+          this.navigateToTeacherAuthorities()
+        }, 4000);
+      },
+      error: err => {
+        this.toast.error({detail: err.error.message})
+        this.loading = false
+      }
+    })
+  }
+
+  signInAsAdmin() {
+    localStorage.setItem(
+      'token',
+      JSON.stringify({
+        email: 'admin@gmail.com',
+        password: 'admin',
+      })
+    );
+    this.navigateToAdminAuthorities()
+  }
+
+  navigateToAdminAuthorities() {
+    this.router.navigateByUrl('/admin');
+  }
+
+  navigateToStudentAuthorities() {
+    this.router.navigateByUrl('/');
+  }
+
+  navigateToTeacherAuthorities() {
+    this.router.navigateByUrl('/teacher');
+  }
+
+  isAdmin(): boolean {
+    return this.email.value === 'admin@gmail.com' && this.password.value === 'admin'
   }
 }

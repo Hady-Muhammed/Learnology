@@ -20,11 +20,12 @@ export class FriendsComponent implements OnInit {
   opened!: boolean;
   numOfUnreadRequests!: number;
 
-  constructor(private http: HttpClient, private toast: NgToastService) {
+  constructor(private http: HttpClient, public toast: NgToastService) {
     this.getAccount();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   getAccount() {
     const token: any = localStorage.getItem('token');
@@ -91,7 +92,7 @@ export class FriendsComponent implements OnInit {
           this.getFriendRequests();
         },
         error: (err) => {
-          this.toast.success({ detail: err.message });
+          this.toast.error({ detail: err.message });
         },
       });
   }

@@ -13,10 +13,11 @@ import { API_URL } from 'src/app/services/socketio.service';
 export class TakenExamsComponent implements OnInit {
   account!: Student;
   quizzes!: Quiz[];
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
   }
 
   getQuizzes() {
@@ -32,7 +33,7 @@ export class TakenExamsComponent implements OnInit {
         this.quizzes = quizzes;
       });
   }
-  
+
   getAccount() {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);

@@ -12,12 +12,13 @@ import { API_URL } from 'src/app/services/socketio.service';
 })
 export class EnrolledCoursesComponent implements OnInit {
   enrolledCourses!: Course[];
-  constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
+  constructor(private http: HttpClient) {
     this.getStudent();
   }
-  
+
+  ngOnInit(): void {
+  }
+
   getStudent() {
     const token: any = localStorage.getItem('token');
     const student: any = jwt_decode(token);

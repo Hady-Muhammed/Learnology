@@ -3,7 +3,7 @@ import { NgToastService } from 'ng-angular-popup';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Quiz } from 'src/app/models/quiz';
+import { Quiz, question } from 'src/app/models/quiz';
 import { Student } from 'src/app/models/student';
 import { API_URL } from 'src/app/services/socketio.service';
 
@@ -23,13 +23,13 @@ export class QuizDetailComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router,
-    private toast: NgToastService
+    public router: Router,
+    public toast: NgToastService
   ) {
     window.scrollTo(0, 0);
     this.id = this.route.snapshot.params['id'];
     this.getQuiz(this.id);
-    this.quizIsTakenBefore();
+    this.quizWasTakenBefore();
   }
 
   ngOnInit(): void {}
@@ -39,12 +39,18 @@ export class QuizDetailComponent implements OnInit {
       .get<Quiz>(API_URL + `/api/quizzes/getSingleQuiz/${id}`)
       .subscribe((quiz: Quiz) => {
         this.quiz = quiz;
-        quiz.questions.forEach((q) => {
+        this.totalTime = this.calcTotalTimeOfQuiz(quiz.questions)
+      });
+  }
+
+  calcTotalTimeOfQuiz(questions: question[]) {
+    let sum = 0
+    questions.forEach((q) => {
           let arr = q.solving_time.split(':');
           let time = +arr[0] * 60 + +arr[1];
-          this.totalTime += time;
+          sum += time;
         });
-      });
+    return sum
   }
 
   takeQuiz() {
@@ -58,7 +64,7 @@ export class QuizDetailComponent implements OnInit {
       .subscribe((res) => {});
   }
 
-  quizIsTakenBefore() {
+  quizWasTakenBefore() {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
     this.http
@@ -66,7 +72,7 @@ export class QuizDetailComponent implements OnInit {
       .subscribe((student: Student) => {
         this.account = student;
         for (const quiz of this.account.taken_quizzes) {
-          if (quiz.id === this.id) this.taken = true;
+          if (quiz.id == this.id) this.taken = true;
         }
       });
   }

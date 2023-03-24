@@ -41,8 +41,8 @@ export class CommentComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private socketService: SocketioService,
-    private toast: NgToastService
+    public socketService: SocketioService,
+    public toast: NgToastService
   ) {}
 
   ngOnInit(): void {}

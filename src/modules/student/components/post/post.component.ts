@@ -40,8 +40,8 @@ export class PostComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private socketService: SocketioService
+    public toast: NgToastService,
+    public socketService: SocketioService
   ) {}
 
   ngOnInit(): void {}
@@ -88,7 +88,7 @@ export class PostComponent implements OnInit {
 
   checkReactType(post: Post) {
     let reactFound = this.account?.reacts.find(
-      (react) => react.postID === post._id && react.belongsTo === 'post'
+      (react) => (react.postID === post._id) && (react.belongsTo === 'post')
     );
     return reactFound?.type;
   }

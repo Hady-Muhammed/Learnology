@@ -14,10 +14,12 @@ import { Student } from 'src/app/models/student';
 export class InboxComponent implements OnInit {
   account!: Student;
   inboxes!: Observable<Inbox[]>;
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
   }
 
   getAccount() {

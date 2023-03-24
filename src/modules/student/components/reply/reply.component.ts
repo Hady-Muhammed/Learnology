@@ -25,7 +25,7 @@ export class ReplyComponent implements OnInit {
   @Input('post') post!: Post;
   @Input('account') account!: Student;
 
-  constructor(private http: HttpClient, private toast: NgToastService) {}
+  constructor(private http: HttpClient, public toast: NgToastService) {}
 
   ngOnInit(): void {}
 

@@ -67,7 +67,7 @@
 <!-- Notifications menu -->
 <ul [ngClass]="notificationsMenuOpened ? 'opacity-[1] pointer-events-auto':'opacity-[0] pointer-events-none'" class="bg-white fixed z-50 xxs:right-1 msm:right-16 top-16 rounded-xl xss:w-[250px] msm:w-[350px] sm:w-[500px] shadow-xl text-left duration-500 overflow-auto max-h-[680px]">
   <h3 class="font-bold text-xl text-left p-5 flex items-center"><span class="inline-block mr-1">Notifications</span><mat-icon class="mat-18 text-violet-300 text-md">circle_notifications</mat-icon></h3>
-  <ng-container *ngFor="let notif of notifications?.reverse(); let i = index">
+  <ng-container *ngFor="let notif of notifications; let i = index">
     <a (click)="navigate(notif.postID)" [ngClass]="i !== notifications.length - 1 ? 'border-b border-b-violet-600/30':''" class="flex items-center justify-between py-4 hover:bg-gray-200 px-5 overflow-hidden cursor-pointer">
       <div class="flex items-center space-x-4">
         <div class="relative">

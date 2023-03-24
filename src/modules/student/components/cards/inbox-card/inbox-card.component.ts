@@ -13,7 +13,7 @@ export class InboxCardComponent implements OnInit {
   @Input('inbox') inbox!: Inbox;
   @Output() inboxDeleted = new EventEmitter();
 
-  constructor(private http: HttpClient, private toast: NgToastService) {}
+  constructor(private http: HttpClient, public toast: NgToastService) {}
 
   ngOnInit(): void {}
 
@@ -21,7 +21,7 @@ export class InboxCardComponent implements OnInit {
     if (!inbox.read) {
       this.http.patch(API_URL + '/api/inboxes/inboxRead', {
         id: inbox._id,
-      });
+      }).subscribe((res: any) => true);
     }
   }
 

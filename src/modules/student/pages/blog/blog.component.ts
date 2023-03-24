@@ -15,9 +15,8 @@ export class BlogComponent implements OnInit {
   filteredArticles!: any;
   category!: any;
   constructor(private http: HttpClient) {
-    this.getAllArticles();
     window.scrollTo(0, 0);
-    this.getAccount();
+    this.getAllArticles();
   }
 
   ngOnInit(): void {}
@@ -32,17 +31,9 @@ export class BlogComponent implements OnInit {
   }
 
   changeCategory(e: any) {
-    this.category = e.target.innerText;
+    this.category = e.target?.innerText;
     this.filteredArticles = this.articles.filter(
       (art: Article) => art.category === this.category
     );
-  }
-
-  getAccount() {
-    const token: any = localStorage.getItem('token');
-    const student: any = jwtDecode(token);
-    this.http
-      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
-      .subscribe((student: Student) => {});
   }
 }

@@ -27,6 +27,7 @@ export class QuestionGuard implements CanDeactivate<any> {
     let nextQuestionNo: number = parseInt(
       nextState?.url.split('/').at(-1) || ''
     );
+    if(isNaN(currentQuestionNo) || isNaN(nextQuestionNo)) return false
     if (nextQuestionNo < currentQuestionNo) return false;
     return true;
   }

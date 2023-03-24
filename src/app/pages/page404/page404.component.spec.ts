@@ -20,4 +20,10 @@ describe('Page404Component', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('should scroll to the top on component initialization', () => {
+    spyOn(window, 'scrollTo');
+    component.ngOnInit();
+    expect(window.scrollTo).toHaveBeenCalledWith(0, 0);
+  });
 });

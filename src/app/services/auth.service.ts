@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 export class AuthService {
   constructor(private http: HttpClient) {}
   getTeacher(): Observable<Teacher> {
-    const token: any = localStorage.getItem('token') || null;
+    const token: any = localStorage.getItem('token');
     const teacher: any = jwt_decode(token);
     return this.http.get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`);
   }

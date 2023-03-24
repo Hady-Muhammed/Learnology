@@ -18,7 +18,7 @@ export class ContactComponent implements OnInit {
   body = new FormControl('', [Validators.required]);
   account!: Student;
 
-  constructor(private http: HttpClient, private toast: NgToastService) {
+  constructor(private http: HttpClient, public toast: NgToastService) {
     window.scrollTo(0, 0);
     this.getAccount();
   }
@@ -46,19 +46,19 @@ export class ContactComponent implements OnInit {
         .subscribe({
           next: (res: any) => {
             this.toast.success({ detail: res.message });
+            this.subject.setValue('');
+            this.subject.setErrors(null);
+            this.body.setValue('');
+            this.body.setErrors(null);
+            this.fname.setValue('');
+            this.fname.setErrors(null);
+            this.lname.setValue('');
+            this.lname.setErrors(null);
           },
           error: (err) => {
             this.toast.error({ detail: err.message });
           },
         });
-      this.subject.setValue('');
-      this.subject.setErrors(null);
-      this.body.setValue('');
-      this.body.setErrors(null);
-      this.fname.setValue('');
-      this.fname.setErrors(null);
-      this.lname.setValue('');
-      this.lname.setErrors(null);
     }
   }
 

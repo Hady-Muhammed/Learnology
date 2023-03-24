@@ -30,8 +30,8 @@ export class CommunityComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private toast: NgToastService
+    public router: Router,
+    public toast: NgToastService
   ) {
     this.getAccount();
     this.getAllPosts();
@@ -95,11 +95,7 @@ export class CommunityComponent implements OnInit {
         },
       })
       .subscribe((res: any) => {
-        if (res.message === 'Chat already exists') {
-          this.router.navigateByUrl(`/account/messages/${res.id}`);
-        } else {
-          this.router.navigateByUrl(`/account/messages/${res.id}`);
-        }
+        this.router.navigateByUrl(`/account/messages/${res.id}`);
       });
   }
 
@@ -235,7 +231,7 @@ export class CommunityComponent implements OnInit {
           this.getAllPendingRequests();
         },
         error: (err) => {
-          this.toast.success({ detail: err.message });
+          this.toast.error({ detail: err.message });
         },
       });
   }

@@ -20,10 +20,10 @@ export class QuizzesComponent implements OnInit {
 
   constructor(private http: HttpClient) {
     window.scrollTo(0, 0);
+    this.getAllQuizzes();
   }
 
   ngOnInit(): void {
-    this.getAllQuizzes();
   }
 
   getAllQuizzes() {
@@ -60,7 +60,6 @@ export class QuizzesComponent implements OnInit {
       if (!this.easy && !this.medium && !this.hard) {
         this.filteredQuizzes = this.quizzes;
       }
-      console.log(this.filteredQuizzes);
       this.loading = false;
     }, 2000);
   }

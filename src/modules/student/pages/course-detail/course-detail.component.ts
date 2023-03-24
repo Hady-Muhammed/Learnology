@@ -22,18 +22,17 @@ export class CourseDetailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private toast: NgToastService,
-    private router: Router
+    public toast: NgToastService,
+    public router: Router
   ) {
     this.id = this.route.snapshot.params['id'];
     this.getCourse(this.id);
     this.getInstructor(this.id);
+    this.courseIsEnrolled();
     window.scrollTo(0, 0);
   }
 
-  ngOnInit(): void {
-    this.courseIsEnrolled();
-  }
+  ngOnInit(): void {}
 
   courseIsEnrolled() {
     const student: any = jwt_decode(localStorage.getItem('token') || '');
@@ -53,7 +52,6 @@ export class CourseDetailComponent implements OnInit {
             this.isEnrolled = true;
           }
         },
-        error: (data) => {},
       });
   }
 
@@ -68,7 +66,6 @@ export class CourseDetailComponent implements OnInit {
       next: (course: Course) => {
         this.course = course;
       },
-      error: (err) => {},
     });
   }
 
@@ -85,7 +82,9 @@ export class CourseDetailComponent implements OnInit {
           this.toast.success({ detail: data.message });
           this.router.navigateByUrl('/courses');
         },
-        error: (err) => {},
+        error: (err) => {
+          this.toast.error({ detail: err.message });
+        },
       });
   }
 }

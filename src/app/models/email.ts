@@ -6,7 +6,7 @@ export interface Email {
   subject: string;
   sentAt: string;
   body: string;
-  sender: Student;
+  sender: Student | undefined;
   read: boolean;
   replied: boolean;
 }

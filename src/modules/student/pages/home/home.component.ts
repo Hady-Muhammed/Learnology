@@ -58,8 +58,8 @@ export class HomeComponent implements OnInit {
   account!: Student;
 
   constructor(private http: HttpClient) {
-    this.getPopularCourses();
     window.scrollTo(0, 0);
+    this.getPopularCourses();
     this.getAccount();
   }
 

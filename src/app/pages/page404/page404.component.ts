@@ -7,8 +7,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class Page404Component implements OnInit {
   constructor() {
-    window.scrollTo(0, 0);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    window.scrollTo(0, 0);
+  }
 }

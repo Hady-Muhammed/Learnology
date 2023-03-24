@@ -18,7 +18,7 @@ export class AdminEmailsComponent implements OnInit {
   subject = new FormControl('', [Validators.required]);
   body = new FormControl('', [Validators.required]);
 
-  constructor(private http: HttpClient, private toast: NgToastService) {}
+  constructor(private http: HttpClient, public toast: NgToastService) {}
 
   ngOnInit(): void {
     this.getAllEmails();

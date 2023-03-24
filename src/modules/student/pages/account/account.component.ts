@@ -16,10 +16,11 @@ export class AccountComponent implements OnInit {
   numOfUnreadMessages: number = 0;
   numOfUnreadInboxes!: number;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
   }
 
   getAccount() {

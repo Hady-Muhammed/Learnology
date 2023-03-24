@@ -20,8 +20,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private socketService: SocketioService,
-    private router: Router
+    public socketService: SocketioService,
+    public router: Router
   ) {
     this.getAccount();
   }

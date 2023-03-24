@@ -29,11 +29,11 @@ export class AdminTeachersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private http: HttpClient, private toast: NgToastService) {}
-
-  ngOnInit(): void {
+  constructor(private http: HttpClient, public toast: NgToastService) {
     this.getAllTeachers();
   }
+
+  ngOnInit(): void {}
 
   isAllSelected() {
     const numSelected = this.selection?.selected?.length;
@@ -87,6 +87,7 @@ export class AdminTeachersComponent implements OnInit {
           next: (res: any) => {
             this.toast.success({ detail: res.message });
             this.getAllTeachers();
+            this.selection.clear()
           },
           error: (err) => {
             this.toast.error({ detail: err.message });
@@ -105,6 +106,7 @@ export class AdminTeachersComponent implements OnInit {
           next: (res: any) => {
             this.toast.success({ detail: res.message });
             this.getAllTeachers();
+            this.selection.clear()
           },
           error: (err) => {
             this.toast.error({ detail: err.message });
