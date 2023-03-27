@@ -28,7 +28,7 @@ export class ConversationComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private socketService: SocketioService
+    public socketService: SocketioService
   ) {
     const student: any = jwt_decode(localStorage.getItem('token') || '');
     this.id = this.route.snapshot.params['id'];
@@ -36,6 +36,16 @@ export class ConversationComponent implements OnInit {
   }
 
   ngOnInit(): void {}
+
+  getAccount(email: string) {
+    this.http
+      .get<Student>(API_URL + `/api/students/getStudent/${email}`)
+      .subscribe((student: Student) => {
+        this.account = student;
+        this.socketService.joinChat(this.id);
+        this.getChat();
+      });
+  }
 
   getChat() {
     this.http
@@ -52,16 +62,10 @@ export class ConversationComponent implements OnInit {
             chat.person1 = personsArray[0];
             chat.person2 = personsArray[1];
           }
-          for (const chat of chats) {
-            delete chat.person1a;
-            delete chat.person1b;
-            delete chat.person2a;
-            delete chat.person2b;
-          }
           return chats[0];
         })
       )
-      .subscribe((chat: Chat) => {
+      .subscribe((chat: any) => {
         this.messages = chat.messages;
         this.newMessages = chat.newMessages;
         if (chat.person1_ID === this.account._id) {
@@ -74,16 +78,6 @@ export class ConversationComponent implements OnInit {
         setTimeout(() => {
           this.scrollToLastMessage();
         }, 100);
-      });
-  }
-
-  getAccount(email: string) {
-    this.http
-      .get<Student>(API_URL + `/api/students/getStudent/${email}`)
-      .subscribe((student: Student) => {
-        this.account = student;
-        this.socketService.joinChat(this.id);
-        this.getChat();
       });
   }
 

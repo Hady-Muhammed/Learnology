@@ -19,13 +19,14 @@ export class TeacherCreateQuizComponent implements OnInit {
     { value: 'Hard', viewValue: 'Hard' },
   ];
   account!: Teacher;
-  constructor(private http: HttpClient, private toast: NgToastService) {
+  constructor(private http: HttpClient, public toast: NgToastService) {
     this.form = new FormGroup({
       name: new FormControl('', [Validators.required]),
       imageURL: new FormControl('', [Validators.required]),
       category: new FormControl('', [Validators.required]),
       selectedValue: new FormControl('', [Validators.required]),
     });
+    this.getAccount();
   }
   /* Form Fields Getters */
   get name() {
@@ -41,9 +42,7 @@ export class TeacherCreateQuizComponent implements OnInit {
     return this.form.get('selectedValue');
   }
   /* Form Fields Getters */
-  ngOnInit(): void {
-    this.getAccount();
-  }
+  ngOnInit(): void {}
 
   getAccount() {
     const token: any = localStorage.getItem('token');

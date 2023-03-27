@@ -5,7 +5,7 @@
       <div class="w-fit">
         <h3 class="font-bold text-xl">{{person2 && person2.name}}</h3>
         <p *ngIf="person2 && person2.online" class="text-sm text-green-600"><span class="min-w-[10px] min-h-[10px] rounded-full bg-green-600 inline-block w-fit"></span> Online</p>
-        <span *ngIf="!person2?.online" class="text-xs text-black/40 block">Last seen at {{person2.last_activity | date}} | {{(person2.last_activity | date : 'short')!.split(',')[1]}}</span>
+        <span *ngIf="!person2?.online" class="text-xs text-black/40 block">Last seen at {{person2 && person2.last_activity | date}} | {{person2 && (person2.last_activity | date : 'short')!.split(',')[1]}}</span>
       </div>
     </div>
     <button class="absolute top-1 right-2 rotate-90" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
@@ -31,7 +31,7 @@
               <div>
                 <h2 class="font-bold text-xl block">{{msg.belongsTo === account.email ? account && account.name : person2 && person2.name}}</h2>
                 <span *ngIf="person2?.online && msg.belongsTo !== account.email" class="text-xs text-green-600 block">online</span>
-                <span *ngIf="!person2?.online && msg.belongsTo !== account.email" class="text-xs text-black/40 block">Last seen at {{person2.last_activity | date}} | {{(person2.last_activity | date : 'short')!.split(',')[1]}}</span>
+                <span *ngIf="!person2?.online && msg.belongsTo !== account.email" class="text-xs text-black/40 block">Last seen at {{person2 && person2.last_activity | date}} | {{person2 && (person2.last_activity | date : 'short')!.split(',')[1]}}</span>
               </div>
             </div>
             <p [ngClass]="msg.belongsTo === account.email ? 'text-right': ''" class="py-8">{{msg.content}}</p>
@@ -46,7 +46,7 @@
               <div>
                 <h2 class="font-bold text-xl block">{{msg.belongsTo === account.email ? account && account.name : person2 && person2.name}}</h2>
                 <span *ngIf="person2?.online && msg.belongsTo !== account.email" class="text-xs text-green-600 block">online</span>
-                <span *ngIf="!person2?.online && msg.belongsTo !== account.email" class="text-xs text-black/40 block">Last seen at {{person2.last_activity | date}} | {{(person2.last_activity | date : 'short')!.split(',')[1]}}</span>
+                <span *ngIf="!person2?.online && msg.belongsTo !== account.email" class="text-xs text-black/40 block">Last seen at {{person2 && person2.last_activity | date}} | {{person2 && (person2.last_activity | date : 'short')!.split(',')[1]}}</span>
               </div>
             </div>
             <p [ngClass]="msg.belongsTo === account.email ? 'text-right': ''" class="py-8">{{msg.content}}</p>

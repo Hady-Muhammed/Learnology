@@ -14,10 +14,11 @@ import { Component, OnInit } from '@angular/core';
 export class TeacherCoursesComponent implements OnInit {
   account!: Teacher;
   courses!: Course[];
-  constructor(private http: HttpClient, private toast: NgToastService) {}
+  constructor(private http: HttpClient, public toast: NgToastService) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
   }
 
   getAccount() {

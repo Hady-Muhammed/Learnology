@@ -31,9 +31,9 @@ export class ChatComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private toast: NgToastService,
-    private router: Router,
-    private socketService: SocketioService
+    public toast: NgToastService,
+    public router: Router,
+    public socketService: SocketioService
   ) {
     this.id = this.route.snapshot.params['id'];
     this.route.params.subscribe((val) => {
@@ -60,12 +60,6 @@ export class ChatComponent implements OnInit {
             chat.person1 = personsArray[0];
             chat.person2 = personsArray[1];
           }
-          for (const chat of chats) {
-            delete chat.person1a;
-            delete chat.person1b;
-            delete chat.person2a;
-            delete chat.person2b;
-          }
           return chats[0];
         })
       )
@@ -80,7 +74,6 @@ export class ChatComponent implements OnInit {
         }
         this.listenForNewMessagesRealtime();
         this.listenForTyping();
-
         setTimeout(() => {
           this.scrollToLastMessage();
         }, 100);
@@ -126,6 +119,7 @@ export class ChatComponent implements OnInit {
         })
         .subscribe((res: any) => {
           this.message = '';
+          this.socketService.typingMessage(this.id, '');
           this.getChat();
         });
       this.http.post(API_URL + '/api/chats/setNewMessages', {
@@ -144,14 +138,14 @@ export class ChatComponent implements OnInit {
   }
 
   listenForNewMessagesRealtime() {
-    this.socketService.socket.on('receive-message', (message: message) => {
+    this.socketService.socket?.on('receive-message', (message: message) => {
       this.messages.push(message);
       this.scrollToLastMessage();
     });
   }
 
   listenForTyping() {
-    this.socketService.socket.on('listen-typing-message', (typing: any) => {
+    this.socketService.socket?.on('listen-typing-message', (typing: any) => {
       if (typing) this.typing = true;
       else this.typing = false;
     });

@@ -1,4 +1,3 @@
-import { SocketioService } from 'src/app/services/socketio.service';
 import { API_URL } from './../../../../app/services/socketio.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -14,14 +13,11 @@ export class TeacherStatisticsComponent implements OnInit {
   account!: Teacher;
   constructor(
     private http: HttpClient,
-    private socketService: SocketioService
-  ) {}
+  ) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
-    const token: any = localStorage.getItem('token');
-    const student: any = jwtDecode(token);
-    this.socketService.setupSocketConnection(student.email);
   }
 
   getAccount() {

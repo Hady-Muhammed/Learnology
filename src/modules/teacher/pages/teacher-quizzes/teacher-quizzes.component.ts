@@ -14,15 +14,17 @@ import jwtDecode from 'jwt-decode';
 export class TeacherQuizzesComponent implements OnInit {
   account!: Teacher;
   quizzes!: Quiz[];
-  constructor(private http: HttpClient, private toast: NgToastService) {}
-
-  ngOnInit(): void {
+  constructor(private http: HttpClient, public toast: NgToastService) {
     this.getAccount();
   }
 
-  getQuizzes(teacherID: string) {
+  ngOnInit(): void {}
+
+  getQuizzes() {
     this.http
-      .get<Quiz[]>(API_URL + `/api/quizzes/getTeacherQuizzes/${teacherID}`)
+      .get<Quiz[]>(
+        API_URL + `/api/quizzes/getTeacherQuizzes/${this.account._id}`
+      )
       .subscribe((quizzes: Quiz[]) => (this.quizzes = quizzes));
   }
 
@@ -33,7 +35,7 @@ export class TeacherQuizzesComponent implements OnInit {
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
-        this.getQuizzes(teacher._id);
+        this.getQuizzes();
       });
   }
 
@@ -45,7 +47,7 @@ export class TeacherQuizzesComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          this.getQuizzes(this.account._id);
+          this.getQuizzes();
         },
         error: (err) => this.toast.error({ detail: err.message }),
       });

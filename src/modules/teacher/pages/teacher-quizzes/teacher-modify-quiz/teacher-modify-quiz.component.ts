@@ -24,10 +24,12 @@ export class TeacherModifyQuizComponent implements OnInit {
   quiz!: Quiz;
   open: number = 99999;
   clicked: boolean = false;
+  WhatYouWillLearn: any;
+  account: any;
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private toast: NgToastService,
+    public toast: NgToastService,
     private fb: FormBuilder
   ) {
     this.form = new FormGroup({
@@ -37,6 +39,9 @@ export class TeacherModifyQuizComponent implements OnInit {
       selectedValue: new FormControl('', [Validators.required]),
       questions: this.fb.array([]),
     });
+    this.id = this.route.snapshot.params['id'];
+    this.getQuiz();
+    Aos.refresh();
   }
 
   changed: boolean = false;
@@ -65,11 +70,7 @@ export class TeacherModifyQuizComponent implements OnInit {
   }
   /* Form Fields Getters */
 
-  ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-    this.getQuiz();
-    Aos.refresh();
-  }
+  ngOnInit(): void {}
 
   getQuiz() {
     this.http
@@ -133,7 +134,7 @@ export class TeacherModifyQuizComponent implements OnInit {
   editQuestion(i: any) {
     if (this.open === i) {
       this.open = 99999;
-    } else [(this.open = i)];
+    } else this.open = i;
   }
 
   saveChanges() {
@@ -160,7 +161,7 @@ export class TeacherModifyQuizComponent implements OnInit {
           this.return();
         },
         error: (err) => {
-          this.toast.success({ detail: err.message });
+          this.toast.error({ detail: err.message });
         },
       });
   }

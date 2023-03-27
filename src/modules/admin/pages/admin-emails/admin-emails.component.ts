@@ -18,10 +18,11 @@ export class AdminEmailsComponent implements OnInit {
   subject = new FormControl('', [Validators.required]);
   body = new FormControl('', [Validators.required]);
 
-  constructor(private http: HttpClient, public toast: NgToastService) {}
+  constructor(private http: HttpClient, public toast: NgToastService) {
+    this.getAllEmails();
+  }
 
   ngOnInit(): void {
-    this.getAllEmails();
   }
 
   getAllEmails() {
@@ -32,7 +33,7 @@ export class AdminEmailsComponent implements OnInit {
     if (!email.read) {
       this.http.patch(API_URL + '/api/emails/emailRead', {
         id: email._id,
-      });
+      }).subscribe();
     }
   }
 
@@ -43,7 +44,7 @@ export class AdminEmailsComponent implements OnInit {
         this.getAllEmails();
       },
       error: (err) => {
-        this.toast.success({ detail: err.message });
+        this.toast.error({ detail: err.message });
       },
     });
   }
@@ -70,7 +71,7 @@ export class AdminEmailsComponent implements OnInit {
           this.opened = false;
         },
         error: (err) => {
-          this.toast.success({ detail: err.message });
+          this.toast.error({ detail: err.message });
         },
       });
   }
@@ -93,7 +94,7 @@ export class AdminEmailsComponent implements OnInit {
           this.opened = false;
         },
         error: (err) => {
-          this.toast.success({ detail: err.message });
+          this.toast.error({ detail: err.message });
         },
       });
   }

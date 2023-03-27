@@ -20,13 +20,16 @@ export class QuestionComponent implements OnInit {
   timer!: number;
   choosenAnswer!: string;
   totalTime!: number;
+  interval: any;
 
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private router: Router,
-    private toast: NgToastService
+    public router: Router,
+    public toast: NgToastService
   ) {
+    this.id = this.route.snapshot.params['quizID'];
+    this.questionNo = this.route.snapshot.params['qnum'];
     this.route.params.subscribe((val) => {
       this.questionNo = this.route.snapshot.params['qnum'];
       this.id = this.route.snapshot.params['quizID'];
@@ -51,17 +54,18 @@ export class QuestionComponent implements OnInit {
   }
 
   startTimer() {
-    setInterval(() => {
-      this.timer--;
-      if (this.timer === 0 && +this.questionNo === this.quiz.questions.length) {
-        this.toast.warning({ detail: 'Quiz timeout!' });
-      } else if (this.timer === 0) {
-        this.toast.warning({ detail: 'Question timeout!' });
-        this.router.navigate([
-          '/quiz',
-          `${this.quiz._id}`,
-          +this.questionNo + 1,
-        ]);
+    this.interval = setInterval(() => {
+      this.timer--
+      if (this.timer-- === 0) {
+        clearInterval(this.interval);
+        const isLastQuestion = +this.questionNo === this.quiz.questions.length;
+        const message = isLastQuestion ? 'Quiz timeout!' : 'Question timeout!';
+
+        this.toast.warning({ detail: message });
+
+        if (!isLastQuestion) {
+          this.router.navigate(['/quiz', this.quiz._id, +this.questionNo + 1]);
+        }
       }
     }, 1000);
   }
@@ -80,7 +84,6 @@ export class QuestionComponent implements OnInit {
             },
           ])
         );
-        this.router.navigate(['quiz', id, qnum]);
       } else {
         let answeredQuestions = JSON.parse(
           localStorage.getItem('answeredQuestions') || ''
@@ -93,8 +96,8 @@ export class QuestionComponent implements OnInit {
           'answeredQuestions',
           JSON.stringify(answeredQuestions)
         );
-        this.router.navigate(['quiz', id, qnum]);
       }
+      this.router.navigate(['quiz', id, qnum]);
     } else {
       this.toast.error({ detail: 'Choose an answer!' });
     }
@@ -113,32 +116,35 @@ export class QuestionComponent implements OnInit {
         'answeredQuestions',
         JSON.stringify(answeredQuestions)
       );
-
-      let studentAnswers = JSON.parse(
-        localStorage.getItem('answeredQuestions') || ''
-      );
-      let correct = 0;
-
-      for (let i = 0; i < this.quiz.questions.length; i++) {
-        if (this.quiz.questions[i].correctAnswer === studentAnswers[i].answer)
-          correct++;
-      }
-
-      const token: any = localStorage.getItem('token');
-      const student: any = jwtDecode(token);
-      this.http
-        .post(API_URL + '/api/quizzes/calculateScore', {
-          studentEmail: student.email,
-          quizID: this.quiz._id,
-          score: `${correct}/${this.quiz.questions.length}`,
-        })
-        .subscribe((res) => {
-          this.router.navigate(['quiz-results', this.quiz._id], {
-            state: { correct },
-          });
-        });
+      this.correctQuiz()
     } else {
       this.toast.error({ detail: 'Choose an answer!' });
     }
+  }
+
+  correctQuiz() {
+    let studentAnswers = JSON.parse(
+      localStorage.getItem('answeredQuestions') || ''
+    );
+    let correct = 0;
+
+    for (let i = 0; i < this.quiz.questions.length; i++) {
+      if (this.quiz.questions[i].correctAnswer === studentAnswers[i].answer)
+        correct++;
+    }
+
+    const token: any = localStorage.getItem('token');
+    const student: any = jwtDecode(token);
+    this.http
+      .post(API_URL + '/api/quizzes/calculateScore', {
+        studentEmail: student.email,
+        quizID: this.quiz._id,
+        score: `${correct}/${this.quiz.questions.length}`,
+      })
+      .subscribe((res) => {
+        this.router.navigate(['quiz-results', this.quiz._id], {
+          state: { correct },
+        });
+      });
   }
 }

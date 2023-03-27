@@ -1,14 +1,12 @@
-import { SocketioService } from 'src/app/services/socketio.service';
 import { API_URL } from './../../../../app/services/socketio.service';
 import { Teacher } from './../../../../app/models/teacher';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
-import jwtDecode from 'jwt-decode';
 
 @Component({
   selector: 'app-teacher-account',
@@ -22,17 +20,16 @@ export class TeacherAccountComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private router: Router,
-    private dialog: MatDialog,
-    private socketService: SocketioService
+    public toast: NgToastService,
+    public router: Router,
+    public dialog: MatDialog,
   ) {
     this.getAccount();
     this.form = new FormGroup({
-      name: new FormControl(''),
-      email: new FormControl(''),
-      title: new FormControl(''),
-      password: new FormControl(''),
+      name: new FormControl('',[Validators.required]),
+      email: new FormControl('',[Validators.required]),
+      title: new FormControl('',[Validators.required]),
+      password: new FormControl('',[Validators.required]),
     });
   }
   /* Form Fields Getters */
@@ -50,9 +47,6 @@ export class TeacherAccountComponent implements OnInit {
   }
   /* Form Fields Getters */
   ngOnInit(): void {
-    const token: any = localStorage.getItem('token');
-    const student: any = jwtDecode(token);
-    this.socketService.setupSocketConnection(student.email);
   }
 
   getAccount() {
@@ -77,13 +71,11 @@ export class TeacherAccountComponent implements OnInit {
       })
       .subscribe({
         next: (data: any) => {
-          console.log(data);
           this.toast.success({ detail: data.message });
           localStorage.removeItem('token');
           this.router.navigateByUrl('/signin');
         },
         error: (data: any) => {
-          console.log(data);
           this.toast.error({ detail: data.message });
         },
       });
@@ -116,7 +108,7 @@ export class TeacherAccountComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          window.location.reload();
+          this.getAccount()
         },
         error: (err) => {
           this.toast.error({ detail: err.message });
@@ -161,9 +153,12 @@ export class PictureDialog {
       this.http.post(API_URL + '/api/teachers/uploadPicture', {
         email: teacher.email,
         Img: this.Img,
-      });
+      }).subscribe();
       this.dialogRef.close();
-      location.reload();
+      this.refreshPage();
     }
+  }
+  refreshPage() {
+    location.reload();
   }
 }

@@ -16,10 +16,11 @@ export class TeacherInboxComponent implements OnInit {
   account!: Teacher;
   inboxes!: Observable<Inbox[]>;
 
-  constructor(private http: HttpClient, private toast: NgToastService) {}
+  constructor(private http: HttpClient, private toast: NgToastService) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
   }
 
   getAccount() {

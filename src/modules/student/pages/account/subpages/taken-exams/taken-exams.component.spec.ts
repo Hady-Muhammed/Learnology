@@ -99,4 +99,27 @@ describe('TakenExamsComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  describe('getAccount()', () => {
+    it('should get account of the signed in student', () => {
+      spyOn(component,'getQuizzes')
+      component.getAccount()
+      const req = httpMock.expectOne(
+        API_URL + `/api/students/getStudent/${mockStudent.email}`
+      );
+      req.flush(mockStudent);
+      expect(component.getQuizzes).toHaveBeenCalled()
+    });
+  });
+
+  describe('getQuizzes()', () => {
+    it('should get all quizzes that have been taken by the signed in student', () => {
+      component.getQuizzes()
+      const req = httpMock.expectOne(
+        API_URL + '/api/quizzes/getQuizzesByIds'
+      );
+      req.flush(mockQuizzes);
+      expect(component.quizzes).toEqual(mockQuizzes)
+    });
+  });
 });

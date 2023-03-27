@@ -15,11 +15,12 @@ export class QuizResultsComponent implements OnInit {
   score!: string;
   percentage!: string;
   parseIntt = parseInt;
-  constructor(private http: HttpClient, private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
+  constructor(private http: HttpClient, private route: ActivatedRoute) {
     this.id = this.route.snapshot.params['id'];
     this.getScore();
+  }
+
+  ngOnInit(): void {
   }
 
   getScore() {
@@ -29,7 +30,7 @@ export class QuizResultsComponent implements OnInit {
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         for (let i = 0; i < student.taken_quizzes.length; i++)
-          if (student.taken_quizzes[i].id === this.id)
+          if (student.taken_quizzes[i].id == this.id)
             this.score = student.taken_quizzes[i].score;
         let x = this.score.split('/');
         this.percentage = `${((+x[0] / +x[1]) * 100).toFixed(1)}%`;

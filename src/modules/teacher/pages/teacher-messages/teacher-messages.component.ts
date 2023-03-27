@@ -22,12 +22,13 @@ export class TeacherMessagesComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
-    private toast: NgToastService
-  ) {}
+    public router: Router,
+    public toast: NgToastService
+  ) {
+    this.getAccount();
+  }
 
   ngOnInit(): void {
-    this.getAccount();
   }
 
   getAccount() {

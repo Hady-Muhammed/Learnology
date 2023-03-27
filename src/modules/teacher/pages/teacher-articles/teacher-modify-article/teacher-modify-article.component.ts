@@ -18,8 +18,8 @@ export class TeacherModifyArticleComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
-    private toast: NgToastService,
-    private router: Router
+    public toast: NgToastService,
+    public router: Router
   ) {
     this.form = new FormGroup({
       title: new FormControl('', [Validators.required]),
@@ -27,6 +27,8 @@ export class TeacherModifyArticleComponent implements OnInit {
       articleContent: new FormControl('', [Validators.required]),
       selectedValue: new FormControl('', [Validators.required]),
     });
+    this.id = this.route.snapshot.params['id'];
+    this.getArticle();
   }
 
   changed: boolean = false;
@@ -55,9 +57,8 @@ export class TeacherModifyArticleComponent implements OnInit {
   /* Form Fields Getters */
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-    this.getArticle();
   }
+
   getArticle() {
     this.http
       .get<Article>(API_URL + `/api/articles/getArticle/${this.id}`)

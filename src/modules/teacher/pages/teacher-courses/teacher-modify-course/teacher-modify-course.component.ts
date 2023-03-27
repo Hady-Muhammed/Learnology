@@ -28,8 +28,8 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private router: Router,
+    public toast: NgToastService,
+    public router: Router,
     private fb: FormBuilder,
     private route: ActivatedRoute
   ) {
@@ -43,6 +43,8 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
       WhatYouWillLearn: this.fb.array([]),
       coursePostedAt: ['', Validators.required],
     });
+    this.id = this.route.snapshot.params['id'];
+    this.getAccount();
   }
   /* FormGroup Fields Getters */
   get courseTitle() {
@@ -76,8 +78,6 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
   /* FormGroup Fields Getters */
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-    this.getAccount();
   }
   ngAfterViewInit(): void {
     // this.dataSource.paginator = this.paginator;
@@ -86,7 +86,7 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
   return() {
     window.history.back();
   }
-  
+
   getAccount() {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
@@ -190,7 +190,6 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
           // Assign data to table
           this.dataSource = new MatTableDataSource(students);
         },
-        error: (err) => {},
       });
   }
 
@@ -214,11 +213,7 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
         },
       })
       .subscribe((res: any) => {
-        if (res.message === 'Chat already exists') {
-          this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
-        } else {
-          this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
-        }
+        this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
       });
   }
 }

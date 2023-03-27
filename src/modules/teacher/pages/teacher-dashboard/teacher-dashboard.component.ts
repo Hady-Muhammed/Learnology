@@ -10,13 +10,11 @@ import jwtDecode from 'jwt-decode';
 })
 export class TeacherDashboardComponent implements OnInit {
   quote!: any;
-  constructor(private http: HttpClient) {}
-
-  ngOnInit(): void {
+  constructor(private http: HttpClient) {
     this.getRandomQuote();
-    const token: any = localStorage.getItem('token');
-    const teacher: any = jwtDecode(token);
   }
+
+  ngOnInit(): void {}
 
   getRandomQuote() {
     this.http

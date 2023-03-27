@@ -18,8 +18,8 @@ export class TeacherCreateCourseComponent implements OnInit {
   form: any;
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private router: Router,
+    public toast: NgToastService,
+    public router: Router,
     private fb: FormBuilder
   ) {
     this.form = this.fb.group({
@@ -30,6 +30,7 @@ export class TeacherCreateCourseComponent implements OnInit {
       coursePrice: ['', Validators.required],
       imageURL: ['', Validators.required],
     });
+    this.getAccount();
   }
   /* FormGroup Fields Getters */
   get courseTitle() {
@@ -59,7 +60,6 @@ export class TeacherCreateCourseComponent implements OnInit {
   /* FormGroup Fields Getters */
 
   ngOnInit(): void {
-    this.getAccount();
   }
   return() {
     window.history.back();
@@ -101,7 +101,7 @@ export class TeacherCreateCourseComponent implements OnInit {
             this.router.navigateByUrl('/teacher/courses');
           },
           error: (res) => {
-            this.toast.success({ detail: 'error!!' });
+            this.toast.error({ detail: 'error!!' });
           },
         });
     } else {

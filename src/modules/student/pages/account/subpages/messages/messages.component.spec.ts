@@ -5,7 +5,6 @@ import {
   HttpClientTestingModule,
 } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Inbox } from 'src/app/models/inbox';
 import { Student } from 'src/app/models/student';
 import { Chat } from 'src/app/models/chat';
 

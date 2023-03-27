@@ -6,9 +6,9 @@
     <div data-aos="fade-right" [attr.data-aos-delay]="i*100" class="bg-violet-100 p-5 xs:w-[90%] md:w-[60%] mx-auto rounded-md relative">
       <a (click)="emailRead(email)" [routerLink]="['/admin/d/emails', email._id]" class="flex justify-between">
         <div class="flex space-x-2">
-          <img class="w-[80px] h-[80px] object-cover rounded-md" [src]="email.sender.picture === 'default' ? '../../../../assets/user.webp' : email.sender.picture" alt="photo">
+          <img class="w-[80px] h-[80px] object-cover rounded-md" [src]="email.sender?.picture === 'default' ? '../../../../assets/user.webp' : email.sender?.picture" alt="photo">
           <div>
-            <h3 class="font-semibold text-lg">{{email.sender.name}}</h3>
+            <h3 class="font-semibold text-lg">{{email.sender?.name}}</h3>
             <p>{{email.subject}}</p>
             <p class="text-black/40">{{email.body.slice(0,30) + '...'}}</p>
           </div>

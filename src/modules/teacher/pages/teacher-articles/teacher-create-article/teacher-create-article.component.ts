@@ -1,3 +1,4 @@
+import { API_URL } from './../../../../../app/services/socketio.service';
 import { Teacher } from './../../../../../app/models/teacher';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
@@ -26,13 +27,15 @@ export class TeacherCreateArticleComponent implements OnInit {
   articleContent = new FormControl('', [Validators.required]);
   constructor(
     private http: HttpClient,
-    private toast: NgToastService,
-    private router: Router
-  ) {}
-
-  ngOnInit(): void {
+    public toast: NgToastService,
+    public router: Router
+  ) {
     this.getAccount();
   }
+
+  ngOnInit(): void {
+  }
+
   return() {
     window.history.back();
   }
@@ -45,7 +48,7 @@ export class TeacherCreateArticleComponent implements OnInit {
       this.articleContent.value
     ) {
       this.http
-        .post('http://localhost:1234/api/articles/publishArticle', {
+        .post(API_URL + '/api/articles/publishArticle', {
           author: this.account.name,
           title: this.title.value,
           image: this.imageURL.value,
@@ -57,7 +60,7 @@ export class TeacherCreateArticleComponent implements OnInit {
           next: (res: any) => {
             this.toast.success({ detail: 'Article published successfully!' });
             this.http
-              .post('http://localhost:1234/api/articles/addArticleToTeacher', {
+              .post(API_URL + '/api/articles/addArticleToTeacher', {
                 id: res.id,
                 email: this.account.email,
               })
@@ -66,7 +69,7 @@ export class TeacherCreateArticleComponent implements OnInit {
               });
           },
           error: (res) => {
-            this.toast.success({ detail: 'error!!' });
+            this.toast.error({ detail: 'error!!' });
           },
         });
     } else {
@@ -77,10 +80,9 @@ export class TeacherCreateArticleComponent implements OnInit {
   getAccount() {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-
     this.http
       .get<Teacher>(
-        `http://localhost:1234/api/teachers/getTeacher/${teacher.email}`
+        API_URL + `/api/teachers/getTeacher/${teacher.email}`
       )
       .subscribe((teacher: Teacher) => {
         this.account = teacher;

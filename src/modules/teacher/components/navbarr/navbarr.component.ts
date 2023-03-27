@@ -21,9 +21,9 @@ export class NavbarrComponent implements OnInit {
   @Input() toggle!: boolean;
 
   constructor(
-    private router: Router,
+    public router: Router,
     private http: HttpClient,
-    private socketService: SocketioService
+    public socketService: SocketioService
   ) {
     this.getAccount();
   }
@@ -53,7 +53,6 @@ export class NavbarrComponent implements OnInit {
     if (!this.isConnectedToSocket()) {
       this.socketService.setupSocketConnection(this.account.email);
       this.socketService.online(this.account._id);
-    } else {
     }
   }
 
