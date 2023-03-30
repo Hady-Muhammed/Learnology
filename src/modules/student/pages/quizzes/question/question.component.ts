@@ -1,17 +1,18 @@
 import { NgToastService } from 'ng-angular-popup';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { question, Quiz } from 'src/app/models/quiz';
 import { API_URL } from 'src/app/services/socketio.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-question',
   templateUrl: './question.component.html',
   styleUrls: ['./question.component.css'],
 })
-export class QuestionComponent implements OnInit {
+export class QuestionComponent implements OnInit, OnDestroy {
   questionNo!: string;
   currentQuestion!: question;
   ans!: string;
@@ -21,6 +22,7 @@ export class QuestionComponent implements OnInit {
   choosenAnswer!: string;
   totalTime!: number;
   interval: any;
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -41,8 +43,8 @@ export class QuestionComponent implements OnInit {
     this.startTimer();
   }
 
-  getQuiz(id: string) {
-    this.http
+  getQuiz(id: string): void {
+    const sub = this.http
       .get<Quiz>(API_URL + `/api/quizzes/getSingleQuiz/${id}`)
       .subscribe((quiz: Quiz) => {
         this.quiz = quiz;
@@ -51,11 +53,12 @@ export class QuestionComponent implements OnInit {
         this.timer = +arr[0] * 60 + +arr[1];
         this.totalTime = this.timer;
       });
+    this.subscription?.add(sub);
   }
 
-  startTimer() {
+  startTimer(): void {
     this.interval = setInterval(() => {
-      this.timer--
+      this.timer--;
       if (this.timer-- === 0) {
         clearInterval(this.interval);
         const isLastQuestion = +this.questionNo === this.quiz.questions.length;
@@ -70,7 +73,7 @@ export class QuestionComponent implements OnInit {
     }, 1000);
   }
 
-  nextQuestion(id: string, qnum: any, ans: string) {
+  nextQuestion(id: string, qnum: any, ans: string): void {
     if (ans) {
       let answeredQuestions = localStorage.getItem('answeredQuestions');
 
@@ -103,7 +106,7 @@ export class QuestionComponent implements OnInit {
     }
   }
 
-  submitQuiz(ans: string) {
+  submitQuiz(ans: string): void {
     if (ans) {
       let answeredQuestions = JSON.parse(
         localStorage.getItem('answeredQuestions') || ''
@@ -116,13 +119,13 @@ export class QuestionComponent implements OnInit {
         'answeredQuestions',
         JSON.stringify(answeredQuestions)
       );
-      this.correctQuiz()
+      this.correctQuiz();
     } else {
       this.toast.error({ detail: 'Choose an answer!' });
     }
   }
 
-  correctQuiz() {
+  correctQuiz(): void {
     let studentAnswers = JSON.parse(
       localStorage.getItem('answeredQuestions') || ''
     );
@@ -135,7 +138,7 @@ export class QuestionComponent implements OnInit {
 
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/quizzes/calculateScore', {
         studentEmail: student.email,
         quizID: this.quiz._id,
@@ -146,5 +149,10 @@ export class QuestionComponent implements OnInit {
           state: { correct },
         });
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

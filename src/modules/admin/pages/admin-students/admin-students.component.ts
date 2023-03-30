@@ -5,28 +5,16 @@ import { API_URL } from './../../../../app/services/socketio.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
-
-const ELEMENT_DATA: any[] = [
-  { position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H' },
-  { position: 2, name: 'Helium', weight: 4.0026, symbol: 'He' },
-  { position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li' },
-  { position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be' },
-  { position: 5, name: 'Boron', weight: 10.811, symbol: 'B' },
-  { position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C' },
-  { position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N' },
-  { position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O' },
-  { position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F' },
-  { position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne' },
-];
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-students',
   templateUrl: './admin-students.component.html',
   styleUrls: ['./admin-students.component.css'],
 })
-export class AdminStudentsComponent implements OnInit {
+export class AdminStudentsComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'select',
     'no',
@@ -38,6 +26,8 @@ export class AdminStudentsComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<Student>;
   selection = new SelectionModel<any>(true, []);
+  subscription!: Subscription;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -47,13 +37,13 @@ export class AdminStudentsComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  isAllSelected() {
+  isAllSelected(): boolean {
     const numSelected = this.selection?.selected.length;
     const numRows = this.dataSource?.data.length;
     return numSelected === numRows;
   }
 
-  toggleAllRows() {
+  toggleAllRows(): void {
     if (this.isAllSelected()) {
       this.selection.clear();
       return;
@@ -70,7 +60,7 @@ export class AdminStudentsComponent implements OnInit {
     }`;
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -79,19 +69,20 @@ export class AdminStudentsComponent implements OnInit {
     }
   }
 
-  getAllStudents() {
-    this.http
+  getAllStudents(): void {
+    const sub = this.http
       .get<Student[]>(API_URL + '/api/students/getAllStudents')
       .subscribe((students: Student[]) => {
         this.dataSource = new MatTableDataSource(students);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
+    this.subscription?.add(sub);
   }
 
-  deleteStudentsBySelection() {
+  deleteStudentsBySelection(): void {
     if (this.selection.selected.length == 1) {
-      this.http
+      const sub = this.http
         .post(API_URL + '/api/students/deleteStudent', {
           email: this.selection.selected[0].email,
         })
@@ -105,12 +96,13 @@ export class AdminStudentsComponent implements OnInit {
             this.toast.error({ detail: err.message });
           },
         });
+      this.subscription?.add(sub);
     } else {
       let emails: string[] = [];
       for (const student of this.selection.selected) {
         emails.push(student.email);
       }
-      this.http
+      const sub = this.http
         .post(API_URL + '/api/students/deleteManyStudents', {
           emails,
         })
@@ -124,11 +116,12 @@ export class AdminStudentsComponent implements OnInit {
             this.toast.error({ detail: err.message });
           },
         });
+      this.subscription?.add(sub);
     }
   }
 
-  deleteStudent(email: string) {
-    this.http
+  deleteStudent(email: string): void {
+    const sub = this.http
       .post(API_URL + '/api/students/deleteStudent', {
         email,
       })
@@ -141,5 +134,10 @@ export class AdminStudentsComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

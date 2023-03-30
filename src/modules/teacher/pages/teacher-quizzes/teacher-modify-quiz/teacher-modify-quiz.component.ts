@@ -7,18 +7,19 @@ import {
   FormBuilder,
   FormArray,
 } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import * as Aos from 'aos';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-modify-quiz',
   templateUrl: './teacher-modify-quiz.component.html',
   styleUrls: ['./teacher-modify-quiz.component.css'],
 })
-export class TeacherModifyQuizComponent implements OnInit {
+export class TeacherModifyQuizComponent implements OnInit, OnDestroy {
   id!: string;
   form!: FormGroup;
   quiz!: Quiz;
@@ -26,6 +27,8 @@ export class TeacherModifyQuizComponent implements OnInit {
   clicked: boolean = false;
   WhatYouWillLearn: any;
   account: any;
+  subscription!: Subscription;
+
   constructor(
     private http: HttpClient,
     private route: ActivatedRoute,
@@ -72,16 +75,17 @@ export class TeacherModifyQuizComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getQuiz() {
-    this.http
+  getQuiz(): void {
+    const sub = this.http
       .get<Quiz>(API_URL + `/api/quizzes/getSingleQuiz/${this.id}`)
       .subscribe((quiz: Quiz) => {
         this.quiz = quiz;
         this.getOriginalData(quiz);
       });
+    this.subscription?.add(sub);
   }
 
-  getOriginalData(quiz: Quiz) {
+  getOriginalData(quiz: Quiz): void {
     this.imageURL?.setValue(quiz.image);
     this.name?.setValue(quiz.name);
     this.category?.setValue(quiz.category);
@@ -91,7 +95,7 @@ export class TeacherModifyQuizComponent implements OnInit {
     }
   }
 
-  addOldQuestions(question: question) {
+  addOldQuestions(question: question): void {
     this.questions.push(
       this.fb.group({
         head: question.head,
@@ -107,7 +111,7 @@ export class TeacherModifyQuizComponent implements OnInit {
     );
   }
 
-  addNewQuestion() {
+  addNewQuestion(): void {
     this.clicked = true;
     let question = {
       head: 'New question',
@@ -131,20 +135,20 @@ export class TeacherModifyQuizComponent implements OnInit {
     );
   }
 
-  editQuestion(i: any) {
+  editQuestion(i: any): void {
     if (this.open === i) {
       this.open = 99999;
     } else this.open = i;
   }
 
-  saveChanges() {
+  saveChanges(): void {
     // Changing the format of the answers to send it to the database
     for (let i = 0; i < this.form.value.questions.length; i++) {
       let obj = this.form.value.questions[i].answers;
       let answers = Object.keys(obj).map((key) => obj[key]);
       this.form.value.questions[i].answers = answers;
     }
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/quizzes/updateQuiz', {
         id: this.id,
         modifiedQuiz: {
@@ -164,22 +168,27 @@ export class TeacherModifyQuizComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  cancelChanges() {
+  cancelChanges(): void {
     this.form.reset();
     this.questions.clear();
     this.getQuiz();
     this.clicked = false;
   }
 
-  deleteQuestion(i: number) {
+  deleteQuestion(i: number): void {
     this.questions.removeAt(i);
     this.quiz.questions.splice(i, 1);
     this.clicked = true;
   }
 
-  return() {
+  return(): void {
     window.history.back();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

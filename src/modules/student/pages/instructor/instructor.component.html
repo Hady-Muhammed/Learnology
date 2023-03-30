@@ -31,7 +31,7 @@
       <h3 class="font-bold text-2xl mt-52 mb-10 relative before:absolute before:w-[40px] before:h-[3px] before:left-1/2 before:translate-x-[-50%] before:bg-[#6a43ff] before:rounded-lg before:-bottom-2 w-fit">Related courses</h3>
       <div class="xs:grid md:grid-cols-2  gap-10">
         <ng-container *ngIf="courses">
-          <ng-container *ngFor="let course of courses; let i = index">
+          <ng-container *ngFor="let course of courses | async; let i = index">
             <a data-aos="fade-up" data-aos-duration="1000" [attr.data-aos-delay]="i * 150" [routerLink]="['/course-details',course._id]" routerLinkActive="router-link-active"  data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600" class="bg-slate-100 cursor-pointer rounded-md crs relative overflow-hidden">
               <div>
                 <img class="h-[200px] w-full object-cover" [src]="course.image" alt="x">
@@ -53,7 +53,7 @@
             <app-course-skeleton></app-course-skeleton>
           </div>
         </ng-container>
-        <ng-container *ngIf="courses && courses.length === 0">
+        <ng-container *ngIf="courses && (courses | async)?.length === 0">
           <h4 data-aos="zoom-in" class="font-bold text-md">No Courses yet!</h4>
         </ng-container>
       </div>

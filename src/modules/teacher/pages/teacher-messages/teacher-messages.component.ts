@@ -1,4 +1,4 @@
-import { map } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { API_URL } from './../../../../app/services/socketio.service';
 import { Teacher } from 'src/app/models/teacher';
 import { Chat } from './../../../../app/models/chat';
@@ -6,7 +6,7 @@ import { FormControl } from '@angular/forms';
 import { NgToastService } from 'ng-angular-popup';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 
 @Component({
@@ -14,11 +14,12 @@ import jwtDecode from 'jwt-decode';
   templateUrl: './teacher-messages.component.html',
   styleUrls: ['./teacher-messages.component.css'],
 })
-export class TeacherMessagesComponent implements OnInit {
+export class TeacherMessagesComponent implements OnInit, OnDestroy {
   account!: Teacher;
   chats!: Chat[];
   searchTerm = new FormControl('');
   filteredChats!: Chat[];
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -28,21 +29,21 @@ export class TeacherMessagesComponent implements OnInit {
     this.getAccount();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  getAccount() {
+  getAccount(): void {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
         this.getChats();
       });
+    this.subscription?.add(sub);
   }
 
-  filterData() {
+  filterData(): void {
     if (this.searchTerm.value) {
       this.filteredChats = this.chats.filter((chat: Chat) => {
         let person: any;
@@ -58,7 +59,7 @@ export class TeacherMessagesComponent implements OnInit {
     }
   }
 
-  goToConversation(id: string, chat: Chat) {
+  goToConversation(id: string, chat: Chat): void {
     chat.newMessages = 0;
     this.http.post(API_URL + '/api/chats/setNewMessages', {
       id,
@@ -67,8 +68,8 @@ export class TeacherMessagesComponent implements OnInit {
     this.router.navigateByUrl('teacher/t/messages/' + id);
   }
 
-  getChats() {
-    this.http
+  getChats(): void {
+    const sub = this.http
       .get<any[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
       .pipe(
         map((chats) => {
@@ -95,6 +96,7 @@ export class TeacherMessagesComponent implements OnInit {
         this.filteredChats = chats;
         this.chats = chats;
       });
+    this.subscription?.add(sub);
   }
 
   deleteChat(id: string) {
@@ -112,5 +114,9 @@ export class TeacherMessagesComponent implements OnInit {
           this.toast.error({ detail: 'Something went wrong!' });
         },
       });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

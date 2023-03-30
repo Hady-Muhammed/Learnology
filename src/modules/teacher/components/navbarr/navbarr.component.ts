@@ -5,19 +5,22 @@ import {
 } from './../../../../app/services/socketio.service';
 import { Teacher } from './../../../../app/models/teacher';
 import { HttpClient } from '@angular/common/http';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbarr',
   templateUrl: './navbarr.component.html',
   styleUrls: ['./navbarr.component.css'],
 })
-export class NavbarrComponent implements OnInit {
+export class NavbarrComponent implements OnInit, OnDestroy {
   account!: Teacher;
   numOfUnreadMessages: number = 0;
   numOfUnreadInboxes!: number;
+  subscription!: Subscription;
+
   @Input() toggle!: boolean;
 
   constructor(
@@ -39,7 +42,7 @@ export class NavbarrComponent implements OnInit {
   getAccount() {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
@@ -47,6 +50,7 @@ export class NavbarrComponent implements OnInit {
         this.getNoOfUnreadMessages();
         this.getNoOfUnreadInboxes();
       });
+    this.subscription?.add(sub);
   }
 
   connectToSocket() {
@@ -61,20 +65,26 @@ export class NavbarrComponent implements OnInit {
   }
 
   getNoOfUnreadMessages() {
-    this.http
+    const sub = this.http
       .get<Chat[]>(API_URL + `/api/chats/getChats/${this.account._id}`)
       .subscribe((chats: Chat[]) => {
         for (let i = 0; i < chats.length; i++) {
           this.numOfUnreadMessages += chats[i].newMessages;
         }
       });
+    this.subscription?.add(sub);
   }
 
   getNoOfUnreadInboxes() {
-    this.http
+    const sub = this.http
       .get<any>(
         API_URL + `/api/inboxes/getAllUnreadInboxes/${this.account._id}`
       )
       .subscribe((res: any) => (this.numOfUnreadInboxes = res.numOfUnread));
+    this.subscription?.add(sub);
+  }
+  
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

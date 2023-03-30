@@ -1,9 +1,10 @@
+import { Subscription } from 'rxjs';
 import { FriendRequest } from './../../../../app/models/friendRequest';
 import { NgToastService } from 'ng-angular-popup';
 import jwt_decode from 'jwt-decode';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { comment, Post } from 'src/app/models/post';
 import { Student } from 'src/app/models/student';
 import { API_URL } from 'src/app/services/socketio.service';
@@ -13,7 +14,7 @@ import { API_URL } from 'src/app/services/socketio.service';
   templateUrl: './community.component.html',
   styleUrls: ['./community.component.css'],
 })
-export class CommunityComponent implements OnInit {
+export class CommunityComponent implements OnInit, OnDestroy {
   students!: Student[];
   account!: Student;
   opened!: boolean;
@@ -27,6 +28,7 @@ export class CommunityComponent implements OnInit {
   posts!: Post[];
   pendingRequests!: FriendRequest[];
   friendRequests!: FriendRequest[];
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -41,17 +43,18 @@ export class CommunityComponent implements OnInit {
 
   getAccount() {
     const student: any = jwt_decode(localStorage.getItem('token') || '');
-    this.http
+    const sub = this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         this.account = student;
         this.getAllPendingRequests();
         this.getFriendRequests();
       });
+    this.subscription?.add(sub);
   }
 
   getAllStudents() {
-    this.http
+    const sub = this.http
       .get<Student[]>(API_URL + '/api/students/getAllStudents')
       .subscribe((students: Student[]) => {
         this.students = students;
@@ -82,10 +85,11 @@ export class CommunityComponent implements OnInit {
           }
         }
       });
+    this.subscription?.add(sub);
   }
 
   createChat(studentID: string) {
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/chats/createChat', {
         chat: {
           person1_ID: this.account._id,
@@ -97,11 +101,12 @@ export class CommunityComponent implements OnInit {
       .subscribe((res: any) => {
         this.router.navigateByUrl(`/account/messages/${res.id}`);
       });
+    this.subscription?.add(sub);
   }
 
   createPost() {
     if (this.content) {
-      this.http
+      const sub = this.http
         .post(API_URL + '/api/posts/createPost', {
           postt: {
             authorID: this.account._id,
@@ -125,16 +130,18 @@ export class CommunityComponent implements OnInit {
             this.toast.error({ detail: err.message });
           },
         });
+      this.subscription?.add(sub);
     } else {
       this.toast.error({ detail: 'You must enter content for post!' });
     }
   }
 
   getAllPosts() {
-    this.http
+    const sub = this.http
       .get<Post[]>(API_URL + '/api/posts/getAllPosts')
       .subscribe((posts: Post[]) => (this.posts = posts));
     this.comments = [];
+    this.subscription?.add(sub);
   }
 
   trackPosts(index: any, post: Post) {
@@ -154,7 +161,7 @@ export class CommunityComponent implements OnInit {
   }
 
   sendFriendRequest(addedStudent: Student) {
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/frequests/sendFriendRequest', {
         request: {
           to: addedStudent._id,
@@ -171,10 +178,11 @@ export class CommunityComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
   getAllPendingRequests() {
-    this.http
+    const sub = this.http
       .get<FriendRequest[]>(
         API_URL + `/api/frequests/getStudentRequests/${this.account._id}`
       )
@@ -182,23 +190,25 @@ export class CommunityComponent implements OnInit {
         this.pendingRequests = requests;
         this.getAllStudents();
       });
+    this.subscription?.add(sub);
   }
 
   getFriendRequests() {
-    this.http
+    const sub = this.http
       .get<FriendRequest[]>(
         API_URL + `/api/frequests/getFriendRequests/${this.account._id}`
       )
       .subscribe((requests: FriendRequest[]) => {
         this.friendRequests = requests;
       });
+    this.subscription?.add(sub);
   }
 
   acceptRequest(acceptedStudent: Student) {
     let friendReq = this.friendRequests.find(
       (req) => req.from === acceptedStudent._id && req.to === this.account._id
     );
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/frequests/acceptRequest', {
         person1: this.account,
         person2: acceptedStudent,
@@ -214,13 +224,14 @@ export class CommunityComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
   rejectRequest(rejectedStudent: Student) {
     let friendReq = this.friendRequests.find(
       (req) => req.from === rejectedStudent._id && req.to === this.account._id
     );
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/frequests/rejectRequest', {
         requestID: friendReq?._id,
       })
@@ -234,5 +245,10 @@ export class CommunityComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

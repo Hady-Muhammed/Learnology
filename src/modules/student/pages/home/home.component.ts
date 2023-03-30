@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Autoplay, SwiperOptions } from 'swiper';
@@ -54,13 +55,13 @@ export class HomeComponent implements OnInit {
     effect: 'fade',
     loop: true,
   };
-  popularCourses!: Course[];
   account!: Student;
+  popularCourses!: Observable<Course[]>;
 
   constructor(private http: HttpClient) {
     window.scrollTo(0, 0);
-    this.getPopularCourses();
     this.getAccount();
+    this.getPopularCourses();
   }
 
   ngOnInit(): void {}
@@ -76,10 +77,8 @@ export class HomeComponent implements OnInit {
   }
 
   getPopularCourses() {
-    this.http
-      .get<Course[]>(API_URL + '/api/courses/getPopularCourses')
-      .subscribe((courses: Course[]) => {
-        this.popularCourses = courses;
-      });
+    this.popularCourses = this.http.get<Course[]>(
+      API_URL + '/api/courses/getPopularCourses'
+    );
   }
 }

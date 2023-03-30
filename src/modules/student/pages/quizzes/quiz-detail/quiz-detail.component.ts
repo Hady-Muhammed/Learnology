@@ -1,8 +1,9 @@
+import { Subscription } from 'rxjs';
 import jwtDecode from 'jwt-decode';
 import { NgToastService } from 'ng-angular-popup';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Quiz, question } from 'src/app/models/quiz';
 import { Student } from 'src/app/models/student';
 import { API_URL } from 'src/app/services/socketio.service';
@@ -12,13 +13,14 @@ import { API_URL } from 'src/app/services/socketio.service';
   templateUrl: './quiz-detail.component.html',
   styleUrls: ['./quiz-detail.component.css'],
 })
-export class QuizDetailComponent implements OnInit {
+export class QuizDetailComponent implements OnInit, OnDestroy {
   quiz!: Quiz;
   id!: string;
   account!: Student;
   math = Math;
   totalTime: number = 0;
   taken: boolean = false;
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -35,39 +37,41 @@ export class QuizDetailComponent implements OnInit {
   ngOnInit(): void {}
 
   getQuiz(id: string) {
-    this.http
+    const sub = this.http
       .get<Quiz>(API_URL + `/api/quizzes/getSingleQuiz/${id}`)
       .subscribe((quiz: Quiz) => {
         this.quiz = quiz;
-        this.totalTime = this.calcTotalTimeOfQuiz(quiz.questions)
+        this.totalTime = this.calcTotalTimeOfQuiz(quiz.questions);
       });
+    this.subscription?.add(sub);
   }
 
   calcTotalTimeOfQuiz(questions: question[]) {
-    let sum = 0
+    let sum = 0;
     questions.forEach((q) => {
-          let arr = q.solving_time.split(':');
-          let time = +arr[0] * 60 + +arr[1];
-          sum += time;
-        });
-    return sum
+      let arr = q.solving_time.split(':');
+      let time = +arr[0] * 60 + +arr[1];
+      sum += time;
+    });
+    return sum;
   }
 
-  takeQuiz() {
+  takeQuiz(): void {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
-    this.http
+    const sub = this.http
       .post(API_URL + `/api/students/takeQuiz`, {
         email: student.email,
         quizID: this.id,
       })
       .subscribe((res) => {});
+    this.subscription?.add(sub);
   }
 
-  quizWasTakenBefore() {
+  quizWasTakenBefore(): void {
     const token: any = localStorage.getItem('token');
     const student: any = jwtDecode(token);
-    this.http
+    const sub = this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe((student: Student) => {
         this.account = student;
@@ -75,5 +79,10 @@ export class QuizDetailComponent implements OnInit {
           if (quiz.id == this.id) this.taken = true;
         }
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

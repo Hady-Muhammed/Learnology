@@ -3,18 +3,25 @@ import { API_URL } from './../../../../app/services/socketio.service';
 import { HttpClient } from '@angular/common/http';
 import { Teacher } from './../../../../app/models/teacher';
 import { SelectionModel } from '@angular/cdk/collections';
-import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ViewEncapsulation,
+  OnDestroy,
+} from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-admin-teachers',
   templateUrl: './admin-teachers.component.html',
   styleUrls: ['./admin-teachers.component.css'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class AdminTeachersComponent implements OnInit {
+export class AdminTeachersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     'select',
     'no',
@@ -26,6 +33,8 @@ export class AdminTeachersComponent implements OnInit {
   ];
   dataSource!: MatTableDataSource<Teacher>;
   selection = new SelectionModel<any>(true, []);
+  subscription!: Subscription;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -35,13 +44,13 @@ export class AdminTeachersComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  isAllSelected() {
+  isAllSelected(): boolean {
     const numSelected = this.selection?.selected?.length;
     const numRows = this.dataSource?.data?.length;
     return numSelected === numRows;
   }
 
-  toggleAllRows() {
+  toggleAllRows(): void {
     if (this.isAllSelected()) {
       this.selection.clear();
       return;
@@ -58,7 +67,7 @@ export class AdminTeachersComponent implements OnInit {
     }`;
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -67,19 +76,20 @@ export class AdminTeachersComponent implements OnInit {
     }
   }
 
-  getAllTeachers() {
-    this.http
+  getAllTeachers(): void {
+    const sub = this.http
       .get<Teacher[]>(API_URL + '/api/teachers/getAllTeachers')
       .subscribe((teachers: Teacher[]) => {
         this.dataSource = new MatTableDataSource(teachers);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       });
+    this.subscription?.add(sub);
   }
 
-  deleteTeachersBySelection() {
+  deleteTeachersBySelection(): void {
     if (this.selection.selected.length == 1) {
-      this.http
+      const sub = this.http
         .post(API_URL + '/api/teachers/deleteTeacher', {
           email: this.selection.selected[0].email,
         })
@@ -87,18 +97,19 @@ export class AdminTeachersComponent implements OnInit {
           next: (res: any) => {
             this.toast.success({ detail: res.message });
             this.getAllTeachers();
-            this.selection.clear()
+            this.selection.clear();
           },
           error: (err) => {
             this.toast.error({ detail: err.message });
           },
         });
+      this.subscription?.add(sub);
     } else {
       let emails: string[] = [];
       for (const teacher of this.selection.selected) {
         emails.push(teacher.email);
       }
-      this.http
+      const sub = this.http
         .post(API_URL + '/api/teachers/deleteManyTeachers', {
           emails,
         })
@@ -106,17 +117,18 @@ export class AdminTeachersComponent implements OnInit {
           next: (res: any) => {
             this.toast.success({ detail: res.message });
             this.getAllTeachers();
-            this.selection.clear()
+            this.selection.clear();
           },
           error: (err) => {
             this.toast.error({ detail: err.message });
           },
         });
+      this.subscription?.add(sub);
     }
   }
 
-  deleteTeacher(email: string) {
-    this.http
+  deleteTeacher(email: string): void {
+    const sub = this.http
       .post(API_URL + '/api/teachers/deleteTeacher', {
         email,
       })
@@ -129,5 +141,10 @@ export class AdminTeachersComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

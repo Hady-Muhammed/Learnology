@@ -1,4 +1,4 @@
-import { map } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { NgToastService } from 'ng-angular-popup';
 import { API_URL } from './../../../../../../app/services/socketio.service';
 import { SocketioService } from 'src/app/services/socketio.service';
@@ -8,14 +8,20 @@ import { message, Chat } from './../../../../../../app/models/chat';
 import { ActivatedRoute, Router } from '@angular/router';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  ElementRef,
+  OnDestroy,
+} from '@angular/core';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.css'],
 })
-export class ChatComponent implements OnInit {
+export class ChatComponent implements OnInit, OnDestroy {
   messages!: message[];
   account!: Teacher;
   person2!: Student;
@@ -26,6 +32,7 @@ export class ChatComponent implements OnInit {
   typing!: boolean;
   chat!: Chat;
   isEmojiPickerVisible!: boolean;
+  subscription!: Subscription;
   @ViewChild('lastMessage') lastMessage!: ElementRef;
 
   constructor(
@@ -45,8 +52,8 @@ export class ChatComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getChat() {
-    this.http
+  getChat(): void {
+    const sub = this.http
       .get<any>(API_URL + `/api/chats/getSingleChat/${this.id}`)
       .pipe(
         map((chats) => {
@@ -78,27 +85,30 @@ export class ChatComponent implements OnInit {
           this.scrollToLastMessage();
         }, 100);
       });
+    this.subscription?.add(sub);
   }
 
-  getAccount(email: string) {
-    this.http
+  getAccount(email: string): void {
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
         this.socketService.joinChat(this.id);
         this.getChat();
       });
+    this.subscription?.add(sub);
   }
 
-  getPerson2(id: string) {
-    this.http
+  getPerson2(id: string): void {
+    const sub = this.http
       .get<Student>(API_URL + `/api/students/getStudentByID/${id}`)
       .subscribe((student: Student) => {
         this.person2 = student;
       });
+    this.subscription?.add(sub);
   }
 
-  sendMessage() {
+  sendMessage(): void {
     if (this.message) {
       let message = {
         belongsTo: this.account.email,
@@ -108,7 +118,7 @@ export class ChatComponent implements OnInit {
       this.messages.push(message);
       this.scrollToLastMessage();
       this.socketService.sendMessage(message, this.id);
-      this.http
+      const sub = this.http
         .post(API_URL + `/api/chats/sendMessage`, {
           id: this.id,
           message: {
@@ -126,10 +136,11 @@ export class ChatComponent implements OnInit {
         id: this.id,
         newMessages: this.newMessages + 1,
       });
+      this.subscription?.add(sub);
     }
   }
 
-  scrollToLastMessage() {
+  scrollToLastMessage(): void {
     this.lastMessage?.nativeElement?.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
@@ -137,26 +148,26 @@ export class ChatComponent implements OnInit {
     });
   }
 
-  listenForNewMessagesRealtime() {
+  listenForNewMessagesRealtime(): void {
     this.socketService.socket?.on('receive-message', (message: message) => {
       this.messages.push(message);
       this.scrollToLastMessage();
     });
   }
 
-  listenForTyping() {
+  listenForTyping(): void {
     this.socketService.socket?.on('listen-typing-message', (typing: any) => {
       if (typing) this.typing = true;
       else this.typing = false;
     });
   }
 
-  isTyping() {
+  isTyping(): void {
     this.socketService.typingMessage(this.id, this.message);
   }
 
-  deleteChat(id: string) {
-    this.http
+  deleteChat(id: string): void {
+    const sub = this.http
       .post(API_URL + '/api/chats/deleteChat', {
         id,
       })
@@ -169,10 +180,15 @@ export class ChatComponent implements OnInit {
           this.toast.error({ detail: 'Something went wrong!' });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  addEmoji(event: any) {
+  addEmoji(event: any): void {
     this.message = `${this.message}${event.emoji.native}`;
     this.isEmojiPickerVisible = false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

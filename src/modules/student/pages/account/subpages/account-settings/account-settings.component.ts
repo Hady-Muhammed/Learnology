@@ -1,10 +1,11 @@
+import { Subscription } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Student } from 'src/app/models/student';
 import { API_URL } from 'src/app/services/socketio.service';
 
@@ -13,7 +14,7 @@ import { API_URL } from 'src/app/services/socketio.service';
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.css'],
 })
-export class AccountSettingsComponent implements OnInit {
+export class AccountSettingsComponent implements OnInit, OnDestroy {
   form = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required]),
@@ -21,6 +22,7 @@ export class AccountSettingsComponent implements OnInit {
   });
   account!: Student;
   loading: boolean = false;
+  subscription!: Subscription;
   constructor(
     private http: HttpClient,
     public toast: NgToastService,
@@ -42,10 +44,10 @@ export class AccountSettingsComponent implements OnInit {
   /* Form Fields Getters */
   ngOnInit(): void {}
 
-  getAccount() {
+  getAccount(): void {
     const token: any = localStorage.getItem('token');
     const account: any = jwt_decode(token);
-    this.http
+    const sub = this.http
       .get(API_URL + `/api/students/getStudent/${account.email}`)
       .subscribe((res: any) => {
         this.account = res;
@@ -54,10 +56,11 @@ export class AccountSettingsComponent implements OnInit {
         this.email?.disable();
         this.password?.setValue(this.account.password.slice(0, 16));
       });
+    this.subscription?.add(sub);
   }
 
-  deleteStudent() {
-    this.http
+  deleteStudent(): void {
+    const sub = this.http
       .post(API_URL + `/api/students/deleteStudent`, {
         email: this.account.email,
       })
@@ -71,9 +74,10 @@ export class AccountSettingsComponent implements OnInit {
           this.toast.error({ detail: data.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  updateAccount() {
+  updateAccount(): void {
     if (this.form.status === 'INVALID') {
       this.toast.error({ detail: 'Enter valid data!' });
       return;
@@ -84,7 +88,7 @@ export class AccountSettingsComponent implements OnInit {
     } else {
       validatedPassword = this.password?.value;
     }
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/students/updateStudent', {
         email: this.account.email,
         modifiedAccount: {
@@ -95,21 +99,26 @@ export class AccountSettingsComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          this.getAccount()
+          this.getAccount();
         },
         error: (err) => {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  cancelChanges() {
+  cancelChanges(): void {
     this.form.reset();
     this.getAccount();
   }
 
-  uploadPicture() {
+  uploadPicture(): void {
     this.dialog.open(PictureDialog);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }
 
@@ -130,7 +139,8 @@ export class AccountSettingsComponent implements OnInit {
     </div>
   `,
 })
-export class PictureDialog {
+export class PictureDialog implements OnDestroy {
+  subscription!: Subscription;
   constructor(
     public dialogRef: MatDialogRef<PictureDialog>,
     private http: HttpClient
@@ -141,15 +151,23 @@ export class PictureDialog {
     if (this.Img) {
       const token: any = localStorage.getItem('token');
       const student: any = jwt_decode(token);
-      this.http.post(API_URL + '/api/students/uploadPicture', {
-        email: student.email,
-        Img: this.Img,
-      }).subscribe()
+      const sub = this.http
+        .post(API_URL + '/api/students/uploadPicture', {
+          email: student.email,
+          Img: this.Img,
+        })
+        .subscribe();
       this.dialogRef.close();
-      this.refreshPage()
+      this.refreshPage();
+      this.subscription?.add(sub);
     }
   }
+
   refreshPage() {
     location.reload();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

@@ -102,11 +102,11 @@ describe('HomeComponent', () => {
       API_URL + `/api/students/getStudent/${mockStudent.email}`
     );
     req1.flush(mockStudent)
+    fixture.detectChanges();
     const req2 = httpMock.expectOne(
       API_URL + `/api/courses/getPopularCourses`
     );
     req2.flush(mockCourses)
-    fixture.detectChanges();
   });
 
   afterEach(() => {

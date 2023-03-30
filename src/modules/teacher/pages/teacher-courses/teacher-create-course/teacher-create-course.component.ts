@@ -1,21 +1,24 @@
 import { API_URL } from './../../../../../app/services/socketio.service';
 import { Teacher } from './../../../../../app/models/teacher';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Form, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import jwtDecode from 'jwt-decode';
 import { NgToastService } from 'ng-angular-popup';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-create-course',
   templateUrl: './teacher-create-course.component.html',
   styleUrls: ['./teacher-create-course.component.css'],
 })
-export class TeacherCreateCourseComponent implements OnInit {
+export class TeacherCreateCourseComponent implements OnInit, OnDestroy {
   selectedValue!: any;
   account!: Teacher;
   form: any;
+  subscription!: Subscription;
+
   constructor(
     private http: HttpClient,
     public toast: NgToastService,
@@ -59,8 +62,7 @@ export class TeacherCreateCourseComponent implements OnInit {
 
   /* FormGroup Fields Getters */
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   return() {
     window.history.back();
   }
@@ -68,15 +70,17 @@ export class TeacherCreateCourseComponent implements OnInit {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
 
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
       });
+    this.subscription?.add(sub);
   }
+
   publishCourse() {
     if (this.form.status === 'VALID') {
-      this.http
+      const sub = this.http
         .post(API_URL + '/api/courses/publishCourse', {
           coursee: {
             instructor_name: this.account.name,
@@ -104,8 +108,13 @@ export class TeacherCreateCourseComponent implements OnInit {
             this.toast.error({ detail: 'error!!' });
           },
         });
+      this.subscription?.add(sub);
     } else {
       this.toast.error({ detail: 'Enter valid data' });
     }
+  }
+  
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

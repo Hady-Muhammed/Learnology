@@ -4,44 +4,48 @@ import { Course } from './../../../../app/models/course';
 import { Teacher } from './../../../../app/models/teacher';
 import { HttpClient } from '@angular/common/http';
 import jwtDecode from 'jwt-decode';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-courses',
   templateUrl: './teacher-courses.component.html',
   styleUrls: ['./teacher-courses.component.css'],
 })
-export class TeacherCoursesComponent implements OnInit {
+export class TeacherCoursesComponent implements OnInit, OnDestroy {
   account!: Teacher;
   courses!: Course[];
+  subscription!: Subscription;
+
   constructor(private http: HttpClient, public toast: NgToastService) {
     this.getAccount();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  getAccount() {
+  getAccount(): void {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
         this.getCourses(teacher.courses_teaching);
       });
+    this.subscription?.add(sub);
   }
 
-  getCourses(courses: string[]) {
-    this.http
+  getCourses(courses: string[]): void {
+    const sub = this.http
       .post<Course[]>(API_URL + '/api/courses/getCoursesByIds', {
         courses,
       })
       .subscribe((courses: Course[]) => (this.courses = courses));
+    this.subscription?.add(sub);
   }
 
-  deleteCourse(id: string) {
-    this.http
+  deleteCourse(id: string): void {
+    const sub = this.http
       .post(API_URL + `/api/courses/deleteCourse`, {
         email: this.account.email,
         id,
@@ -55,5 +59,10 @@ export class TeacherCoursesComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

@@ -2,24 +2,26 @@ import { NgToastService } from 'ng-angular-popup';
 import { Teacher } from 'src/app/models/teacher';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import jwtDecode from 'jwt-decode';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
 import { API_URL } from 'src/app/services/socketio.service';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-instructor',
   templateUrl: './instructor.component.html',
   styleUrls: ['./instructor.component.css'],
 })
-export class InstructorComponent implements OnInit {
+export class InstructorComponent implements OnInit, OnDestroy {
   id!: string;
   teacher!: Teacher;
   account!: Student;
-  courses!: Course[];
+  courses!: Observable<Course[]>;
   liked!: boolean;
   statusText!: string;
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -38,25 +40,27 @@ export class InstructorComponent implements OnInit {
   ngOnInit(): void {}
 
   getAccount(email: string) {
-    this.http
+    const sub = this.http
       .get<Student>(API_URL + `/api/students/getStudent/${email}`)
       .subscribe((student: Student) => {
         this.account = student;
         this.isLiked();
       });
+    this.subscription?.add(sub);
   }
 
   getInstructor(id: string) {
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacherById/${id}`)
       .subscribe((teacher: Teacher) => {
         this.teacher = teacher;
         this.getCourses(teacher.courses_teaching);
       });
+    this.subscription?.add(sub);
   }
 
   createChat() {
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/chats/createChat', {
         chat: {
           person1_ID: this.account._id,
@@ -68,14 +72,16 @@ export class InstructorComponent implements OnInit {
       .subscribe((res: any) => {
         this.router.navigateByUrl(`/account/messages/${res.id}`);
       });
+    this.subscription?.add(sub);
   }
 
   getCourses(courses: string[]) {
-    this.http
-      .post<Course[]>(API_URL + '/api/courses/getCoursesByIds', {
+    this.courses = this.http.post<Course[]>(
+      API_URL + '/api/courses/getCoursesByIds',
+      {
         courses,
-      })
-      .subscribe((courses: Course[]) => (this.courses = courses));
+      }
+    );
   }
 
   isLiked() {
@@ -83,7 +89,7 @@ export class InstructorComponent implements OnInit {
   }
 
   addLike() {
-    this.http
+    const sub = this.http
       .post(API_URL + `/api/students/likeTeacher`, {
         email: this.account.email,
         teacherID: this.id,
@@ -98,5 +104,10 @@ export class InstructorComponent implements OnInit {
           this.toast.error({ detail: 'Something went wrong!' });
         },
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

@@ -3,7 +3,13 @@ import { Student } from './../../../../../app/models/student';
 import { Course } from './../../../../../app/models/course';
 import { NgToastService } from 'ng-angular-popup';
 import { HttpClient } from '@angular/common/http';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  ViewChild,
+  OnDestroy,
+} from '@angular/core';
 import { FormArray, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import jwtDecode from 'jwt-decode';
@@ -11,19 +17,24 @@ import { Teacher } from 'src/app/models/teacher';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-modify-course',
   templateUrl: './teacher-modify-course.component.html',
   styleUrls: ['./teacher-modify-course.component.css'],
 })
-export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
+export class TeacherModifyCourseComponent
+  implements OnInit, AfterViewInit, OnDestroy
+{
   account!: Teacher;
   form: any;
   id!: string;
   course!: Course;
   dataSource!: MatTableDataSource<Student>;
   displayedColumns: string[] = ['id', 'photo', 'name', 'email', 'action'];
+  subscription!: Subscription;
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   constructor(
@@ -77,8 +88,7 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
   }
   /* FormGroup Fields Getters */
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
   ngAfterViewInit(): void {
     // this.dataSource.paginator = this.paginator;
     // this.dataSource.sort = this.sort;
@@ -87,26 +97,28 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
     window.history.back();
   }
 
-  getAccount() {
+  getAccount(): void {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
 
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
         let courseID = teacher.courses_teaching.find((crs) => crs === this.id);
-        this.http
+        const sub = this.http
           .get<Course>(API_URL + `/api/courses/getCourse/${courseID}`)
           .subscribe((course: Course) => {
             this.course = course;
             this.getOriginalData(course);
             this.getEnrolledStudents(course.enrolled_students);
           });
+        this.subscription?.add(sub);
       });
+    this.subscription?.add(sub);
   }
 
-  getOriginalData(course: Course) {
+  getOriginalData(course: Course): void {
     this.courseCateg.setValue(course.category);
     this.courseOverview.setValue(course.overview);
     this.courseTitle.setValue(course.course_title);
@@ -119,7 +131,7 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
     }
   }
 
-  addOldPoints(point: string) {
+  addOldPoints(point: string): void {
     this.WhatYouWillLearn.push(this.point(point));
   }
 
@@ -129,7 +141,7 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
     });
   }
 
-  addNewPoint() {
+  addNewPoint(): void {
     this.WhatYouWillLearn.push(
       this.fb.group({
         point: '',
@@ -137,12 +149,12 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
     );
   }
 
-  deletePoint(index: number) {
+  deletePoint(index: number): void {
     this.WhatYouWillLearn.removeAt(index);
     this.WhatYouWillLearn.markAsTouched();
   }
 
-  saveChanges() {
+  saveChanges(): void {
     let points = this.WhatYouWillLearn.value.map((x: any) => x.point);
     let modifiedCourse = {
       course_title: this.courseTitle.value,
@@ -155,7 +167,7 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
       WhatYouWillLearn: points,
     };
 
-    this.http
+    const sub = this.http
       .post(API_URL + '/api/courses/modifyCourse', {
         id: this.id,
         modifiedCourse,
@@ -169,9 +181,10 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
           this.toast.error({ detail: res.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  cancelChanges() {
+  cancelChanges(): void {
     this.form.reset();
     this.getOriginalData(this.course);
     this.WhatYouWillLearn.clear();
@@ -180,8 +193,8 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
     }
   }
 
-  getEnrolledStudents(students: string[]) {
-    this.http
+  getEnrolledStudents(students: string[]): void {
+    const sub = this.http
       .post<Student[]>(API_URL + '/api/students/getStudentsByIds', {
         students,
       })
@@ -191,9 +204,10 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
           this.dataSource = new MatTableDataSource(students);
         },
       });
+    this.subscription?.add(sub);
   }
 
-  applyFilter(event: Event) {
+  applyFilter(event: Event): void {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -202,8 +216,8 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
     }
   }
 
-  createChat(studentID: string) {
-    this.http
+  createChat(studentID: string): void {
+    const sub = this.http
       .post(API_URL + '/api/chats/createChat', {
         chat: {
           person1_ID: this.account._id,
@@ -215,5 +229,10 @@ export class TeacherModifyCourseComponent implements OnInit, AfterViewInit {
       .subscribe((res: any) => {
         this.router.navigateByUrl(`/teacher/t/messages/${res.id}`);
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

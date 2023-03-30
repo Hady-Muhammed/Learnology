@@ -1,5 +1,6 @@
+import { Subscription } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Quiz } from 'src/app/models/quiz';
 import { API_URL } from 'src/app/services/socketio.service';
 
@@ -8,7 +9,7 @@ import { API_URL } from 'src/app/services/socketio.service';
   templateUrl: './quizzes.component.html',
   styleUrls: ['./quizzes.component.css'],
 })
-export class QuizzesComponent implements OnInit {
+export class QuizzesComponent implements OnInit , OnDestroy {
   easy: boolean = false;
   medium: boolean = false;
   hard: boolean = false;
@@ -17,22 +18,23 @@ export class QuizzesComponent implements OnInit {
   loading!: boolean;
   grid!: boolean;
   searchTerm!: string;
+  subscription!: Subscription;
 
   constructor(private http: HttpClient) {
     window.scrollTo(0, 0);
     this.getAllQuizzes();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getAllQuizzes() {
-    this.http
+    const sub = this.http
       .get<Quiz[]>(API_URL + '/api/quizzes/getAllQuizzes')
       .subscribe((quizzes: Quiz[]) => {
         this.quizzes = quizzes;
         this.filteredQuizzes = quizzes;
       });
+    this.subscription?.add(sub);
   }
 
   changeDifficulty() {
@@ -72,5 +74,9 @@ export class QuizzesComponent implements OnInit {
     } else {
       this.filteredQuizzes = this.quizzes;
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe()
   }
 }

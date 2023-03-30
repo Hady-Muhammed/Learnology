@@ -2,34 +2,36 @@ import { API_URL } from './../../../../app/services/socketio.service';
 import { Teacher } from './../../../../app/models/teacher';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NgToastService } from 'ng-angular-popup';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-account',
   templateUrl: './teacher-account.component.html',
   styleUrls: ['./teacher-account.component.css'],
 })
-export class TeacherAccountComponent implements OnInit {
+export class TeacherAccountComponent implements OnInit, OnDestroy {
   form!: FormGroup;
   account!: Teacher;
   loading: boolean = false;
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
     public toast: NgToastService,
     public router: Router,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {
     this.getAccount();
     this.form = new FormGroup({
-      name: new FormControl('',[Validators.required]),
-      email: new FormControl('',[Validators.required]),
-      title: new FormControl('',[Validators.required]),
-      password: new FormControl('',[Validators.required]),
+      name: new FormControl('', [Validators.required]),
+      email: new FormControl('', [Validators.required]),
+      title: new FormControl('', [Validators.required]),
+      password: new FormControl('', [Validators.required]),
     });
   }
   /* Form Fields Getters */
@@ -46,13 +48,12 @@ export class TeacherAccountComponent implements OnInit {
     return this.form.get('password');
   }
   /* Form Fields Getters */
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  getAccount() {
+  getAccount(): void {
     const token = localStorage.getItem('token') || '';
     const teacher: any = jwt_decode(token);
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
@@ -62,10 +63,11 @@ export class TeacherAccountComponent implements OnInit {
         this.email?.disable();
         this.password?.setValue(this.account.password.slice(0, 16));
       });
+    this.subscription?.add(sub);
   }
 
-  deleteTeacher() {
-    this.http
+  deleteTeacher(): void {
+    const sub = this.http
       .post(API_URL + `/api/teachers/deleteTeacher`, {
         email: this.account.email,
       })
@@ -79,13 +81,14 @@ export class TeacherAccountComponent implements OnInit {
           this.toast.error({ detail: data.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  uploadPicture() {
+  uploadPicture(): void {
     this.dialog.open(PictureDialog);
   }
 
-  updateTeacher() {
+  updateTeacher(): void {
     if (this.form.status === 'INVALID') {
       this.toast.error({ detail: 'Enter valid data!' });
       return;
@@ -96,7 +99,7 @@ export class TeacherAccountComponent implements OnInit {
     } else {
       validatedPassword = this.password?.value;
     }
-    this.http
+    const sub = this.http
       .post(API_URL + `/api/teachers/updateTeacher`, {
         email: this.account.email,
         modifiedAccount: {
@@ -108,17 +111,22 @@ export class TeacherAccountComponent implements OnInit {
       .subscribe({
         next: (res: any) => {
           this.toast.success({ detail: res.message });
-          this.getAccount()
+          this.getAccount();
         },
         error: (err) => {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  cancelChanges() {
+  cancelChanges(): void {
     this.getAccount();
     this.form.reset();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }
 
@@ -139,7 +147,9 @@ export class TeacherAccountComponent implements OnInit {
     </div>
   `,
 })
-export class PictureDialog {
+export class PictureDialog implements OnDestroy {
+  subscription!: Subscription;
+
   constructor(
     public dialogRef: MatDialogRef<PictureDialog>,
     private http: HttpClient
@@ -150,15 +160,23 @@ export class PictureDialog {
     if (this.Img) {
       const token: any = localStorage.getItem('token');
       const teacher: any = jwt_decode(token);
-      this.http.post(API_URL + '/api/teachers/uploadPicture', {
-        email: teacher.email,
-        Img: this.Img,
-      }).subscribe();
+      const sub = this.http
+        .post(API_URL + '/api/teachers/uploadPicture', {
+          email: teacher.email,
+          Img: this.Img,
+        })
+        .subscribe();
       this.dialogRef.close();
       this.refreshPage();
+      this.subscription?.add(sub);
     }
   }
+
   refreshPage() {
     location.reload();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

@@ -58,7 +58,7 @@
   </h3>
   <p class="text-center mb-10 text-gray-600">some of the best sellers this week</p>
   <div class="grid xs:grid-cols-1 md:grid-cols-3 gap-10">
-    <ng-container *ngFor="let course of popularCourses; let i = index">
+    <ng-container *ngFor="let course of popularCourses | async; let i = index">
       <app-course-card [course]="course" data-aos="fade-up" data-aos-duration="1000" [attr.data-aos-delay]="i * 150" class="crs"></app-course-card>
     </ng-container>
   </div>

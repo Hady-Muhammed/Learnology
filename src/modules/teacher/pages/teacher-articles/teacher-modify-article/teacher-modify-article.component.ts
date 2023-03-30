@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-modify-article',
@@ -14,6 +15,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 export class TeacherModifyArticleComponent implements OnInit {
   id!: string;
   form!: FormGroup;
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -56,11 +58,10 @@ export class TeacherModifyArticleComponent implements OnInit {
   }
   /* Form Fields Getters */
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   getArticle() {
-    this.http
+    const sub = this.http
       .get<Article>(API_URL + `/api/articles/getArticle/${this.id}`)
       .subscribe((article: Article) => {
         this.title?.setValue(article.title);
@@ -68,10 +69,11 @@ export class TeacherModifyArticleComponent implements OnInit {
         this.articleContent?.setValue(article.body);
         this.selectedValue?.setValue(article.category);
       });
+    this.subscription?.add(sub);
   }
 
-  modifyArticle() {
-    this.http
+  modifyArticle(): void {
+    const sub = this.http
       .post(API_URL + `/api/articles/modifyArticle`, {
         id: this.id,
         modifiedArticle: {
@@ -90,14 +92,19 @@ export class TeacherModifyArticleComponent implements OnInit {
           this.toast.error({ detail: 'Something went wrong!' });
         },
       });
+    this.subscription?.add(sub);
   }
 
-  cancelChanges() {
+  cancelChanges(): void {
     this.getArticle();
     this.form.reset();
   }
 
-  return() {
+  return(): void {
     window.history.back();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

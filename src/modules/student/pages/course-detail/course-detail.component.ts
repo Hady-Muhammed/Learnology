@@ -1,7 +1,8 @@
+import { Subscription } from 'rxjs';
 import { NgToastService } from 'ng-angular-popup';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Course } from 'src/app/models/course';
 import { Student } from 'src/app/models/student';
@@ -13,12 +14,13 @@ import { API_URL } from 'src/app/services/socketio.service';
   templateUrl: './course-detail.component.html',
   styleUrls: ['./course-detail.component.css'],
 })
-export class CourseDetailComponent implements OnInit {
+export class CourseDetailComponent implements OnInit, OnDestroy {
   course!: Course;
   id: string;
   text!: string;
   instructor!: Teacher;
   isEnrolled: boolean = false;
+  subscription!: Subscription;
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
@@ -36,7 +38,7 @@ export class CourseDetailComponent implements OnInit {
 
   courseIsEnrolled() {
     const student: any = jwt_decode(localStorage.getItem('token') || '');
-    this.http
+    const sub = this.http
       .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
       .subscribe({
         next: (student: Student) => {
@@ -53,26 +55,31 @@ export class CourseDetailComponent implements OnInit {
           }
         },
       });
+    this.subscription?.add(sub);
   }
 
   getInstructor(id: string) {
-    this.http
+    const sub = this.http
       .get<Teacher>(API_URL + `/api/courses/getInstructor/${id}`)
       .subscribe((teacher: Teacher) => (this.instructor = teacher));
+    this.subscription?.add(sub);
   }
 
   getCourse(id: string) {
-    this.http.get<Course>(API_URL + `/api/courses/getCourse/${id}`).subscribe({
-      next: (course: Course) => {
-        this.course = course;
-      },
-    });
+    const sub = this.http
+      .get<Course>(API_URL + `/api/courses/getCourse/${id}`)
+      .subscribe({
+        next: (course: Course) => {
+          this.course = course;
+        },
+      });
+    this.subscription?.add(sub);
   }
 
   enrollCourse() {
     const token: any = localStorage.getItem('token');
     const student: any = jwt_decode(token);
-    this.http
+    const sub = this.http
       .post(API_URL + `/api/students/enrollCourse`, {
         email: student.email,
         course: this.course,
@@ -86,5 +93,10 @@ export class CourseDetailComponent implements OnInit {
           this.toast.error({ detail: err.message });
         },
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

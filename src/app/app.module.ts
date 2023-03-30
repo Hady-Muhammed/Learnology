@@ -8,7 +8,7 @@ import { SharedModule } from './../modules/shared/shared.module';
 import { TeacherModule } from 'src/modules/teacher/teacher.module';
 import { StudentModule } from './../modules/student/student.module';
 import { SocketioService } from './services/socketio.service';
-import { NgModule, isDevMode } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';

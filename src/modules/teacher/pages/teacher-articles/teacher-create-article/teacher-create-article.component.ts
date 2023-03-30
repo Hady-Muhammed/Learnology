@@ -5,14 +5,15 @@ import { NgToastService } from 'ng-angular-popup';
 import jwtDecode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { FormControl, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-teacher-create-article',
   templateUrl: './teacher-create-article.component.html',
   styleUrls: ['./teacher-create-article.component.css'],
 })
-export class TeacherCreateArticleComponent implements OnInit {
+export class TeacherCreateArticleComponent implements OnInit, OnDestroy {
   selectedValue!: any;
   account!: Teacher;
   categories: any[] = [
@@ -25,6 +26,8 @@ export class TeacherCreateArticleComponent implements OnInit {
   title = new FormControl('', [Validators.required]);
   imageURL = new FormControl('', [Validators.required]);
   articleContent = new FormControl('', [Validators.required]);
+  subscription!: Subscription;
+
   constructor(
     private http: HttpClient,
     public toast: NgToastService,
@@ -33,21 +36,20 @@ export class TeacherCreateArticleComponent implements OnInit {
     this.getAccount();
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
-  return() {
+  return(): void {
     window.history.back();
   }
 
-  publishArticle() {
+  publishArticle(): void {
     if (
       this.title.value &&
       this.imageURL.value &&
       this.selectedValue &&
       this.articleContent.value
     ) {
-      this.http
+      const sub = this.http
         .post(API_URL + '/api/articles/publishArticle', {
           author: this.account.name,
           title: this.title.value,
@@ -72,20 +74,24 @@ export class TeacherCreateArticleComponent implements OnInit {
             this.toast.error({ detail: 'error!!' });
           },
         });
+      this.subscription?.add(sub);
     } else {
       this.toast.error({ detail: "Enter a valid article's data" });
     }
   }
 
-  getAccount() {
+  getAccount(): void {
     const token: any = localStorage.getItem('token');
     const teacher: any = jwtDecode(token);
-    this.http
-      .get<Teacher>(
-        API_URL + `/api/teachers/getTeacher/${teacher.email}`
-      )
+    const sub = this.http
+      .get<Teacher>(API_URL + `/api/teachers/getTeacher/${teacher.email}`)
       .subscribe((teacher: Teacher) => {
         this.account = teacher;
       });
+    this.subscription?.add(sub);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

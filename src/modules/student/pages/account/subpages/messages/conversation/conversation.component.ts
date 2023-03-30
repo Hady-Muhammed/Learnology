@@ -1,10 +1,10 @@
-import { map } from 'rxjs';
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { map, Subscription } from 'rxjs';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import jwt_decode from 'jwt-decode';
 import { API_URL, SocketioService } from 'src/app/services/socketio.service';
-import { message, Chat } from 'src/app/models/chat';
+import { message } from 'src/app/models/chat';
 import { Student } from 'src/app/models/student';
 import { Teacher } from 'src/app/models/teacher';
 
@@ -13,7 +13,7 @@ import { Teacher } from 'src/app/models/teacher';
   templateUrl: './conversation.component.html',
   styleUrls: ['./conversation.component.css'],
 })
-export class ConversationComponent implements OnInit {
+export class ConversationComponent implements OnInit , OnDestroy {
   messages!: message[];
   account!: Student;
   person2!: Student | Teacher | any;
@@ -22,6 +22,7 @@ export class ConversationComponent implements OnInit {
   newMessages!: number;
   typing: boolean = false;
   isEmojiPickerVisible!: boolean;
+  subscription!: Subscription;
 
   @ViewChild('lastMessage') lastMessage!: ElementRef;
 
@@ -37,18 +38,19 @@ export class ConversationComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  getAccount(email: string) {
-    this.http
+  getAccount(email: string): void {
+    const sub = this.http
       .get<Student>(API_URL + `/api/students/getStudent/${email}`)
       .subscribe((student: Student) => {
         this.account = student;
         this.socketService.joinChat(this.id);
         this.getChat();
       });
+    this.subscription?.add(sub);
   }
 
-  getChat() {
-    this.http
+  getChat(): void {
+    const sub = this.http
       .get<any>(API_URL + `/api/chats/getSingleChat/${this.id}`)
       .pipe(
         map((chats) => {
@@ -79,12 +81,13 @@ export class ConversationComponent implements OnInit {
           this.scrollToLastMessage();
         }, 100);
       });
+    this.subscription?.add(sub);
   }
 
-  getPerson2(id: string) {
+  getPerson2(id: string): void {
     // Person2 may be a student or a teacher so
     // we'll check first who's he/she
-    this.http
+    const sub = this.http
       .get<Student>(API_URL + `/api/students/getStudentByID/${id}`)
       .subscribe((student: Student) => {
         if (!student) {
@@ -97,9 +100,10 @@ export class ConversationComponent implements OnInit {
           this.person2 = student;
         }
       });
+    this.subscription?.add(sub);
   }
 
-  sendMessage() {
+  sendMessage(): void {
     if (this.message) {
       let message = {
         belongsTo: this.account.email,
@@ -109,7 +113,7 @@ export class ConversationComponent implements OnInit {
       this.messages.push(message);
       this.scrollToLastMessage();
       this.socketService.sendMessage(message, this.id);
-      this.http
+      const sub = this.http
         .post(API_URL + `/api/chats/sendMessage`, {
           id: this.id,
           message: {
@@ -122,6 +126,7 @@ export class ConversationComponent implements OnInit {
           this.message = '';
           this.socketService.typingMessage(this.id, '');
         });
+      this.subscription?.add(sub);
       this.http.post(API_URL + '/api/chats/setNewMessages', {
         id: this.id,
         newMessages: this.newMessages + 1,
@@ -129,14 +134,14 @@ export class ConversationComponent implements OnInit {
     }
   }
 
-  listenForNewMessagesRealtime() {
+  listenForNewMessagesRealtime(): void {
     this.socketService.socket?.on('receive-message', (message: message) => {
       this.messages.push(message);
       this.scrollToLastMessage();
     });
   }
 
-  scrollToLastMessage() {
+  scrollToLastMessage(): void {
     this.lastMessage?.nativeElement?.scrollIntoView({
       behavior: 'smooth',
       block: 'nearest',
@@ -144,7 +149,7 @@ export class ConversationComponent implements OnInit {
     });
   }
 
-  listenForTyping() {
+  listenForTyping(): void {
     this.socketService.socket?.on(
       'listen-typing-message',
       (typing: boolean) => {
@@ -154,12 +159,16 @@ export class ConversationComponent implements OnInit {
     );
   }
 
-  isTyping() {
+  isTyping(): void {
     this.socketService.typingMessage(this.id, this.message);
   }
 
-  addEmoji(event: any) {
+  addEmoji(event: any): void {
     this.message = `${this.message}${event.emoji.native}`;
     this.isEmojiPickerVisible = false;
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe();
   }
 }

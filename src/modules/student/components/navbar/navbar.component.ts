@@ -1,7 +1,8 @@
+import { Subscription } from 'rxjs';
 import jwt_decode from 'jwt-decode';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { API_URL, SocketioService } from 'src/app/services/socketio.service';
 import { Student } from 'src/app/models/student';
 import { Notification } from 'src/app/models/notification';
@@ -11,12 +12,13 @@ import { Notification } from 'src/app/models/notification';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css'],
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, OnDestroy {
   isOpened: boolean = false;
   account!: Student;
   notificationsMenuOpened: boolean = false;
   numOfNotifications: number = 0;
   notifications!: Notification[];
+  subscription!: Subscription;
 
   constructor(
     private http: HttpClient,
@@ -76,7 +78,7 @@ export class NavbarComponent implements OnInit {
   }
 
   getNotifications() {
-    this.http
+    this.subscription = this.http
       .get<Notification[]>(
         API_URL + `/api/notifications/getAllNotifications/${this.account._id}`
       )
@@ -98,5 +100,9 @@ export class NavbarComponent implements OnInit {
 
   navigate(postID: string) {
     this.router.navigate(['notified-post', postID]);
+  }
+
+  ngOnDestroy(): void {
+    this.subscription?.unsubscribe()
   }
 }

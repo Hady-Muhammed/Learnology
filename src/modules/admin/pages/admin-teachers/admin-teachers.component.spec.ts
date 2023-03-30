@@ -111,7 +111,6 @@ describe('AdminTeachersComponent', () => {
           { email: 'mock2' },
         ]
       );
-      console.log(component.selection.selected.length);
       component.deleteTeachersBySelection();
       const req = httpMock.expectOne(
         API_URL + '/api/teachers/deleteManyTeachers'
