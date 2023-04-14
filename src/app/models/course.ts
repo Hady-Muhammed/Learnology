@@ -14,4 +14,19 @@ export interface Course {
   rating: [];
   price: number;
   WhatYouWillLearn: string[];
+  sections: section[]
+}
+
+export type section = {
+  section_title: string;
+  section_desc: string;
+  lectures: lecture[];
+  total_time: string
+}
+
+export type lecture = {
+  lecture_title: string;
+  lecture_desc: string;
+  video_url: string;
+  duration: string
 }

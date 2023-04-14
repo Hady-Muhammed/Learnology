@@ -1,3 +1,4 @@
+import { VideoComponent } from './pages/account/subpages/enrolled-courses/videos/subpages/video/video.component';
 import { AuthGuard } from '../../app/guards/auth.guard';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -27,6 +28,7 @@ import { PostsComponent } from './pages/account/subpages/posts/posts.component';
 import { FriendsComponent } from './pages/account/subpages/friends/friends.component';
 import { InboxComponent } from './pages/account/subpages/inbox/inbox.component';
 import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbox-detail.component';
+import { VideosComponent } from './pages/account/subpages/enrolled-courses/videos/videos.component';
 
 const routes: Routes = [
   {
@@ -52,6 +54,23 @@ const routes: Routes = [
     pathMatch: 'full',
     component: CoursesComponent,
     canActivate: [AuthGuard],
+  },
+  {
+    path: 'enrolled/:courseID/videos',
+    component: VideosComponent,
+    canActivate: [AuthGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: "full",
+        redirectTo: '1'
+      },
+      {
+        path: ':videoID',
+        pathMatch: 'full',
+        component: VideoComponent
+      },
+    ]
   },
   {
     path: 'course-details/:id',

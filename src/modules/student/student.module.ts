@@ -51,6 +51,9 @@ import { PostsComponent } from './pages/account/subpages/posts/posts.component';
 import { FriendCardComponent } from './components/cards/friend-card/friend-card.component';
 import { InboxComponent } from './pages/account/subpages/inbox/inbox.component';
 import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbox-detail.component';
+import { VideosComponent } from './pages/account/subpages/enrolled-courses/videos/videos.component';
+import { CourseSectionAccordionComponent } from './components/course-section-accordion/course-section-accordion.component';
+import { VideoComponent } from './pages/account/subpages/enrolled-courses/videos/subpages/video/video.component';
 
 @NgModule({
   declarations: [
@@ -96,6 +99,9 @@ import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbo
     FriendCardComponent,
     InboxComponent,
     InboxDetailComponent,
+    VideosComponent,
+    CourseSectionAccordionComponent,
+    VideoComponent,
   ],
   imports: [
     CommonModule,

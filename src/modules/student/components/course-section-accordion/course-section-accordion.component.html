@@ -1,0 +1,39 @@
+<mat-accordion multi="true">
+  <mat-expansion-panel hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title class="font-bold text-lg">
+        Section 1: Object-oriented Programming in C++
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul>
+      <li>
+        1.<button>Eslaam</button>
+      </li>
+      <li>
+        2.<a href=""></a>
+      </li>
+      <li>
+        3.<a href=""></a>
+      </li>
+    </ul>
+  </mat-expansion-panel>
+  <mat-expansion-panel (opened)="panelOpenState = true"
+                       (closed)="panelOpenState = false">
+    <mat-expansion-panel-header>
+      <mat-panel-title class="font-bold text-lg">
+        Section 2: Mini-Project in C++
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ul>
+      <li>
+        <a href=""></a>
+      </li>
+      <li>
+        <a href=""></a>
+      </li>
+      <li>
+        <a href=""></a>
+      </li>
+    </ul>
+  </mat-expansion-panel>
+</mat-accordion>

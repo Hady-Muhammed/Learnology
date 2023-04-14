@@ -2,7 +2,7 @@
   <div class="grid xs:grid-cols-1 md:grid-cols-2 gap-10">
     <ng-container *ngIf="enrolledCourses">
       <ng-container *ngFor="let course of enrolledCourses; let i = index">
-        <a data-aos="fade-up" data-aos-duration="1000" [attr.data-aos-delay]="i * 150" routerLinkActive="router-link-active"  data-aos="fade-up" data-aos-duration="1000" data-aos-delay="600" class="bg-slate-100 cursor-pointer rounded-md crs relative overflow-hidden">
+        <a [routerLink]="['/enrolled',course._id,'videos']" [attr.data-aos-delay]="i * 150" data-aos="fade-up" data-aos-duration="1000" class="bg-slate-100 cursor-pointer rounded-md crs relative overflow-hidden">
           <div>
             <img class="h-[200px] w-full object-cover" [src]="course.image" alt="x">
           </div>

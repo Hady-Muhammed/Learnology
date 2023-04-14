@@ -1,0 +1,49 @@
+<app-navbar></app-navbar>
+<main class="flex mt-[76px] font-mont relative">
+  <div class="w-full">
+    <div class="relative overflow-hidden">
+      <router-outlet></router-outlet>
+      <button *ngIf="!opened" (click)="toggleContent()" class="absolute group hover:-right-2 duration-500 p-3 font-bold -right-[7.5rem] top-1/2 -translate-y-1/2 bg-black text-white border-2 flex items-center space-x-3">
+        <i class="text-xl fa-solid fa-arrow-left"></i>
+        <span class="opacity-0 group-hover:opacity-100 duration-300">
+          Course content
+        </span>
+      </button>
+    </div>
+    <div class="md:p-5 lg:p-20 space-y-4">
+      <h3 class="text-lg font-bold">Instructor</h3>
+      <div class="flex space-x-4 items-center border-b border-b-black pb-5 ">
+        <a [routerLink]="['../../instructor']" href="">
+          <img class="object-cover rounded-full w-[70px] h-[70px]" [src]="'../../../../../../../assets/user.webp'" alt="photo">
+        </a>
+        <div>
+        <a [routerLink]="['../../instructor']" href="">
+          <h4 class="font-bold text-xl">{{course && course.instructor_name}}</h4>
+        </a>
+        <p class="text-black/50 text-sm">{{course && course.instructor_title}}</p>
+        </div>
+      </div>
+      <div>
+        <h4 class="mb-5 font-semibold text-xl">Course Overview</h4>
+        <article class="pb-5 border-b border-b-black">
+          {{course && course.overview}}
+          {{course && course.overview}}
+          {{course && course.overview}}
+          {{course && course.overview}}
+        </article>
+      </div>
+    </div>
+  </div>
+  <aside class="w-[33%] h-[80vh] sticky top-[76px] overflow-auto" *ngIf="opened">
+    <div class="flex sticky top-0 z-10 bg-white justify-between border-b border-b-black">
+      <h2 class="p-4  font-semibold ">Course content</h2>
+      <button class="p-3 text-lg" (click)="toggleContent()">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <ng-container *ngFor="let section of course.sections">
+      <app-course-section-accordion [section]="section"></app-course-section-accordion>
+    </ng-container>
+  </aside>
+</main>
+<app-footer></app-footer>

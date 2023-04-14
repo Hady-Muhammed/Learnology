@@ -11,6 +11,7 @@ import { AdminEmailsComponent } from './pages/admin-emails/admin-emails.componen
 import { AdminEmailDetailComponent } from './pages/admin-email-detail/admin-email-detail.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FocusPipeComponent } from './components/focus-pipe/focus-pipe.component';
 
 @NgModule({
   declarations: [
@@ -21,6 +22,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     AdminEmailsComponent,
     AdminEmailDetailComponent,
     AdminComponent,
+    FocusPipeComponent,
   ],
   imports: [
     CommonModule,
