@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
   selector: 'app-admin-teachers',
   templateUrl: './admin-teachers.component.html',
   styleUrls: ['./admin-teachers.component.css'],
-  encapsulation: ViewEncapsulation.ShadowDom,
+  encapsulation: ViewEncapsulation.Emulated,
 })
 export class AdminTeachersComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [

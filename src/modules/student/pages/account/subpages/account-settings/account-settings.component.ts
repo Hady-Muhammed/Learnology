@@ -29,6 +29,7 @@ export class AccountSettingsComponent implements OnInit, OnDestroy {
     public router: Router,
     public dialog: MatDialog
   ) {
+    window.scroll(0,0)
     this.getAccount();
   }
   /* Form Fields Getters */

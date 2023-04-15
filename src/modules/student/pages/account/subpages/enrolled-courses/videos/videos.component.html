@@ -14,7 +14,7 @@
       <h3 class="text-lg font-bold">Instructor</h3>
       <div class="flex space-x-4 items-center border-b border-b-black pb-5 ">
         <a [routerLink]="['../../instructor']" href="">
-          <img class="object-cover rounded-full w-[70px] h-[70px]" [src]="'../../../../../../../assets/user.webp'" alt="photo">
+          <img class="object-cover rounded-full w-[70px] h-[70px]" [src]="instructor && instructor.picture === 'default' ? '../../../../../../../assets/user.webp': instructor && instructor.picture" alt="photo">
         </a>
         <div>
         <a [routerLink]="['../../instructor']" href="">
@@ -41,7 +41,7 @@
         <i class="fa-solid fa-xmark"></i>
       </button>
     </div>
-    <ng-container *ngFor="let section of course.sections">
+    <ng-container *ngFor="let section of course?.sections">
       <app-course-section-accordion [section]="section"></app-course-section-accordion>
     </ng-container>
   </aside>

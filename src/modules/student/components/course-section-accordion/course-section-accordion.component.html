@@ -2,38 +2,13 @@
   <mat-expansion-panel hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title class="font-bold text-lg">
-        Section 1: Object-oriented Programming in C++
+        {{section.title}}
       </mat-panel-title>
     </mat-expansion-panel-header>
     <ul>
-      <li>
-        1.<button>Eslaam</button>
-      </li>
-      <li>
-        2.<a href=""></a>
-      </li>
-      <li>
-        3.<a href=""></a>
-      </li>
-    </ul>
-  </mat-expansion-panel>
-  <mat-expansion-panel (opened)="panelOpenState = true"
-                       (closed)="panelOpenState = false">
-    <mat-expansion-panel-header>
-      <mat-panel-title class="font-bold text-lg">
-        Section 2: Mini-Project in C++
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-    <ul>
-      <li>
-        <a href=""></a>
-      </li>
-      <li>
-        <a href=""></a>
-      </li>
-      <li>
-        <a href=""></a>
-      </li>
+      <a [routerLink]="[section._id,vid._id]" class="hover:bg-gray-100 font-semibold text-md hover:text-lg duration-300 cursor-pointer block" *ngFor="let vid of section.videos">
+        - {{vid.title}}
+      </a>
     </ul>
   </mat-expansion-panel>
 </mat-accordion>

@@ -18,15 +18,15 @@ export interface Course {
 }
 
 export type section = {
-  section_title: string;
-  section_desc: string;
-  lectures: lecture[];
+  _id: string;
+  title: string;
+  videos: video[];
   total_time: string
 }
 
-export type lecture = {
-  lecture_title: string;
-  lecture_desc: string;
+export type video = {
+  _id: string;
+  title: string;
   video_url: string;
   duration: string
 }

@@ -63,10 +63,11 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: "full",
-        redirectTo: '1'
+        redirectTo: '1/1',
+        
       },
       {
-        path: ':videoID',
+        path: ':sectionID/:videoID',
         pathMatch: 'full',
         component: VideoComponent
       },
