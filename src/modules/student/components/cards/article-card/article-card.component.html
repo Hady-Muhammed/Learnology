@@ -1,5 +1,5 @@
 <article class="space-y-4">
-  <img class="w-[750px] rounded-xl" [src]="article.image" alt="photo" />
+  <img loading="lazy" class="w-[750px] rounded-xl" [src]="article.image" alt="photo" />
   <div class="flex justify-between">
     <span class="block text-black/60">{{
       article.author.charAt(0).toUpperCase() + article.author.slice(1)

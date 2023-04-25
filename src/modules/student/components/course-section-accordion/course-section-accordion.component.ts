@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { section } from 'src/app/models/course';
 
@@ -6,6 +6,7 @@ import { section } from 'src/app/models/course';
   selector: 'app-course-section-accordion',
   templateUrl: './course-section-accordion.component.html',
   styleUrls: ['./course-section-accordion.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CourseSectionAccordionComponent implements OnInit {
   panelOpenState = false;

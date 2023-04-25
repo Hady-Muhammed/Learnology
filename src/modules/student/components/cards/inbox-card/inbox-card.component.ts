@@ -2,12 +2,13 @@ import { NgToastService } from 'ng-angular-popup';
 import { HttpClient } from '@angular/common/http';
 import { API_URL } from './../../../../../app/services/socketio.service';
 import { Inbox } from './../../../../../app/models/inbox';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-inbox-card',
   templateUrl: './inbox-card.component.html',
   styleUrls: ['./inbox-card.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InboxCardComponent implements OnInit {
   @Input('inbox') inbox!: Inbox;

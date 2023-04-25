@@ -3,12 +3,13 @@ import { NgToastService } from 'ng-angular-popup';
 import { API_URL } from 'src/app/services/socketio.service';
 import { HttpClient } from '@angular/common/http';
 import { Student } from 'src/app/models/student';
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 
 @Component({
   selector: 'app-friend-card',
   templateUrl: './friend-card.component.html',
   styleUrls: ['./friend-card.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FriendCardComponent implements OnInit {
   @Input('friend') friend!: Student;

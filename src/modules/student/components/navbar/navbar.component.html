@@ -12,7 +12,7 @@
     <a routerLink="/contact" class="text-white text-xl font-bold" href="">Contact</a>
     <a (click)="logOut()" class="text-white text-xl font-bold" href="">Logout</a>
     <a matTooltip="Account" routerLink="/account" class="rounded-full overflow-hidden">
-      <img class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
+      <img loading="lazy" class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
     </a>
     <button (click)="toggleNotificationMenu()" class="relative">
       <i class="fa-solid fa-bell text-white text-xl"></i>
@@ -42,7 +42,7 @@
     <a (click)="isOpened = !isOpened" routerLink="/contact" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">Contact</a>
     <a (click)="logOut()" class="text-white text-xl font-bold duration-500 hover:pl-5" href="">Logout</a>
     <a matTooltip="Account" (click)="isOpened = !isOpened" routerLink="/account" class="overflow-hidden rounded-full">
-      <img class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
+      <img loading="lazy" class="w-[30px] h-[30px] object-cover" [src]="account && account.picture !== 'default' ? account.picture: '../../../../../assets/user.webp'" alt="x">
     </a>
     <button (click)="toggleNotificationMenu()" class="relative">
       <i class="fa-solid fa-bell text-white text-xl"></i>
@@ -71,7 +71,7 @@
     <a (click)="navigate(notif.postID)" [ngClass]="i !== notifications.length - 1 ? 'border-b border-b-violet-600/30':''" class="flex items-center justify-between py-4 hover:bg-gray-200 px-5 overflow-hidden cursor-pointer">
       <div class="flex items-center space-x-4">
         <div class="relative">
-          <img class="xs:w-[50px] xs:h-[50px] sm:w-[70px] sm:h-[70px] rounded-full object-cover" [src]="notif.sender[0].picture === 'default' ? '../../../assets/user.webp': notif.sender[0].picture" alt="photo">
+          <img loading="lazy" class="xs:w-[50px] xs:h-[50px] sm:w-[70px] sm:h-[70px] rounded-full object-cover" [src]="notif.sender[0].picture === 'default' ? '../../../assets/user.webp': notif.sender[0].picture" alt="photo">
           <span *ngIf="notif.type === 'love'" class="grid place-items-center absolute -right-2 bottom-0 border border-black w-[35px] h-[35px] bg-white rounded-full">
             <i class="text-red-500 text-xl fa-solid fa-heart"></i>
           </span>

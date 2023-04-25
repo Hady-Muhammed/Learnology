@@ -1,6 +1,6 @@
 <a [routerLink]="['../','quiz-detail',quiz._id]" class="cursor-pointer rounded-md relative overflow-hidden bg-slate-100 block">
   <div>
-    <img class="h-[250px] w-full object-cover" [src]="quiz.image" alt="x">
+    <img loading="lazy" class="h-[250px] w-full object-cover" [src]="quiz.image" alt="x">
   </div>
   <div class="p-5 xs:h-fit md:h-[150px] space-y-4">
     <p class="text-gray-400">{{quiz.category}}</p>
