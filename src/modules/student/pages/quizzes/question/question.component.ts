@@ -44,16 +44,24 @@ export class QuestionComponent implements OnInit, OnDestroy {
   }
 
   getQuiz(id: string): void {
-    const sub = this.http
-      .get<Quiz>(API_URL + `/api/quizzes/getSingleQuiz/${id}`)
-      .subscribe((quiz: Quiz) => {
-        this.quiz = quiz;
-        this.currentQuestion = this.quiz.questions[+this.questionNo - 1];
-        let arr = this.currentQuestion.solving_time.split(':');
-        this.timer = +arr[0] * 60 + +arr[1];
-        this.totalTime = this.timer;
-      });
-    this.subscription?.add(sub);
+    if(!this.quiz) {
+      const sub = this.http
+        .get<Quiz>(API_URL + `/api/quizzes/getSingleQuiz/${id}`)
+        .subscribe((quiz: Quiz) => {
+          this.quiz = quiz;
+          this.changeQuestion()
+        });
+      this.subscription?.add(sub);
+    } else {
+      this.changeQuestion()
+    }
+  }
+
+  changeQuestion(): void {
+    this.currentQuestion = this.quiz.questions[+this.questionNo - 1];
+    let arr = this.currentQuestion.solving_time.split(':');
+    this.timer = +arr[0] * 60 + +arr[1];
+    this.totalTime = this.timer;
   }
 
   startTimer(): void {
