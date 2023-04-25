@@ -5,7 +5,7 @@
   </div>
   <div class="xs:grid xl:grid-cols-2 pt-10 xs:gap-10 relative z-40">
     <div [attr.data-aos]="i % 2 == 0 ? 'fade-right' : 'fade-left'" class="bg-white rounded-md shadow-md overflow-hidden" *ngFor="let crs of courses; let i = index">
-      <img [src]="crs.image" alt="image" class="w-full h-[300px] object-cover">
+      <img loading="lazy" [src]="crs.image" alt="image" class="w-full h-[300px] object-cover">
       <div class="space-y-2 p-5">
         <div class="text-sm text-black/50 flex justify-between"><span>COURSE</span><span>{{crs.postedAt | date}}</span></div>
         <h3 class="font-bold text-lg">{{crs.course_title}}</h3>
