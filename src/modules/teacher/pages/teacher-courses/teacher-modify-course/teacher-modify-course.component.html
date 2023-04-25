@@ -75,16 +75,10 @@
               <button class="text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40" (click)="addNewPoint()">add</button>
               <div class="flex mt-20 justify-end space-x-5">
                 <button (click)="saveChanges()" [disabled]="
-                !courseCateg?.dirty && !courseOverview?.dirty
-                && !coursePrice?.dirty && !coursePostedAt?.dirty
-                && !courseShortDesc?.dirty && !courseTitle?.dirty
-                && !WhatYouWillLearn.dirty && !imageURL?.dirty
+                !form.touched && !form.dirty
                 " class="disabled:opacity-[.5] disabled:pointer-events-none text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40">SAVE CHANGES</button>
                 <button (click)="cancelChanges()" [disabled]="
-                !courseCateg?.dirty && !courseOverview?.dirty
-                && !coursePrice?.dirty && !coursePostedAt?.dirty
-                && !courseShortDesc?.dirty && !courseTitle?.dirty
-                && !WhatYouWillLearn.dirty && !imageURL?.dirty
+                !form.touched && !form.dirty
                 " class="disabled:opacity-[.5] disabled:pointer-events-none text-white w-[200px] shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] cursor-pointer rounded-md p-2 relative z-40">CANCEL</button>
               </div>
             </form>
@@ -112,7 +106,7 @@
             <ng-container matColumnDef="photo">
               <th mat-header-cell *matHeaderCellDef mat-sort-header> Photo </th>
               <td mat-cell *matCellDef="let row">
-                  <img class="mx-auto w-[40px] h-[40px] rounded-full object-cover" [src]="row?.picture === 'default' ? '?.?./?.?./?.?./?.?./?.?./assets/user?.webp':row?.picture" alt="phooto">
+                  <img class="mx-auto w-[40px] h-[40px] rounded-full object-cover" [src]="row?.picture === 'default' ? '../../../../../assets/user.webp':row?.picture" alt="phooto">
               </td>
             </ng-container>
 
