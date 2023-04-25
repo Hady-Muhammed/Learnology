@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminStudentsComponent } from './pages/admin-students/admin-students.component';
 import { AdminTeachersComponent } from './pages/admin-teachers/admin-teachers.component';
 import { AdminEmailsComponent } from './pages/admin-emails/admin-emails.component';
+import { EmailResolverService } from './services/email-resolver.service';
 
 const routes: Routes = [
   {
@@ -36,6 +37,9 @@ const routes: Routes = [
       {
         path: 'emails/:id',
         component: AdminEmailDetailComponent,
+        resolve: {
+          data: EmailResolverService
+        }
       },
     ],
   },

@@ -26,7 +26,9 @@ export class AdminEmailDetailComponent implements OnInit, OnDestroy {
     public toast: NgToastService
   ) {
     this.id = this.route.snapshot.params['id'];
-    this.getEmail(this.id);
+    // this.getEmail(this.id);
+    console.log(this.route.snapshot.data["data"][0])
+    this.email = this.route.snapshot.data["data"][0]
   }
 
   ngOnInit(): void {}
