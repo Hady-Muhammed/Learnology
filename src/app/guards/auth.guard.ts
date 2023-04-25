@@ -1,7 +1,7 @@
-import { AuthService } from '../services/auth.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import jwtDecode from 'jwt-decode';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ import { Observable, map } from 'rxjs';
 
 /// This is basically an authenticattion guard for the all student internal routes specifcally
 export class AuthGuard implements CanActivate {
-  constructor(private router: Router, private auth: AuthService) {}
+  constructor(private router: Router) {}
   canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -20,32 +20,15 @@ export class AuthGuard implements CanActivate {
     const token = localStorage.getItem('token');
 
     if (token) {
-      return this.isStudent().pipe(
-        map((data) => {
-          if (data) {
-            return true;
-          } else {
-            this.router.navigateByUrl('/teacher');
-            return false;
-          }
-        })
-      );
-    } else {
-      this.router.navigateByUrl('/signin');
-      return false;
+      const { role }: any = jwtDecode(token);
+      if (role === 'student') {
+        return true;
+      } else if (role === 'teacher') {
+        this.router.navigateByUrl('/teacher');
+        return false;
+      }
     }
-  }
-  isStudent() {
-    return this.auth.getTeacher().pipe(
-      map((data) => {
-        if (data) {
-          // isTeacher
-          return false;
-        } else {
-          // isStudent
-          return true;
-        }
-      })
-    );
+    this.router.navigateByUrl('/signin');
+    return false;
   }
 }

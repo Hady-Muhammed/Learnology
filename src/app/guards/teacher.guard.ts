@@ -1,6 +1,6 @@
-import { AuthService } from './../services/auth.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
+import jwtDecode from 'jwt-decode';
 import { Observable, map } from 'rxjs';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { Observable, map } from 'rxjs';
 
 /// This is basically an authenticattion guard for the teacher routes specifcally
 export class TeacherGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private router: Router) {}
   canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -19,23 +19,15 @@ export class TeacherGuard implements CanActivate {
     | UrlTree {
     const token = localStorage.getItem('token');
     if (token) {
-      return this.isTeacher();
+      const {role}: any = jwtDecode(token)
+      if(role === "teacher") {
+        return true
+      } else if(role === "student") {
+        this.router.navigateByUrl('/');
+        return false
+      }
     }
     this.router.navigateByUrl('/signin');
     return false;
-  }
-  isTeacher() {
-    return this.auth.getTeacher().pipe(
-      map((teacherFound) => {
-        if (teacherFound) {
-          // isTeacher
-          return true;
-        } else {
-          // isStudent
-          this.router.navigateByUrl('/');
-          return false;
-        }
-      })
-    );
   }
 }

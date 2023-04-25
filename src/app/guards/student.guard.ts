@@ -1,14 +1,14 @@
-import { AuthService } from './../services/auth.service';
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, UrlTree } from '@angular/router';
-import { Observable, map } from 'rxjs';
+import jwtDecode from 'jwt-decode';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 
 export class StudentGuard implements CanActivate {
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private router: Router) {}
   canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
@@ -16,21 +16,15 @@ export class StudentGuard implements CanActivate {
     | UrlTree {
     const token = localStorage.getItem('token');
     if (token) {
-      return this.isStudent();
+      const {role}: any = jwtDecode(token)
+      if(role === "student") {
+        return true
+      } else if(role === "teacher") {
+        this.router.navigateByUrl('/teacher');
+        return false
+      }
     }
     this.router.navigateByUrl('/signin');
     return false;
-  }
-  isStudent() {
-    return this.auth.getTeacher().pipe(
-      map((teacherFound) => {
-        if (teacherFound) {
-          this.router.navigateByUrl('/teacher');
-          return false;
-        } else {
-          return true;
-        }
-      })
-    );
   }
 }
