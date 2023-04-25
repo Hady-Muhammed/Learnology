@@ -10,9 +10,7 @@ import SwiperCore, {
   Scrollbar,
   A11y,
 } from 'swiper';
-import jwtDecode from 'jwt-decode';
 import { Course } from 'src/app/models/course';
-import { Student } from 'src/app/models/student';
 import { API_URL } from 'src/app/services/socketio.service';
 
 // install Swiper modules
@@ -55,26 +53,14 @@ export class HomeComponent implements OnInit {
     effect: 'fade',
     loop: true,
   };
-  account!: Student;
   popularCourses!: Observable<Course[]>;
 
   constructor(private http: HttpClient) {
     window.scrollTo(0, 0);
-    this.getAccount();
     this.getPopularCourses();
   }
 
   ngOnInit(): void {}
-
-  getAccount() {
-    const token: any = localStorage.getItem('token');
-    const student: any = jwtDecode(token);
-    this.http
-      .get<Student>(API_URL + `/api/students/getStudent/${student.email}`)
-      .subscribe((student: Student) => {
-        this.account = student;
-      });
-  }
 
   getPopularCourses() {
     this.popularCourses = this.http.get<Course[]>(
