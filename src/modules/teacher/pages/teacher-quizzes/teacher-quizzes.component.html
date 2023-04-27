@@ -4,7 +4,7 @@
     <button routerLink="/teacher/t/quizzes/new-quiz" class="text-white shadow-black/40 shadow-lg bg-gradient-to-r from-[#6a43ff] to-[#8d46ff] rounded-md p-2 relative z-40">Upload a new quiz</button>
   </div>
   <div class="flex flex-col mt-10" *ngFor="let quiz of quizzes; let i = index">
-    <div data-aos="fade-up" [attr.data-aos-delay]="i*100" class="flex xs:flex-col xl:flex-row items-center bg-white mb-10 rounded-md overflow-hidden xs:w-fit xl:w-full mx-auto justify-between">
+    <div data-aos-offset="0" data-aos="fade-up" [attr.data-aos-delay]="i*100" class="flex xs:flex-col xl:flex-row items-center bg-white mb-10 rounded-md overflow-hidden xs:w-fit xl:w-full mx-auto justify-between">
       <img class="w-[300px] object-contain xs:mt-5 xl:mt-0" [src]="quiz && quiz.image" alt="phooto">
       <div class="xs:text-center md:text-left xs:px-5 md:px-10 p-10 space-y-4 xs:w-[300px] sm:w-[350px] md:w-[500px]">
         <h3 class="xs:text-md md:text-xl">{{quiz && quiz.name}}</h3>

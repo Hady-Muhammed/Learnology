@@ -10,7 +10,7 @@
     </div>
     <!-- Chats -->
     <div class="flex flex-col relative z-40">
-      <div class="cursor-pointer" data-aos="fade-up" [attr.data-aos-delay]="i * 100" *ngFor="let chat of filteredChats; let i = index">
+      <div class="cursor-pointer" data-aos-offset="-200" data-aos="fade-up" [attr.data-aos-delay]="i * 100" *ngFor="let chat of filteredChats; let i = index">
         <a (click)="goToConversation(chat._id,chat)" class="flex justify-between space-x-3 relative mt-5 bg-white p-5 rounded-xl group hover:bg-[#6a43ff] hover:text-white duration-500">
             <div class="relative">
               <img class="w-[60px] h-[60px] rounded-full object-cover" [src]="chat.person1.email === account.email ? chat.person2.picture === 'default' ? '../../../../../assets/user.webp': chat.person2.picture : chat.person1.picture === 'default' ? '../../../../../assets/user.webp': chat.person1.picture" alt="phooto">

@@ -48,7 +48,7 @@
   <div class="flex relative justify-between">
     <!-- Like & Comment buttons -->
     <button (mouseout)="handleReactMenuOfPostMouseOut()" (mouseover)="handleReactMenuOfPostMouseOver()" class="p-3 bg-[#6a43ff]/80 w-full uppercase text-white border-r xs:text-xs msm:text-sm md:text-base">
-      {{checkReactType(post) === 'love' ? 'You loved this post' : checkReactType(post) === 'like' ? 'You liked this post' : checkReactType(post) === 'wow' ? 'You wowed this post' : 'like'}}
+      {{(post | checkReactType: account.reacts) === 'love' ? 'You loved this post' : (post | checkReactType: account.reacts) === 'like' ? 'You liked this post' : (post | checkReactType: account.reacts) === 'wow' ? 'You wowed this post' : 'like'}}
     </button>
     <button (click)="getComments(post._id,inp,true)" class="p-3 bg-[#6a43ff]/80 w-full uppercase text-white xs:text-xs msm:text-sm md:text-base">comment</button>
     <app-reacts-popup [isOpened]="openReactMenuOfPost" (openReactMenu)="openReactMenuOfPost=$event" [post]="post" [account]="account" (reactHappened)="reactHappened.emit(true)" [type]="'post'"></app-reacts-popup>

@@ -54,6 +54,7 @@ import { InboxDetailComponent } from './pages/account/subpages/inbox-detail/inbo
 import { VideosComponent } from './pages/account/subpages/enrolled-courses/videos/videos.component';
 import { CourseSectionAccordionComponent } from './components/course-section-accordion/course-section-accordion.component';
 import { VideoComponent } from './pages/account/subpages/enrolled-courses/videos/subpages/video/video.component';
+import { CheckReactTypePipe } from './pipes/checkreacttype.pipe';
 
 @NgModule({
   declarations: [
@@ -102,6 +103,7 @@ import { VideoComponent } from './pages/account/subpages/enrolled-courses/videos
     VideosComponent,
     CourseSectionAccordionComponent,
     VideoComponent,
+    CheckReactTypePipe,
   ],
   imports: [
     CommonModule,

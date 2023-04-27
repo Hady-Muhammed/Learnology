@@ -86,13 +86,6 @@ export class PostComponent implements OnInit {
     }
   }
 
-  checkReactType(post: Post) {
-    let reactFound = this.account?.reacts.find(
-      (react) => (react.postID === post._id) && (react.belongsTo === 'post')
-    );
-    return reactFound?.type;
-  }
-
   getComments(postID: string, input: HTMLInputElement, loadingFlag: boolean) {
     if (loadingFlag) {
       input.focus();
