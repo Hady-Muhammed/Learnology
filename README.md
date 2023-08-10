@@ -1,4 +1,4 @@
-# Learnology 
+# Learnology [DEMO](https://learnoloogy.netlify.app/)
 
 ## An educational application which you can use to level up your knowledge 
 
