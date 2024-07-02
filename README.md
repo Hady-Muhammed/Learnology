@@ -3,7 +3,7 @@
 ## An educational application which you can use to level up your knowledge 
 
 This project is by far my most loved one and i've put a hell alot of effort on it , **it's basically built with** : <br/><br/>
-[![My Skills](https://skills.thijs.gg/icons?i=angular,tailwind,ts,mongodb,nodejs)](https://skills.thijs.gg)
+[![My Skills](https://skillicons.dev/icons?i=angular,tailwind,ts,mongodb,nodejs)](https://skillicons.dev)
 
 
 ## Features 
